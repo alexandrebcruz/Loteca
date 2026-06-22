@@ -37,6 +37,7 @@ AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(AQUI)
 ANALISE_DIR = os.path.join(RAIZ, "data", "analise")
 PY = sys.executable or "python3"
+BR_TZ = dt.timezone(dt.timedelta(hours=-3))  # Brasil (UTC-3, sem horário de verão)
 
 
 def _log(msg):
@@ -108,7 +109,7 @@ def main():
         print("[erro] concurso sem nuConcurso.", file=sys.stderr)
         sys.exit(1)
 
-    ts = dt.datetime.now().strftime("%Y%m%d%H%M")
+    ts = dt.datetime.now(BR_TZ).strftime("%Y%m%d%H%M")
     pasta = a.saida or f"{num}_{ts}"
     cdir = os.path.join(ANALISE_DIR, pasta)
     os.makedirs(cdir, exist_ok=True)
@@ -168,6 +169,13 @@ def main():
         if rc != 0:
             print(f"[aviso] etapa 3 (auditoria) retornou {rc}; "
                   f"veja {audit_path}.", file=sys.stderr)
+
+    # programação congelada já foi consumida pelas etapas 1/2, e o
+    # analise_loteca grava seu próprio programacao.json -> o scratch é redundante.
+    try:
+        os.remove(prog_path)
+    except OSError:
+        pass
 
     # ----------------------------------------------------------------- resumo
     _log("concluído.")

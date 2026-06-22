@@ -840,9 +840,14 @@ def otimizar_loteca(numero, max_custo=None, destaque=48.0, salvar=True,
     destaque_combos = max(MIN_COMBOS, int(destaque // PRECO))
     html = montar_html(meta, jogos, bilhetes, destaque_combos)
 
-    out_path = os.path.join(_dir_concurso(meta["concurso"]), "otimizacao.html")
+    cdir = _dir_concurso(meta["concurso"])
+    out_path = os.path.join(cdir, "otimizacao.html")
     if salvar:
         _salvar_texto(out_path, html)
+        # snapshot dos preços/regras vigentes no momento desta análise, junto
+        # do resto da pasta do concurso (o cache global é regenerável e volátil).
+        _salvar_texto(os.path.join(cdir, "precos.json"),
+                      json.dumps(precos, ensure_ascii=False, indent=2))
         if verbose:
             print(f"[ok] relatório salvo em {out_path}")
             print(f"[ok] {len(bilhetes)} apostas (uma por par D,T alcançável) "
