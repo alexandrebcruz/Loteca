@@ -721,6 +721,9 @@ _HTML = r"""<!doctype html>
   svg.chart .area{fill:rgba(11,102,195,.08);stroke:none}
   svg.chart .pt{fill:#fff;stroke:var(--accent2);stroke-width:2;cursor:pointer}
   svg.chart .pt.sel{fill:var(--accent);stroke:var(--accent)}
+  svg.chart .line-live{fill:none;stroke:var(--warn);stroke-width:2.5;stroke-dasharray:5 4}
+  svg.chart .pt-live{fill:#fff;stroke:var(--warn);stroke-width:2.5;cursor:pointer}
+  svg.chart .pt-live.sel{fill:var(--warn)}
   .dica{color:var(--muted);font-size:.82rem;margin:.5em 0 0;text-align:center}
   .info-tab{table-layout:fixed;width:100%}
   .info-tab td{text-align:left;border:none;padding:5px 8px;white-space:normal}
@@ -1007,10 +1010,16 @@ document.getElementById('subtitulo').innerHTML =
 
   function draw(){
     const W=920,H=320,P={l:54,r:18,t:16,b:46};
-    const ys=tl.map(p=>p[metr]);
+    // o "agora (ao vivo)" entra como ponto EXTRA à direita: a escala X passa a ter
+    // tl.length + 1 posições e o ponto live ocupa a última; linha tracejada (warn)
+    // liga o último ponto histórico (pré-jogo) ao live, deixando claro o salto.
+    const lp=D.live_point;
+    const n=tl.length + (lp?1:0);
+    const ys=tl.map(p=>p[metr]); if(lp) ys.push(lp[metr]);
     const ymax=Math.max(...ys, 1e-9)*1.12, ymin=0;
-    const px=i=> P.l + (W-P.l-P.r) * (tl.length<2?0.5:i/(tl.length-1));
+    const px=i=> P.l + (W-P.l-P.r) * (n<2?0.5:i/(n-1));
     const py=v=> H-P.b - (H-P.t-P.b) * ((v-ymin)/(ymax-ymin||1));
+    const iLive=tl.length;   // índice X do ponto live
     let grid='', ax='';
     for(let gi=0;gi<=4;gi++){ const v=ymin+(ymax-ymin)*gi/4, y=py(v);
       grid+='<line class="grid" x1="'+P.l+'" y1="'+y+'" x2="'+(W-P.r)+'" y2="'+y+'"/>';
@@ -1018,25 +1027,40 @@ document.getElementById('subtitulo').innerHTML =
     let xlab='';
     tl.forEach((p,i)=>{ if(tl.length>8 && i%2 && i!==tl.length-1) return;
       xlab+='<text x="'+px(i)+'" y="'+(H-P.b+18)+'" text-anchor="middle">'+esc(p.t)+'</text>'; });
+    if(lp) xlab+='<text x="'+px(iLive)+'" y="'+(H-P.b+18)+'" text-anchor="middle" '+
+      'style="fill:var(--warn);font-weight:700">● '+esc(lp.t)+'</text>';
     const dpts=tl.map((p,i)=>(i?'L':'M')+px(i)+' '+py(p[metr])).join(' ');
     const area=(tl.length>1)?('M'+px(0)+' '+py(0)+' '+tl.map((p,i)=>'L'+px(i)+' '+py(p[metr])).join(' ')+' L'+px(tl.length-1)+' '+py(0)+' Z'):'';
+    // segmento tracejado do último ponto histórico ao live
+    const liveSeg=(lp && tl.length)?('<path class="line-live" d="M'+px(tl.length-1)+' '+
+      py(tl[tl.length-1][metr])+' L'+px(iLive)+' '+py(lp[metr])+'"/>'):'';
     let pts='';
     tl.forEach((p,i)=>{ pts+='<circle class="pt" data-i="'+i+'" cx="'+px(i)+'" cy="'+py(p[metr])+'" r="5"/>'; });
+    const livePt=lp?('<circle class="pt-live" data-live="1" cx="'+px(iLive)+'" cy="'+py(lp[metr])+'" r="6"/>'):'';
     document.getElementById('chart').innerHTML=
       '<svg class="chart" viewBox="0 0 '+W+' '+H+'">'+grid+
       '<line class="axis" x1="'+P.l+'" y1="'+P.t+'" x2="'+P.l+'" y2="'+(H-P.b)+'"/>'+
       '<line class="axis" x1="'+P.l+'" y1="'+(H-P.b)+'" x2="'+(W-P.r)+'" y2="'+(H-P.b)+'"/>'+
       (area?'<path class="area" d="'+area+'"/>':'')+
-      '<path class="line" d="'+dpts+'"/>'+ax+xlab+pts+'</svg>';
+      '<path class="line" d="'+dpts+'"/>'+liveSeg+ax+xlab+pts+livePt+'</svg>';
     document.querySelectorAll('#chart .pt').forEach(c=>c.onclick=()=>{
       const i=+c.dataset.i, p=tl[i];
-      document.querySelectorAll('#chart .pt').forEach(x=>x.classList.remove('sel'));
+      document.querySelectorAll('#chart .pt,#chart .pt-live').forEach(x=>x.classList.remove('sel'));
       c.classList.add('sel');
       const ctx = p.jogo ? (p.sorteio ? (esc(p.jogo)+' → sorteio (equiprovável 1X2)')
         : (esc(p.jogo)+' → '+p.resultado+' ('+(p.coberto?'coberto':'furou')+')')) : 'situação inicial';
       document.getElementById('dica').innerHTML='<b>'+esc(p.t)+'</b> · '+ctx+' · '+
         METR.find(m=>m.k===metr).rot+' = <b>'+pct(p[metr])+'</b> ('+umEm(p[metr])+')';
     });
+    const lpc=document.querySelector('#chart .pt-live');
+    if(lpc) lpc.onclick=()=>{
+      document.querySelectorAll('#chart .pt,#chart .pt-live').forEach(x=>x.classList.remove('sel'));
+      lpc.classList.add('sel');
+      document.getElementById('dica').innerHTML='<b>'+esc(lp.t)+'</b> · '+
+        '<span style="color:var(--warn);font-weight:700">considerando odds ao vivo</span> ('+
+        lp.n_live+' jogo'+(lp.n_live>1?'s':'')+' in-play) · '+
+        METR.find(m=>m.k===metr).rot+' = <b>'+pct(lp[metr])+'</b> ('+umEm(lp[metr])+')';
+    };
   }
 
   // tabela de evolução
