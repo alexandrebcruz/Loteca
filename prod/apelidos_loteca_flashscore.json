@@ -2,7 +2,9 @@
   "_comentario": "De-para de nomes (Loteca -> Flashscore.com.br / Livesport) + apoio ao desempate geográfico. DIFERENTE do apelidos_loteca_sofascore.json: o Flashscore.com.br é PT (igual à Loteca), então o casamento é RAW-FIRST (nomes crus PT<->PT) e 'times' só guarda os casos em que o nome cru NÃO casa — abreviações da Loteca (ATH BILBAO, PSG) e clubes que o Flashscore grafa diferente. NÃO ponha tradução de seleção (Alemanha->Germany): aqui a seleção já é PT. 'times': chave normalizada (sem acento, minúscula) -> nome canônico do Flashscore. 'paises': código país da Loteca (~ISO alpha-3) -> ISO alpha-2 (mantido por simetria; o feed dá país por NOME, então hoje não dispara). 'uf': sigla do estado BR -> termos textuais procurados no nome do time/torneio. A camada de resgate por LLM popula 'times' ao longo do tempo (--aplicar-apelido).",
   "times": {
     "ath bilbao": "Athletic Club",
-    "athletic bilbao": "Athletic Club"
+    "athletic bilbao": "Athletic Club",
+    "holanda": "Países Baixos",
+    "estados unidos": "EUA"
   },
   "paises": {
     "ALB": "AL",

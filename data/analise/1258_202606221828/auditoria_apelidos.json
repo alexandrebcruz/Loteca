@@ -1,0 +1,43 @@
+{
+  "apelidos": "/mnt/d/Projetos/Loteca/prod/apelidos_loteca_flashscore.json",
+  "concursos": 1255,
+  "nomes_distintos": 932,
+  "total_times": 4,
+  "etapa1": {
+    "usados": 4,
+    "orfaos": [],
+    "duplicatas": [],
+    "typos": [],
+    "conflitos": []
+  },
+  "etapa2": [
+    {
+      "de": "ath bilbao",
+      "para": "Athletic Club",
+      "loteca": "ATH. BILBAO",
+      "loteca_norm": "ath bilbao",
+      "status": "nao-verificavel"
+    },
+    {
+      "de": "athletic bilbao",
+      "para": "Athletic Club",
+      "loteca": "ATHLETIC BILBAO",
+      "loteca_norm": "athletic bilbao",
+      "status": "nao-verificavel"
+    },
+    {
+      "de": "holanda",
+      "para": "Países Baixos",
+      "loteca": "HOLANDA",
+      "loteca_norm": "holanda",
+      "status": "nao-verificavel"
+    },
+    {
+      "de": "estados unidos",
+      "para": "EUA",
+      "loteca": "ESTADOS UNIDOS",
+      "loteca_norm": "estados unidos",
+      "status": "nao-verificavel"
+    }
+  ]
+}

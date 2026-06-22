@@ -1,0 +1,32 @@
+{
+  "seq": 4,
+  "loteca": {
+    "home": "JAPAO",
+    "away": "SUECIA",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Japão",
+    "away": "Suécia",
+    "data_exibida": "2026-06-25",
+    "mid": "Sl2xgtXi",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.4914,
+    "empate": 0.2828,
+    "fora": 0.2258,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 1.92,
+      "empate": 3.35,
+      "fora": 4.2
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

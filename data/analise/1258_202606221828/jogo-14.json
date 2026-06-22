@@ -1,0 +1,32 @@
+{
+  "seq": 14,
+  "loteca": {
+    "home": "JORDANIA",
+    "away": "ARGENTINA",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Jordânia",
+    "away": "Argentina",
+    "data_exibida": "2026-06-28",
+    "mid": "KAnAWtpR",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.0775,
+    "empate": 0.1521,
+    "fora": 0.7704,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 12.0,
+      "empate": 6.0,
+      "fora": 1.2
+    }
+  },
+  "palpite": "2",
+  "n_casas": 21,
+  "erro": null
+}

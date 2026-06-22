@@ -1,0 +1,32 @@
+{
+  "seq": 7,
+  "loteca": {
+    "home": "NORUEGA",
+    "away": "FRANCA",
+    "data": "2026-06-26"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Noruega",
+    "away": "França",
+    "data_exibida": "2026-06-26",
+    "mid": "bsJSJ30L",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2248,
+    "empate": 0.2489,
+    "fora": 0.5263,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 4.1,
+      "empate": 3.75,
+      "fora": 1.76
+    }
+  },
+  "palpite": "2",
+  "n_casas": 21,
+  "erro": null
+}

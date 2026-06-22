@@ -1,0 +1,32 @@
+{
+  "seq": 10,
+  "loteca": {
+    "home": "PANAMA",
+    "away": "INGLATERRA",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Panamá",
+    "away": "Inglaterra",
+    "data_exibida": "2026-06-27",
+    "mid": "YZajsXcn",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.0883,
+    "empate": 0.1536,
+    "fora": 0.7581,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 10.4,
+      "empate": 5.9,
+      "fora": 1.22
+    }
+  },
+  "palpite": "2",
+  "n_casas": 21,
+  "erro": null
+}

@@ -1,0 +1,32 @@
+{
+  "seq": 6,
+  "loteca": {
+    "home": "PARAGUAI",
+    "away": "AUSTRALIA",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Paraguai",
+    "away": "Austrália",
+    "data_exibida": "2026-06-26",
+    "mid": "lGmJTJSg",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.3455,
+    "empate": 0.4064,
+    "fora": 0.2481,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 2.8,
+      "empate": 2.25,
+      "fora": 3.8
+    }
+  },
+  "palpite": "X",
+  "n_casas": 23,
+  "erro": null
+}

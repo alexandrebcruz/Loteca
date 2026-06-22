@@ -1,0 +1,32 @@
+{
+  "seq": 12,
+  "loteca": {
+    "home": "COLOMBIA",
+    "away": "PORTUGAL",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Colômbia",
+    "away": "Portugal",
+    "data_exibida": "2026-06-27",
+    "mid": "vL2qotaK",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.262,
+    "empate": 0.2761,
+    "fora": 0.4619,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 3.55,
+      "empate": 3.35,
+      "fora": 2.0
+    }
+  },
+  "palpite": "2",
+  "n_casas": 21,
+  "erro": null
+}

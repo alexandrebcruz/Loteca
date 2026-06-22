@@ -1,0 +1,32 @@
+{
+  "seq": 1,
+  "loteca": {
+    "home": "CURAÇAO",
+    "away": "COSTA DO MARFIM",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Curaçao",
+    "away": "Costa do Marfim",
+    "data_exibida": "2026-06-25",
+    "mid": "d2S1vysC",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.0569,
+    "empate": 0.1284,
+    "fora": 0.8147,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 16.0,
+      "empate": 7.59,
+      "fora": 1.15
+    }
+  },
+  "palpite": "2",
+  "n_casas": 23,
+  "erro": null
+}

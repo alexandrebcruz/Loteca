@@ -1,0 +1,32 @@
+{
+  "seq": 9,
+  "loteca": {
+    "home": "URUGUAI",
+    "away": "ESPANHA",
+    "data": "2026-06-26"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Uruguai",
+    "away": "Espanha",
+    "data_exibida": "2026-06-27",
+    "mid": "8xM154oS",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.1395,
+    "empate": 0.2258,
+    "fora": 0.6347,
+    "n_casas_validas": 22,
+    "odds_medianas": {
+      "casa": 7.0,
+      "empate": 4.18,
+      "fora": 1.47
+    }
+  },
+  "palpite": "2",
+  "n_casas": 22,
+  "erro": null
+}

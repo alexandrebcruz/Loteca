@@ -1,0 +1,32 @@
+{
+  "seq": 11,
+  "loteca": {
+    "home": "CROACIA",
+    "away": "GANA",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Croácia",
+    "away": "Gana",
+    "data_exibida": "2026-06-27",
+    "mid": "6mbbuBSb",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.5827,
+    "empate": 0.2492,
+    "fora": 0.168,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 1.6,
+      "empate": 3.75,
+      "fora": 5.5
+    }
+  },
+  "palpite": "1",
+  "n_casas": 21,
+  "erro": null
+}

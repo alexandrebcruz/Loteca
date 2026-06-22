@@ -1,0 +1,32 @@
+{
+  "seq": 5,
+  "loteca": {
+    "home": "TURQUIA",
+    "away": "ESTADOS UNIDOS",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Turquia",
+    "away": "EUA",
+    "data_exibida": "2026-06-26",
+    "mid": "SCvmMa2U",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2833,
+    "empate": 0.2412,
+    "fora": 0.4755,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 3.4,
+      "empate": 3.89,
+      "fora": 1.93
+    }
+  },
+  "palpite": "2",
+  "n_casas": 23,
+  "erro": null
+}

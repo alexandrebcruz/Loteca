@@ -1,0 +1,243 @@
+{
+  "preco_unitario": 2.0,
+  "min_combos": 2,
+  "min_valor": 4.0,
+  "max_combos": 864,
+  "max_valor": 1728.0,
+  "max_duplos": 9,
+  "max_triplos": 6,
+  "tabela_validada": true,
+  "linhas_tabela": 38,
+  "tabela_dt": [
+    {
+      "d": 1,
+      "t": 0,
+      "combos": 2,
+      "valor": 4.0
+    },
+    {
+      "d": 0,
+      "t": 1,
+      "combos": 3,
+      "valor": 6.0
+    },
+    {
+      "d": 2,
+      "t": 0,
+      "combos": 4,
+      "valor": 8.0
+    },
+    {
+      "d": 1,
+      "t": 1,
+      "combos": 6,
+      "valor": 12.0
+    },
+    {
+      "d": 3,
+      "t": 0,
+      "combos": 8,
+      "valor": 16.0
+    },
+    {
+      "d": 0,
+      "t": 2,
+      "combos": 9,
+      "valor": 18.0
+    },
+    {
+      "d": 2,
+      "t": 1,
+      "combos": 12,
+      "valor": 24.0
+    },
+    {
+      "d": 4,
+      "t": 0,
+      "combos": 16,
+      "valor": 32.0
+    },
+    {
+      "d": 1,
+      "t": 2,
+      "combos": 18,
+      "valor": 36.0
+    },
+    {
+      "d": 3,
+      "t": 1,
+      "combos": 24,
+      "valor": 48.0
+    },
+    {
+      "d": 0,
+      "t": 3,
+      "combos": 27,
+      "valor": 54.0
+    },
+    {
+      "d": 5,
+      "t": 0,
+      "combos": 32,
+      "valor": 64.0
+    },
+    {
+      "d": 2,
+      "t": 2,
+      "combos": 36,
+      "valor": 72.0
+    },
+    {
+      "d": 4,
+      "t": 1,
+      "combos": 48,
+      "valor": 96.0
+    },
+    {
+      "d": 1,
+      "t": 3,
+      "combos": 54,
+      "valor": 108.0
+    },
+    {
+      "d": 6,
+      "t": 0,
+      "combos": 64,
+      "valor": 128.0
+    },
+    {
+      "d": 3,
+      "t": 2,
+      "combos": 72,
+      "valor": 144.0
+    },
+    {
+      "d": 0,
+      "t": 4,
+      "combos": 81,
+      "valor": 162.0
+    },
+    {
+      "d": 5,
+      "t": 1,
+      "combos": 96,
+      "valor": 192.0
+    },
+    {
+      "d": 2,
+      "t": 3,
+      "combos": 108,
+      "valor": 216.0
+    },
+    {
+      "d": 7,
+      "t": 0,
+      "combos": 128,
+      "valor": 256.0
+    },
+    {
+      "d": 4,
+      "t": 2,
+      "combos": 144,
+      "valor": 288.0
+    },
+    {
+      "d": 1,
+      "t": 4,
+      "combos": 162,
+      "valor": 324.0
+    },
+    {
+      "d": 6,
+      "t": 1,
+      "combos": 192,
+      "valor": 384.0
+    },
+    {
+      "d": 3,
+      "t": 3,
+      "combos": 216,
+      "valor": 432.0
+    },
+    {
+      "d": 0,
+      "t": 5,
+      "combos": 243,
+      "valor": 486.0
+    },
+    {
+      "d": 8,
+      "t": 0,
+      "combos": 256,
+      "valor": 512.0
+    },
+    {
+      "d": 5,
+      "t": 2,
+      "combos": 288,
+      "valor": 576.0
+    },
+    {
+      "d": 2,
+      "t": 4,
+      "combos": 324,
+      "valor": 648.0
+    },
+    {
+      "d": 7,
+      "t": 1,
+      "combos": 384,
+      "valor": 768.0
+    },
+    {
+      "d": 4,
+      "t": 3,
+      "combos": 432,
+      "valor": 864.0
+    },
+    {
+      "d": 1,
+      "t": 5,
+      "combos": 486,
+      "valor": 972.0
+    },
+    {
+      "d": 9,
+      "t": 0,
+      "combos": 512,
+      "valor": 1024.0
+    },
+    {
+      "d": 6,
+      "t": 2,
+      "combos": 576,
+      "valor": 1152.0
+    },
+    {
+      "d": 3,
+      "t": 4,
+      "combos": 648,
+      "valor": 1296.0
+    },
+    {
+      "d": 0,
+      "t": 6,
+      "combos": 729,
+      "valor": 1458.0
+    },
+    {
+      "d": 8,
+      "t": 1,
+      "combos": 768,
+      "valor": 1536.0
+    },
+    {
+      "d": 5,
+      "t": 3,
+      "combos": 864,
+      "valor": 1728.0
+    }
+  ],
+  "fonte": "https://loterias.caixa.gov.br/Paginas/Loteca.aspx",
+  "atualizado_em": "2026-06-21T23:12:37"
+}

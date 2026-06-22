@@ -1,0 +1,32 @@
+{
+  "seq": 2,
+  "loteca": {
+    "home": "EQUADOR",
+    "away": "ALEMANHA",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Equador",
+    "away": "Alemanha",
+    "data_exibida": "2026-06-25",
+    "mid": "zmvgtcCa",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2639,
+    "empate": 0.2431,
+    "fora": 0.493,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 3.55,
+      "empate": 3.85,
+      "fora": 1.88
+    }
+  },
+  "palpite": "2",
+  "n_casas": 23,
+  "erro": null
+}

@@ -1,0 +1,32 @@
+{
+  "seq": 8,
+  "loteca": {
+    "home": "SENEGAL",
+    "away": "IRAQUE",
+    "data": "2026-06-26"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Senegal",
+    "away": "Iraque",
+    "data_exibida": "2026-06-26",
+    "mid": "j5IhOwop",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.7198,
+    "empate": 0.1863,
+    "fora": 0.0939,
+    "n_casas_validas": 22,
+    "odds_medianas": {
+      "casa": 1.28,
+      "empate": 5.05,
+      "fora": 10.0
+    }
+  },
+  "palpite": "1",
+  "n_casas": 22,
+  "erro": null
+}
