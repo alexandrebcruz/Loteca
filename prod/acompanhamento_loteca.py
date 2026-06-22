@@ -72,7 +72,7 @@ import nodriver as uc                                            # noqa: E402
 from nodriver import cdp                                         # noqa: E402
 from buscar_odds_flashscore import (                             # noqa: E402
     resolver_proxy, _egress_ip, _consent, _goto, coletar_odds,
-    _canonical_from_mid, _esperar, ORIGIN,
+    buscar_odds_live_flashscore, _canonical_from_mid, _esperar, ORIGIN,
 )
 from analise_loteca import estimar_prob                          # noqa: E402
 
@@ -390,6 +390,7 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
                 "mid": mid, "invertido": inv,
                 "prob_orig": prob_orig or None,
                 "prob": None, "placar": None, "resultado": None,
+                "prob_live": None, "live": None,
                 "estado": "agendado", "inicio": None, "fim_est": None,
                 "_dt_utc": None, "coberto": None, "erro": None,
             }
@@ -431,6 +432,23 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
                 except Exception as e:                          # noqa: BLE001
                     reg["erro"] = str(e)[:160]
 
+            # odds AO VIVO (intragame): só p/ jogos acontecendo agora. É um EXTRA —
+            # não altera prob/cobertura nem as métricas; só agrega a leitura in-play
+            # das casas que precificam ao vivo (consenso de-vig sobre elas).
+            if reg["estado"] == "ao_vivo":
+                try:
+                    live = await buscar_odds_live_flashscore(tab, mid, match_url=url)
+                    if live.get("n_casas_live"):
+                        reg["prob_live"] = estimar_prob(live, invertido=inv)
+                        reg["live"] = {
+                            "n_casas": live["n_casas_live"],
+                            "casas": live.get("casas_disponiveis") or [],
+                        }
+                except Exception as e:                          # noqa: BLE001
+                    # falha de odds live não compromete o acompanhamento
+                    if not reg["erro"]:
+                        reg["erro"] = f"live: {str(e)[:120]}"
+
             if verbose:
                 if reg["resultado"] is not None:
                     _log(f"  [{reg['seq']:2}] {reg['home']} x {reg['away']} -> "
@@ -442,9 +460,15 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
                          f"SORTEIO (equiprovável 1X2; cobertura {cb*100:.1f}%)")
                 else:
                     p = reg["prob"] or {}
+                    extra = ""
+                    if reg.get("prob_live"):
+                        pl = reg["prob_live"]
+                        extra = (f"  ● live({reg['live']['n_casas']}): "
+                                 f"1={pl.get('casa')} X={pl.get('empate')} 2={pl.get('fora')}")
                     _log(f"  [{reg['seq']:2}] {reg['home']} x {reg['away']} "
                          f"[{reg['estado']}] -> 1={p.get('casa')} X={p.get('empate')} "
-                         f"2={p.get('fora')}" + (f"  ⚠ {reg['erro']}" if reg["erro"] else ""))
+                         f"2={p.get('fora')}" + extra +
+                         (f"  ⚠ {reg['erro']}" if reg["erro"] else ""))
             jogos.append(reg)
         return jogos
     finally:
@@ -473,6 +497,23 @@ def _cob_atual(r):
     return c
 
 
+def _cob_atual_live(r):
+    """Igual a _cob_atual, mas PREFERE a prob AO VIVO (in-play) onde ela existe.
+    Usado só para a métrica complementar do bilhete (atual_live) — não altera a
+    cobertura/metricas oficiais. Jogos sem odds live caem na mesma conta de _cob_atual."""
+    if r.get("estado") == "sorteio":
+        m = r.get("marcas") or []
+        return (len(m) / 3.0) if m else None
+    if r.get("coberto") is not None:
+        return 1.0 if r["coberto"] else 0.0
+    c = _cob_marcas(r.get("prob_live"), r["marcas"])
+    if c is None:
+        c = _cob_marcas(r.get("prob"), r["marcas"])
+    if c is None:
+        c = _cob_marcas(r.get("prob_orig"), r["marcas"])
+    return c
+
+
 def _montar_dados(pasta, analise, jogos, bilhete):
     def _locked(r):
         # jogo já "travado": decidido em campo OU resolvido por sorteio.
@@ -486,6 +527,10 @@ def _montar_dados(pasta, analise, jogos, bilhete):
 
     cobs = [_cob_atual(r) for r in jogos]
     atual = _metricas(cobs)
+
+    # métrica COMPLEMENTAR usando as odds AO VIVO onde existem (não substitui a
+    # `atual`; só aparece nos KPIs como "● ao vivo" quando há ao menos 1 jogo live).
+    atual_live = _metricas([_cob_atual_live(r) for r in jogos])
 
     decididos = [r for r in jogos if _locked(r)]
     decididos.sort(key=lambda r: r["_dt_utc"] or dt.datetime.max)
@@ -533,12 +578,26 @@ def _montar_dados(pasta, analise, jogos, bilhete):
         "finalizados": sum(1 for r in jogos if r["estado"] == "finalizado"),
         "sorteios": sum(1 for r in jogos if r["estado"] == "sorteio"),
         "ao_vivo": sum(1 for r in jogos if r["estado"] == "ao_vivo"),
+        "com_odds_live": sum(1 for r in jogos if r.get("prob_live")),
         "pendentes": sum(1 for r in jogos if r["estado"] in ("agendado", "indefinido")),
         "cobertos": sum(1 for r in jogos if r.get("coberto") is True),
         "furos": sum(1 for r in jogos if r.get("coberto") is False),
     }
 
     agora_br = dt.datetime.now(BR_TZ)
+
+    # Ponto "agora (ao vivo)" para a TABELA de evolução: só quando há odds in-play.
+    # Carrega as métricas recalculadas com as odds ao vivo (atual_live) e o instante
+    # (data/hora/minuto) em que o script rodou. Fica SÓ na tabela — não entra no
+    # gráfico, que mostra a progressão real conforme os jogos terminam.
+    live_point = None
+    if resumo["com_odds_live"]:
+        live_point = {
+            "t": agora_br.strftime("%d/%m %H:%M"),
+            "n_live": resumo["com_odds_live"],
+            **atual_live,
+        }
+
     jogos_out = []
     for r in jogos:
         o = {k: v for k, v in r.items() if not k.startswith("_")}
@@ -557,6 +616,8 @@ def _montar_dados(pasta, analise, jogos, bilhete):
         "resumo": resumo,
         "inicial": inicial,
         "atual": atual,
+        "atual_live": atual_live,
+        "live_point": live_point,
         "jogos": jogos_out,
         "timeline": timeline,
     }
@@ -608,6 +669,10 @@ _HTML = r"""<!doctype html>
   .badge.sort{background:#efe7fb;color:#6b3fb0}
   .prob{font-variant-numeric:tabular-nums;font-weight:600;border-radius:5px;
     padding:3px 6px;display:inline-block;min-width:46px}
+  .liveval{font-size:.72rem;margin-top:3px;color:var(--warn);font-weight:700;
+    font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.25}
+  .kpi-live{margin-top:6px;padding-top:5px;border-top:1px dashed #e8d9b0;
+    font-size:.8rem;color:var(--warn);font-weight:700;font-variant-numeric:tabular-nums}
   .fav{outline:2px solid var(--accent);outline-offset:-2px;font-weight:800}
   .placar{font-weight:800;font-variant-numeric:tabular-nums}
   .mk{font-weight:800;letter-spacing:.06em}
@@ -688,7 +753,10 @@ _HTML = r"""<!doctype html>
   entram na Loteca como <b>sorteio</b> — resultado equiprovável entre 1, X e 2
   (a cobertura vira o nº de colunas marcadas ÷ 3). Na evolução temporal, os jogos
   ainda pendentes são mantidos na sua cobertura atual (não há histórico de odds
-  para reconstruir).</p>
+  para reconstruir). Para jogos <b>em andamento</b> com mercado in-play, mostramos
+  ainda a <b>odd 1X2 ao vivo</b> (consenso de-vig das casas que precificam durante a
+  partida, via Flashscore/Livesport) — é uma leitura informativa adicional e
+  <b>não entra</b> no cálculo de cobertura nem nas probabilidades do bilhete.</p>
 </main>
 <script id="dados" type="application/json">__DADOS_JSON__</script>
 <script>
@@ -707,6 +775,14 @@ function grad(p){
   return 'rgb('+r+','+g+','+b+')';
 }
 function tipoAposta(m){ const n=(m||[]).length; return n>=3?'triplo':n===2?'duplo':'simples'; }
+/* variação em pontos percentuais (▲/▼ Xpp) — usado p/ comparar ao vivo vs pré-jogo */
+function ppBadge(now,was,suf){
+  if(now==null||was==null) return '';
+  const d=now-was; const u=(suf==null?'pp':suf);
+  if(Math.abs(d)<5e-4) return ' <span style="color:var(--muted)">=</span>';
+  const cls=d>0?'delta-up':'delta-dn', sig=d>0?'▲':'▼';
+  return ' <span class="'+cls+'">'+sig+(Math.abs(d)*100).toFixed(1)+u+'</span>';
+}
 
 /* cabeçalho */
 document.getElementById('titulo').textContent = 'Loteca '+D.concurso+' — acompanhamento';
@@ -739,7 +815,8 @@ document.getElementById('subtitulo').innerHTML =
     bil+
     '<tr><td class="k">Jogos finalizados</td><td class="v">'+r.finalizados+' de '+r.total+'</td></tr>'+
     (r.sorteios?'<tr><td class="k">Definidos por sorteio</td><td class="v">'+r.sorteios+'</td></tr>':'')+
-    '<tr><td class="k">Ao vivo agora</td><td class="v">'+r.ao_vivo+'</td></tr>'+
+    '<tr><td class="k">Ao vivo agora</td><td class="v">'+r.ao_vivo+
+      (r.com_odds_live?' <span style="color:var(--warn);font-weight:700">('+r.com_odds_live+' com odds ao vivo)</span>':'')+'</td></tr>'+
     '<tr><td class="k">Ainda por jogar</td><td class="v">'+r.pendentes+'</td></tr>'+
     (D.fim_apostas?'<tr><td class="k">Apostas até</td><td class="v">'+esc(D.fim_apostas)+'</td></tr>':'')+
     '</tbody></table>';
@@ -776,10 +853,43 @@ document.getElementById('subtitulo').innerHTML =
       }).join('');
     }
     const p=j.prob||j.prob_orig||{};
+    const pl=j.prob_live;
     return ['1','X','2'].map(k=>{
       const v=p[KEY[k]]; const fav=marcas.includes(k)?' fav':'';
-      return '<td><span class="prob'+fav+'" style="background:'+grad(v)+'">'+pct(v)+'</span></td>';
+      let sub='';
+      if(pl){
+        const lv=pl[KEY[k]];
+        sub='<div class="liveval" title="odds ao vivo (in-play)">●&nbsp;'+pct(lv)+
+            ppBadge(lv,v)+'</div>';
+      }
+      return '<td><span class="prob'+fav+'" style="background:'+grad(v)+'">'+pct(v)+'</span>'+sub+'</td>';
     }).join('');
+  }
+
+  function liveLine(j){
+    // selinho de odds AO VIVO (os valores vão sob cada coluna 1/X/2, em cellsFor)
+    if(!j.prob_live) return '';
+    const n=(j.live&&j.live.n_casas)||0;
+    return '<div style="margin-top:3px;font-size:.72rem;color:var(--warn);font-weight:700">'+
+      '● odds ao vivo ('+n+' casa'+(n>1?'s':'')+')</div>';
+  }
+
+  function cobDe(p,marcas){
+    // cobertura = soma das probs das colunas marcadas (mesma conta de _cob_marcas)
+    if(!p||!marcas) return null;
+    let s=0,ok=false;
+    marcas.forEach(k=>{const v=p[KEY[k]]; if(v!=null){s+=v; ok=true;}});
+    return ok?s:null;
+  }
+
+  function cobCell(j){
+    let sub='';
+    if(j.prob_live && j.estado==='ao_vivo'){
+      const lc=cobDe(j.prob_live, j.marcas);
+      if(lc!=null) sub='<div class="liveval" title="cobertura ao vivo">●&nbsp;'+
+        pct(lc)+ppBadge(lc,j.cob)+'</div>';
+    }
+    return '<td>'+pct(j.cob)+sub+'</td>';
   }
 
   function rowFor(j){
@@ -788,12 +898,13 @@ document.getElementById('subtitulo').innerHTML =
       ? '<span class="placar">'+esc(j.placar)+'</span>' : '—';
     return '<tr>'+
       '<td class="conf">'+esc(j.home)+' <span style="color:var(--muted)">x</span> '+esc(j.away)+
-        (j.erro?' <span title="'+esc(j.erro)+'" style="color:var(--warn)">⚠</span>':'')+'</td>'+
+        (j.erro?' <span title="'+esc(j.erro)+'" style="color:var(--warn)">⚠</span>':'')+
+        liveLine(j)+'</td>'+
       '<td>'+(j.inicio?esc(j.inicio):'—')+'</td>'+
       '<td>'+badgeFor(j)+'</td>'+
       '<td><span class="mk">'+esc(marcas.join(' '))+'</span><br><span style="color:var(--muted);font-size:.74rem">'+tipoAposta(marcas)+'</span></td>'+
       '<td>'+placar+'</td>'+
-      '<td>'+pct(j.cob)+'</td>'+
+      cobCell(j)+
       cellsFor(j)+
     '</tr>';
   }
@@ -819,7 +930,10 @@ document.getElementById('subtitulo').innerHTML =
     '<h2>Jogos</h2><p class="sub">Coluna(s) <b>marcada(s) no bilhete</b> destacada(s). '+
     'Pendentes: prob. 1X2 <b>atualizada</b> e cobertura corrente. Decididos: placar e '+
     '● na coluna do resultado (verde = coberto, vermelho = furou). '+
-    '<b>Sorteio</b>: jogo não realizado/interrompido — resultado equiprovável 1X2.</p>'+
+    '<b>Sorteio</b>: jogo não realizado/interrompido — resultado equiprovável 1X2. '+
+    'Em jogos <b>ao vivo</b> com mercado in-play, sob cada coluna 1/X/2 aparece em '+
+    '<span style="color:var(--warn)">amarelo</span> a <b>prob. ao vivo</b> e a variação em '+
+    'pp vs. a prob. pré-jogo (consenso das casas que precificam durante a partida).</p>'+
     '<div class="ordena" id="ord-btns">'+
       '<button data-o="loteca">Ordem da Loteca</button>'+
       '<button data-o="horario">Data e hora</button>'+
@@ -834,25 +948,34 @@ document.getElementById('subtitulo').innerHTML =
 
 /* card KPIs atuais (com o delta vs. início) */
 (function(){
-  const a=D.atual, ini=D.inicial||{};
+  const a=D.atual, ini=D.inicial||{}, al=D.atual_live||{};
+  const hasLive = (D.resumo&&D.resumo.com_odds_live>0);
   function delta(now,was){
     if(now==null||was==null) return '';
     const d=now-was; if(Math.abs(d)<1e-9) return ' <span style="color:var(--muted)">=</span>';
     const cls=d>0?'delta-up':'delta-dn'; const sig=d>0?'▲':'▼';
     return ' <span class="'+cls+'">'+sig+' '+(Math.abs(d)*100).toFixed(1)+'pp</span>';
   }
-  function kpi(lab,val,sub,dest){
+  // linha complementar "● ao vivo": recalcula o KPI usando as odds in-play onde
+  // existem; delta = quanto a leitura ao vivo muda vs. a prob atual (pré-jogo).
+  function liveRow(nowLive, base){
+    if(!hasLive || nowLive==null) return '';
+    return '<div class="kpi-live">● ao vivo: '+pct(nowLive)+ppBadge(nowLive,base)+'</div>';
+  }
+  function kpi(lab,val,sub,live,dest){
     return '<div class="kpi'+(dest?' destaque':'')+'"><div class="lab">'+lab+'</div>'+
-      '<div class="val">'+val+'</div><div class="sub2">'+sub+'</div></div>';
+      '<div class="val">'+val+'</div><div class="sub2">'+sub+'</div>'+live+'</div>';
   }
   document.getElementById('kpi-sec').innerHTML =
     '<h2>Probabilidade atual do bilhete</h2>'+
     '<p class="sub">Do bilhete jogado'+(D.bilhete?' ('+fmtBRL(D.bilhete.custo)+')':'')+
-    ', com os jogos já decididos fixados. <b>pp</b> = variação vs. o início.</p>'+
+    ', com os jogos já decididos fixados. <b>pp</b> = variação vs. o início.'+
+    (hasLive?' <b style="color:var(--warn)">● ao vivo</b> = mesma conta usando as odds '+
+      'in-play onde existem (complementar; a variação é vs. a prob atual).':'')+'</p>'+
     '<div class="resumo">'+
-      kpi('P(14 ou 13)', pct(a.p13mais), umEm(a.p13mais)+delta(a.p13mais,ini.p13mais), true)+
-      kpi('P(14)', pct(a.p14), umEm(a.p14)+delta(a.p14,ini.p14))+
-      kpi('P(13 exato)', pct(a.p13), umEm(a.p13)+delta(a.p13,ini.p13))+
+      kpi('P(14 ou 13)', pct(a.p13mais), umEm(a.p13mais)+delta(a.p13mais,ini.p13mais), liveRow(al.p13mais,a.p13mais), true)+
+      kpi('P(14)', pct(a.p14), umEm(a.p14)+delta(a.p14,ini.p14), liveRow(al.p14,a.p14))+
+      kpi('P(13 exato)', pct(a.p13), umEm(a.p13)+delta(a.p13,ini.p13), liveRow(al.p13,a.p13))+
     '</div>';
 })();
 
@@ -929,6 +1052,19 @@ document.getElementById('subtitulo').innerHTML =
     rows+='<tr><td>'+esc(p.t)+'</td><td class="conf">'+ev+'</td>'+
       '<td>'+pct(p.p13mais)+'</td><td>'+pct(p.p14)+'</td><td>'+pct(p.p13)+'</td></tr>';
   });
+  // linha extra "agora (ao vivo)": só quando há jogos com odds in-play. Mostra a
+  // hora em que o script rodou e as métricas recalculadas com as odds ao vivo,
+  // com a variação (pp) vs. a situação atual (pré-jogo) — leitura complementar.
+  if(D.live_point){
+    const lp=D.live_point, a=D.atual||{};
+    rows+='<tr style="background:#fffaf0">'+
+      '<td>'+esc(lp.t)+'</td>'+
+      '<td class="conf"><span style="color:var(--warn);font-weight:700">● considerando odds ao vivo</span> '+
+        '<span style="color:var(--muted);font-size:.8rem">('+lp.n_live+' jogo'+(lp.n_live>1?'s':'')+' in-play)</span></td>'+
+      '<td>'+pct(lp.p13mais)+ppBadge(lp.p13mais,a.p13mais)+'</td>'+
+      '<td>'+pct(lp.p14)+ppBadge(lp.p14,a.p14)+'</td>'+
+      '<td>'+pct(lp.p13)+ppBadge(lp.p13,a.p13)+'</td></tr>';
+  }
   document.getElementById('evol-sec').innerHTML=
     '<h3 class="sub-h">Evolução (tabela)</h3><div class="tabela-wrap"><table><thead><tr>'+
     '<th>Quando</th><th class="conf">Jogo decidido</th><th>P(14 ou 13)</th><th>P(14)</th>'+

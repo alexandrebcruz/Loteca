@@ -54,6 +54,13 @@ ambiente; sem elas, use `--sem-auditar`/`--pular-auditoria` e sem `--proxy`.
 - **Dois de-para SEPARADOS**: Sofascore em INGLÊS (Alemanha→Germany), Flashscore
   em PT raw-first (Alemanha→Alemanha). Não unifique — a tabela em inglês quebra o
   match no Flashscore.
+- **Odds AO VIVO (intragame) ≠ odds pré-jogo**: a página HTML de comparação
+  (`coletar_odds`) é a *closing line* congelada. As odds que ticam in-play vêm de
+  um GraphQL separado (`global.ds.lsapp.eu/odds/pq_graphql`, `findOddsByEventId`,
+  sem `x-fsign`) — exposto em `buscar_odds_live_flashscore()`. É um canal
+  **aditivo**: só o `acompanhamento_loteca.py` consome, e só para jogos `ao_vivo`;
+  **não toca** `coletar_odds`, o pipeline, nem as probabilidades/cobertura do
+  bilhete (que seguem as odds pré-jogo). Endpoint e mapeamento 1X2 no README.
 - **Saída do pipeline**: pasta `data/analise/<concurso>_<AAAAMMDDHHMM>/`. O
   override de pasta nas etapas 1/2 é o flag `--saida` (seta `SAIDA_OVERRIDE`, que
   faz `_dir_concurso` ignorar o número do concurso).

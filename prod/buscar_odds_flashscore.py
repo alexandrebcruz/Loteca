@@ -844,6 +844,136 @@ async def coletar_odds(tab, match_url):
 
 
 # --------------------------------------------------------------------------- #
+# Odds AO VIVO (intragame) — canal GraphQL `findOddsByEventId` da Livesport.
+#
+# Por quê um caminho SEPARADO de coletar_odds(): a página HTML de comparação
+# (odds/1x2-odds/) mostra a linha de FECHAMENTO pré-jogo e NÃO atualiza com a bola
+# rolando. As cotações que ticam in-play vêm de um GraphQL limpo (JSON, sem
+# x-fsign): global.ds.lsapp.eu/odds/pq_graphql. Lá, cada mercado é por
+# casa × tipo (HOME_DRAW_AWAY = 1X2) × tempo (FULL_TIME), com `value` (cotação
+# corrente) + `opening` e a flag `hasLiveBettingOffers` — o sinal real de que a
+# casa está precificando AO VIVO. Cobertura é fina: na maioria dos jogos só um
+# punhado de casas oferece live (em liga grande, mais). Devolve no MESMO formato
+# de coletar_odds() (odds_por_casa/odds_1x2 em orientação FLASHSCORE: casa=mandante,
+# empate, fora=visitante), pra reusar estimar_prob(..., invertido=...) sem adaptar.
+# --------------------------------------------------------------------------- #
+_GQL_ODDS = ("https://global.ds.lsapp.eu/odds/pq_graphql?_hash=oce&eventId={mid}"
+             "&projectId=401&geoIpCode={cc}&geoIpSubdivisionCode={sub}")
+
+
+def _team_ids_da_url(match_url):
+    """Da URL canônica /jogo/futebol/<slug>-<homeId>/<slug>-<awayId>/... extrai
+    (home_id, away_id). O 1º participante do caminho é o mandante. -> (str, str)|(None,None)."""
+    m = re.search(r"/jogo/[^/]+/[^/]*?-([A-Za-z0-9]{6,})/[^/]*?-([A-Za-z0-9]{6,})/", match_url or "")
+    return (m.group(1), m.group(2)) if m else (None, None)
+
+
+def _map_1x2(odds_items, home_id, away_id):
+    """Mapeia os 3 EventOddsItem -> {casa, empate, fora} (orientação Flashscore).
+    Empate = item com eventParticipantId nulo; mandante/visitante por id (com
+    fallback posicional [mandante, visitante] na ordem do array)."""
+    casa = empate = fora = None
+    sobra = []
+    for it in odds_items or []:
+        pid = it.get("eventParticipantId")
+        try:
+            v = float(it.get("value")) if it.get("value") is not None else None
+        except (TypeError, ValueError):
+            v = None
+        if pid is None:
+            empate = v
+        elif home_id and pid == home_id:
+            casa = v
+        elif away_id and pid == away_id:
+            fora = v
+        else:
+            sobra.append(v)
+    # fallback posicional p/ os participantes não casados por id
+    if casa is None and sobra:
+        casa = sobra.pop(0)
+    if fora is None and sobra:
+        fora = sobra.pop(0)
+    return {"casa": casa, "empate": empate, "fora": fora}
+
+
+async def buscar_odds_live_flashscore(tab, mid, match_url=None,
+                                      cc="BR", sub="BRSP", so_live=True):
+    """Odds 1X2 AO VIVO (intragame) de um jogo, via GraphQL da Livesport.
+
+    Usa uma `tab` já aberta (browser/consent já resolvidos pelo chamador) e faz um
+    fetch in-page do GraphQL findOddsByEventId. Filtra HOME_DRAW_AWAY + FULL_TIME.
+
+    so_live=True (default): devolve só as casas com hasLiveBettingOffers=True (as
+    que realmente precificam in-play). so_live=False: devolve todas as casas com
+    1X2 FT (útil pré-jogo), marcando quais são live.
+
+    -> dict no formato de coletar_odds():
+       {url, mid, n_casas, n_casas_live, casas_disponiveis, odds_por_casa:[
+          {casa, bookmaker_id, live(bool), odds_1x2:{casa,empate,fora},
+           opening_1x2:{casa,empate,fora}} ]}
+       Levanta RuntimeError se o GraphQL não responder; odds_por_casa pode vir
+       vazia (jogo sem oferta live) — o chamador trata."""
+    if not match_url:
+        match_url = await _canonical_from_mid(tab, mid)
+    home_id, away_id = _team_ids_da_url(match_url)
+
+    url = _GQL_ODDS.format(mid=mid, cc=cc, sub=sub)
+    expr = ("(async()=>{try{const r=await fetch(%r);return await r.text();}"
+            "catch(e){return '';}})()" % url)
+    raw = _unwrap(await tab.evaluate(expr, await_promise=True)) or ""
+    try:
+        node = json.loads(raw)["data"]["findOddsByEventId"]
+    except (ValueError, KeyError, TypeError):
+        raise RuntimeError(f"GraphQL de odds live não retornou JSON p/ mid={mid}")
+
+    # de-para bookmakerId -> nome (settings.bookmakers)
+    nomes = {}
+    for pb in (((node.get("settings") or {}).get("bookmakers")) or []):
+        bk = pb.get("bookmaker") or {}
+        if bk.get("id") is not None:
+            nomes[bk["id"]] = bk.get("name")
+
+    casas = []
+    for m in (node.get("odds") or []):
+        if m.get("bettingType") != "HOME_DRAW_AWAY" or m.get("bettingScope") != "FULL_TIME":
+            continue
+        live = bool(m.get("hasLiveBettingOffers"))
+        if so_live and not live:
+            continue
+        bid = m.get("bookmakerId")
+        valores = _map_1x2(m.get("odds"), home_id, away_id)
+        if None in (valores["casa"], valores["empate"], valores["fora"]):
+            continue
+        abert = _map_1x2(
+            [{"eventParticipantId": it.get("eventParticipantId"),
+              "value": it.get("opening")} for it in (m.get("odds") or [])],
+            home_id, away_id)
+        casas.append({
+            "casa": nomes.get(bid) or (f"bk{bid}" if bid is not None else None),
+            "bookmaker_id": bid,
+            "live": live,
+            "odds_1x2": valores,
+            "opening_1x2": abert,
+        })
+
+    # dedup por bookmaker_id (mantém a 1ª ocorrência)
+    seen, uniq = set(), []
+    for c in casas:
+        if c["bookmaker_id"] not in seen:
+            seen.add(c["bookmaker_id"]); uniq.append(c)
+
+    return {
+        "url": match_url,
+        "mid": mid,
+        "fonte": "flashscore-live-graphql",
+        "n_casas": len(uniq),
+        "n_casas_live": sum(1 for c in uniq if c["live"]),
+        "casas_disponiveis": [c["casa"] for c in uniq],
+        "odds_por_casa": uniq,
+    }
+
+
+# --------------------------------------------------------------------------- #
 # Orquestração
 # --------------------------------------------------------------------------- #
 async def _run(data=None, home=None, away=None, proxy=None, country=None,

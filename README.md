@@ -118,6 +118,15 @@ Saída do pipeline em `data/analise/<concurso>_<AAAAMMDDHHMM>/`:
   equiprovável 1X2 → cobertura = nº de colunas marcadas ÷ 3). Salva em
   `data/analise/<pasta>/acompanhamento/<R$>_<AAAAMMDDHHMM>.html`, sem resíduos de
   scraping.
+  - **Odds ao vivo (complementar):** para cada jogo no estado `ao_vivo`, chama
+    automaticamente `buscar_odds_live_flashscore` (acima) e, havendo casas
+    precificando in-play, mostra no HTML — sob cada coluna 1/X/2, na cobertura do
+    jogo, nos cards P(14)/P(13)/P(13+) e numa linha extra na "Evolução (tabela)" —
+    a leitura ao vivo com a variação (▲/▼ em pp) vs. a prob pré-jogo. **Não há flag
+    para isso**: o comando é o mesmo e o ao vivo só "liga" quando há jogo
+    acontecendo no momento da execução. É **puramente informativo** — NÃO entra na
+    cobertura nem nas probabilidades do bilhete (que seguem as odds pré-jogo). Se a
+    coleta live falhar é best-effort: registra o aviso e não derruba o HTML.
 
 ### Coleta de dados
 
@@ -153,6 +162,32 @@ Saída do pipeline em `data/analise/<concurso>_<AAAAMMDDHHMM>/`:
     igual à Loteca) e só cai no nome canônico abaixo do threshold; usa o
     `apelidos_loteca_flashscore.json` (PT). O match-id do Flashscore **≠** o
     `event_id` do Sofascore — por isso resolve por nome/data.
+  - **Odds AO VIVO (intragame)** — `buscar_odds_live_flashscore(tab, mid,
+    match_url=...)`. As odds que **ticam com a bola rolando NÃO vêm da página HTML
+    de comparação** (`coletar_odds`, que mostra a *closing line* pré-jogo e fica
+    congelada). Vêm de um **GraphQL limpo** (JSON, sem `x-fsign`):
+
+    ```
+    GET https://global.ds.lsapp.eu/odds/pq_graphql?_hash=oce&eventId=<mid>&projectId=401&geoIpCode=BR&geoIpSubdivisionCode=BRSP
+    ```
+
+    em `data.findOddsByEventId`. Cada item de `odds` é um mercado por **casa ×
+    tipo × tempo**: filtre `bettingType="HOME_DRAW_AWAY"` (=1X2) +
+    `bettingScope="FULL_TIME"`. Cada mercado traz `value` (cotação corrente),
+    `opening` (abertura), `active` e a flag **`hasLiveBettingOffers`** — o sinal
+    real de que a casa está precificando in-play. Mapeamento dos 3 itens:
+    **empate = `eventParticipantId` nulo**; mandante/visitante por id (o 1º id no
+    path da URL canônica `/jogo/futebol/<slug>-<homeId>/<slug>-<awayId>/` é o
+    mandante — robusto mesmo se o feed inverter a ordem). `settings.bookmakers` dá
+    o de-para `bookmakerId → nome`. **Cobertura é fina**: na maioria dos jogos só
+    um punhado de casas oferece live (o consenso de ~24 casas pré-jogo NÃO existe
+    ao vivo). A função recebe uma `tab` já aberta (consent resolvido pelo
+    chamador), faz o fetch in-page e devolve **no MESMO formato de `coletar_odds`**
+    (`odds_por_casa[]` / `odds_1x2` em orientação Flashscore) — então
+    `estimar_prob(..., invertido=...)` funciona direto, sem adaptação. Por padrão
+    (`so_live=True`) só retorna casas com `hasLiveBettingOffers=True`. **É um canal
+    SEPARADO e aditivo**: `coletar_odds` (usada na análise/pipeline) não foi
+    tocada, e a coleta live só é acionada pelo acompanhamento (ver abaixo).
 
 - **`buscar_eventid_sofascore.py`** — resolve o `EVENT_ID` do **Sofascore** de um
   jogo (data + nomes). Sobe Chrome headful, captura o token de sessão e resolve
