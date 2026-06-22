@@ -1,0 +1,25 @@
+# dados / saídas / cache (regeneráveis — histórico da Caixa, checkpoints, preços)
+data/
+
+# ambientes e bytecode Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# logs e artefatos de execução
+*.log
+*.out
+_game.png
+_home.png
+
+# config local do harness / editor
+.claude/
+.vscode/
+.idea/
+
+# locks/backups dos apelidos (gerados pelos auditores)
+*.lock
+*.bak
+*.bak.*

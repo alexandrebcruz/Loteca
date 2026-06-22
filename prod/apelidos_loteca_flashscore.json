@@ -1,0 +1,211 @@
+{
+  "_comentario": "De-para de nomes (Loteca -> Flashscore.com.br / Livesport) + apoio ao desempate geográfico. DIFERENTE do apelidos_loteca_sofascore.json: o Flashscore.com.br é PT (igual à Loteca), então o casamento é RAW-FIRST (nomes crus PT<->PT) e 'times' só guarda os casos em que o nome cru NÃO casa — abreviações da Loteca (ATH BILBAO, PSG) e clubes que o Flashscore grafa diferente. NÃO ponha tradução de seleção (Alemanha->Germany): aqui a seleção já é PT. 'times': chave normalizada (sem acento, minúscula) -> nome canônico do Flashscore. 'paises': código país da Loteca (~ISO alpha-3) -> ISO alpha-2 (mantido por simetria; o feed dá país por NOME, então hoje não dispara). 'uf': sigla do estado BR -> termos textuais procurados no nome do time/torneio. A camada de resgate por LLM popula 'times' ao longo do tempo (--aplicar-apelido).",
+  "times": {
+    "ath bilbao": "Athletic Club",
+    "athletic bilbao": "Athletic Club"
+  },
+  "paises": {
+    "ALB": "AL",
+    "AND": "AD",
+    "ARE": "AE",
+    "ARG": "AR",
+    "AUS": "AU",
+    "AUT": "AT",
+    "BEL": "BE",
+    "BGR": "BG",
+    "BIH": "BA",
+    "BLR": "BY",
+    "BOL": "BO",
+    "BRA": "BR",
+    "CAN": "CA",
+    "CHE": "CH",
+    "CHL": "CL",
+    "CIV": "CI",
+    "CMR": "CM",
+    "COG": "CG",
+    "COL": "CO",
+    "CPV": "CV",
+    "CRI": "CR",
+    "CUW": "CW",
+    "CYP": "CY",
+    "CZE": "CZ",
+    "DEU": "DE",
+    "DNK": "DK",
+    "DZA": "DZ",
+    "ECU": "EC",
+    "EGY": "EG",
+    "ESP": "ES",
+    "EST": "EE",
+    "FIN": "FI",
+    "FRA": "FR",
+    "FRO": "FO",
+    "GBR": "GB",
+    "GEO": "GE",
+    "GHA": "GH",
+    "GIB": "GI",
+    "GLP": "GP",
+    "GNB": "GW",
+    "GRC": "GR",
+    "GTM": "GT",
+    "HND": "HN",
+    "HRV": "HR",
+    "HTI": "HT",
+    "HUN": "HU",
+    "IRL": "IE",
+    "IRN": "IR",
+    "IRQ": "IQ",
+    "ISL": "IS",
+    "ISR": "IL",
+    "ITA": "IT",
+    "JAM": "JM",
+    "JPN": "JP",
+    "KAZ": "KZ",
+    "LIE": "LI",
+    "LTU": "LT",
+    "LUX": "LU",
+    "LVA": "LV",
+    "MAR": "MA",
+    "MEX": "MX",
+    "MKD": "MK",
+    "MLT": "MT",
+    "NGA": "NG",
+    "NIC": "NI",
+    "NLD": "NL",
+    "NOR": "NO",
+    "NZL": "NZ",
+    "PAN": "PA",
+    "PER": "PE",
+    "POL": "PL",
+    "PRT": "PT",
+    "PRY": "PY",
+    "QAT": "QA",
+    "ROM": "RO",
+    "SAU": "SA",
+    "SEN": "SN",
+    "SLV": "SV",
+    "SVK": "SK",
+    "SVN": "SI",
+    "SWE": "SE",
+    "TUN": "TN",
+    "TUR": "TR",
+    "UKR": "UA",
+    "URY": "UY",
+    "USA": "US",
+    "VEN": "VE",
+    "ZAF": "ZA",
+    "ING": "EN",
+    "COR": "KR"
+  },
+  "uf": {
+    "AC": [
+      "acriano",
+      "acre"
+    ],
+    "AL": [
+      "alagoano",
+      "alagoas"
+    ],
+    "AM": [
+      "amazonense",
+      "amazonas"
+    ],
+    "AP": [
+      "amapaense",
+      "amapa"
+    ],
+    "BA": [
+      "baiano",
+      "bahia"
+    ],
+    "CE": [
+      "cearense",
+      "ceara"
+    ],
+    "DF": [
+      "brasiliense",
+      "distrito federal",
+      "brasilia"
+    ],
+    "ES": [
+      "capixaba",
+      "espirito santo"
+    ],
+    "GO": [
+      "goiano",
+      "goias"
+    ],
+    "MA": [
+      "maranhense",
+      "maranhao"
+    ],
+    "MG": [
+      "mineiro",
+      "minas gerais"
+    ],
+    "MS": [
+      "sul mato grossense",
+      "mato grosso do sul"
+    ],
+    "MT": [
+      "mato grossense",
+      "mato grosso"
+    ],
+    "PA": [
+      "paraense",
+      "para"
+    ],
+    "PB": [
+      "paraibano",
+      "paraiba"
+    ],
+    "PE": [
+      "pernambucano",
+      "pernambuco"
+    ],
+    "PI": [
+      "piauiense",
+      "piaui"
+    ],
+    "PR": [
+      "paranaense",
+      "parana"
+    ],
+    "RJ": [
+      "carioca",
+      "fluminense",
+      "rio de janeiro"
+    ],
+    "RN": [
+      "potiguar",
+      "rio grande do norte"
+    ],
+    "RO": [
+      "rondoniense",
+      "rondonia"
+    ],
+    "RR": [
+      "roraimense",
+      "roraima"
+    ],
+    "RS": [
+      "gaucho",
+      "rio grande do sul"
+    ],
+    "SC": [
+      "catarinense",
+      "santa catarina"
+    ],
+    "SE": [
+      "sergipano",
+      "sergipe"
+    ],
+    "SP": [
+      "paulista",
+      "sao paulo"
+    ],
+    "TO": [
+      "tocantinense",
+      "tocantins"
+    ]
+  }
+}
