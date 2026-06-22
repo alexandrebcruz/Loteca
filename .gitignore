@@ -25,3 +25,7 @@ _home.png
 *.lock
 *.bak
 *.bak.*
+
+# data/analise é 100% versionado: esta negação final vence as regras globais
+# acima (*.log, *.png, *.bak, *.lock…) para QUALQUER arquivo dentro da pasta.
+!data/analise/**
