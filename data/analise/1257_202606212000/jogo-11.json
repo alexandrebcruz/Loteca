@@ -1,0 +1,32 @@
+{
+  "seq": 11,
+  "loteca": {
+    "home": "BOSNIA HERZEGOVIN",
+    "away": "CATAR",
+    "data": "2026-06-24"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Bósnia e Herzegovina",
+    "away": "Catar",
+    "data_exibida": "2026-06-24",
+    "mid": "jRyHEZGP",
+    "metodo": "agenda",
+    "score": 0.919,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.6581,
+    "empate": 0.2012,
+    "fora": 0.1407,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 1.42,
+      "empate": 4.7,
+      "fora": 6.6
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

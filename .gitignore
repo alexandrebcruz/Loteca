@@ -1,5 +1,7 @@
-# dados / saídas / cache (regeneráveis — histórico da Caixa, checkpoints, preços)
-data/
+# dados / saídas / cache (regeneráveis — histórico da Caixa, preços).
+# EXCEÇÃO: data/analise/ é versionado (checkpoints + relatórios das análises).
+data/*
+!data/analise/
 
 # ambientes e bytecode Python
 .venv/

@@ -1,0 +1,32 @@
+{
+  "seq": 14,
+  "loteca": {
+    "home": "REPUBLICA TCHECA",
+    "away": "MEXICO",
+    "data": "2026-06-24"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Republica Tcheca",
+    "away": "México",
+    "data_exibida": "2026-06-25",
+    "mid": "GCoIA5bf",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2585,
+    "empate": 0.2571,
+    "fora": 0.4844,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 3.6,
+      "empate": 3.63,
+      "fora": 1.94
+    }
+  },
+  "palpite": "2",
+  "n_casas": 21,
+  "erro": null
+}

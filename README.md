@@ -23,9 +23,11 @@ máquina com Chrome e Python.
   - `dev/varredura_nomes.py`, `dev/verificar_flagrados.py`, `dev/comparar_modos.py`
     — análise/manutenção de nomes (varrem concursos p/ achar divergências e
     comparar estratégias de resolução).
-- **`data/`** — saídas e cache (não versionado): histórico cru da Caixa em
-  `data/raw/loteca-NNNN.json`, checkpoints de análise em
-  `data/analise/<concurso>/`, cache de preços em `data/loteca_precos.json`.
+- **`data/`** — saídas e cache. O histórico cru da Caixa
+  (`data/raw/loteca-NNNN.json`) e o cache de preços (`data/loteca_precos.json`)
+  **não são versionados** (regeneráveis). Já os **checkpoints + relatórios de cada
+  análise em `data/analise/<concurso>/` SÃO versionados** (`.gitignore`:
+  `data/*` + `!data/analise/`).
 
 ## Fluxo de ponta a ponta
 
@@ -104,6 +106,18 @@ Saída do pipeline em `data/analise/<concurso>_<AAAAMMDDHHMM>/`:
     desligada por padrão no batch), `--llm-model`, `--proxy/--country`,
     `--concurso-json`, `--saida` (subpasta custom sob `data/analise`,
     default = número do concurso), `--quiet`.
+
+- **`acompanhamento_loteca.py`** — gera **um HTML ao vivo** de um concurso já
+  analisado: `python3 prod/acompanhamento_loteca.py <pasta> <valor_R$>` (ex.:
+  `1257_202606212000 108`). Reaproveita o `analise.json` da pasta (mid, prob 1X2,
+  invertido) e **reconstrói o bilhete jogado** rodando o mesmo `otimizador_loteca`
+  sobre o valor em R$ informado. Lê placar/status/horário **direto na página de
+  cada jogo** (não usa o feed), recoleta odds só dos pendentes e **reestima
+  P(14)/P(13)/P(13+)** (Poisson-binomial) com a evolução temporal. Jogo não
+  realizado ou interrompido sem chegar ao fim vira **sorteio** (resultado
+  equiprovável 1X2 → cobertura = nº de colunas marcadas ÷ 3). Salva em
+  `data/analise/<pasta>/acompanhamento/<R$>_<AAAAMMDDHHMM>.html`, sem resíduos de
+  scraping.
 
 ### Coleta de dados
 

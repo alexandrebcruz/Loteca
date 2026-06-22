@@ -1,0 +1,458 @@
+{
+  "concurso": 1257,
+  "aberto": true,
+  "fim_apostas": "21/06/2026 21h",
+  "fonte_odds": "flashscore.com.br",
+  "jogos_resolvidos": 14,
+  "jogos_total": 14,
+  "jogos": [
+    {
+      "seq": 1,
+      "loteca": {
+        "home": "ESCOCIA/SCT",
+        "away": "BRASIL",
+        "data": "2026-06-24"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Escócia",
+        "away": "Brasil",
+        "data_exibida": "2026-06-24",
+        "mid": "EgVZxtj1",
+        "metodo": "agenda",
+        "score": 0.9,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.122,
+        "empate": 0.1913,
+        "fora": 0.6866,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 7.78,
+          "empate": 4.9,
+          "fora": 1.37
+        }
+      },
+      "palpite": "2",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 2,
+      "loteca": {
+        "home": "NOVA ZELANDIA",
+        "away": "EGITO",
+        "data": "2026-06-21"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Nova Zelândia",
+        "away": "Egito",
+        "data_exibida": "2026-06-22",
+        "mid": "QeaikheU",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.1612,
+        "empate": 0.2416,
+        "fora": 0.5972,
+        "n_casas_validas": 24,
+        "odds_medianas": {
+          "casa": 5.9,
+          "empate": 3.92,
+          "fora": 1.58
+        }
+      },
+      "palpite": "2",
+      "n_casas": 24,
+      "erro": null
+    },
+    {
+      "seq": 3,
+      "loteca": {
+        "home": "ARGENTINA",
+        "away": "AUSTRIA",
+        "data": "2026-06-22"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Argentina",
+        "away": "Áustria",
+        "data_exibida": "2026-06-22",
+        "mid": "Cpq2Y2FE",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.617,
+        "empate": 0.2366,
+        "fora": 0.1463,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 1.52,
+          "empate": 4.0,
+          "fora": 6.5
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 4,
+      "loteca": {
+        "home": "FRANCA",
+        "away": "IRAQUE",
+        "data": "2026-06-22"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "França",
+        "away": "Iraque",
+        "data_exibida": "2026-06-22",
+        "mid": "KMRMTaNM",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.8758,
+        "empate": 0.0923,
+        "fora": 0.0319,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 1.07,
+          "empate": 10.0,
+          "fora": 30.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 5,
+      "loteca": {
+        "home": "NORUEGA",
+        "away": "SENEGAL",
+        "data": "2026-06-22"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Noruega",
+        "away": "Senegal",
+        "data_exibida": "2026-06-23",
+        "mid": "xSUJLPV8",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.4194,
+        "empate": 0.2708,
+        "fora": 0.3099,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 2.25,
+          "empate": 3.5,
+          "fora": 3.06
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 6,
+      "loteca": {
+        "home": "PORTUGAL",
+        "away": "UZBEQUISTAO/UZB",
+        "data": "2026-06-23"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Portugal",
+        "away": "Uzbequistão",
+        "data_exibida": "2026-06-23",
+        "mid": "nRFcNx7D",
+        "metodo": "agenda",
+        "score": 0.9,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7873,
+        "empate": 0.1463,
+        "fora": 0.0665,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 1.2,
+          "empate": 6.4,
+          "fora": 14.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 7,
+      "loteca": {
+        "home": "INGLATERRA",
+        "away": "GANA",
+        "data": "2026-06-23"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Inglaterra",
+        "away": "Gana",
+        "data_exibida": "2026-06-23",
+        "mid": "KhgvzGjJ",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7791,
+        "empate": 0.1522,
+        "fora": 0.0687,
+        "n_casas_validas": 22,
+        "odds_medianas": {
+          "casa": 1.21,
+          "empate": 6.15,
+          "fora": 13.25
+        }
+      },
+      "palpite": "1",
+      "n_casas": 22,
+      "erro": null
+    },
+    {
+      "seq": 8,
+      "loteca": {
+        "home": "PANAMA",
+        "away": "CROACIA",
+        "data": "2026-06-23"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Panamá",
+        "away": "Croácia",
+        "data_exibida": "2026-06-23",
+        "mid": "CSkWyxM6",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.1483,
+        "empate": 0.2397,
+        "fora": 0.612,
+        "n_casas_validas": 22,
+        "odds_medianas": {
+          "casa": 6.31,
+          "empate": 3.96,
+          "fora": 1.53
+        }
+      },
+      "palpite": "2",
+      "n_casas": 22,
+      "erro": null
+    },
+    {
+      "seq": 9,
+      "loteca": {
+        "home": "COLOMBIA",
+        "away": "CONGO",
+        "data": "2026-06-23"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Colômbia",
+        "away": "R. D. Congo",
+        "data_exibida": "2026-06-24",
+        "mid": "K0YnEaMq",
+        "metodo": "agenda",
+        "score": 0.9,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.6217,
+        "empate": 0.2379,
+        "fora": 0.1404,
+        "n_casas_validas": 22,
+        "odds_medianas": {
+          "casa": 1.5,
+          "empate": 4.0,
+          "fora": 6.64
+        }
+      },
+      "palpite": "1",
+      "n_casas": 22,
+      "erro": null
+    },
+    {
+      "seq": 10,
+      "loteca": {
+        "home": "SUICA",
+        "away": "CANADA",
+        "data": "2026-06-24"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Suíça",
+        "away": "Canadá",
+        "data_exibida": "2026-06-24",
+        "mid": "2wQjwkpp",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.3847,
+        "empate": 0.3187,
+        "fora": 0.2966,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 2.44,
+          "empate": 2.93,
+          "fora": 3.14
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 11,
+      "loteca": {
+        "home": "BOSNIA HERZEGOVIN",
+        "away": "CATAR",
+        "data": "2026-06-24"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Bósnia e Herzegovina",
+        "away": "Catar",
+        "data_exibida": "2026-06-24",
+        "mid": "jRyHEZGP",
+        "metodo": "agenda",
+        "score": 0.919,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.6581,
+        "empate": 0.2012,
+        "fora": 0.1407,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 1.42,
+          "empate": 4.7,
+          "fora": 6.6
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 12,
+      "loteca": {
+        "home": "MARROCOS",
+        "away": "HAITI",
+        "data": "2026-06-24"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Marrocos",
+        "away": "Haiti",
+        "data_exibida": "2026-06-24",
+        "mid": "n7TsyKKD",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7919,
+        "empate": 0.145,
+        "fora": 0.0631,
+        "n_casas_validas": 23,
+        "odds_medianas": {
+          "casa": 1.18,
+          "empate": 6.5,
+          "fora": 15.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 23,
+      "erro": null
+    },
+    {
+      "seq": 13,
+      "loteca": {
+        "home": "AFRICA DO SUL",
+        "away": "COREIA DO SUL",
+        "data": "2026-06-24"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "África do Sul",
+        "away": "Coreia do Sul",
+        "data_exibida": "2026-06-25",
+        "mid": "4rr4ngNc",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.17,
+        "empate": 0.2434,
+        "fora": 0.5866,
+        "n_casas_validas": 21,
+        "odds_medianas": {
+          "casa": 5.5,
+          "empate": 3.85,
+          "fora": 1.6
+        }
+      },
+      "palpite": "2",
+      "n_casas": 21,
+      "erro": null
+    },
+    {
+      "seq": 14,
+      "loteca": {
+        "home": "REPUBLICA TCHECA",
+        "away": "MEXICO",
+        "data": "2026-06-24"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "Republica Tcheca",
+        "away": "México",
+        "data_exibida": "2026-06-25",
+        "mid": "GCoIA5bf",
+        "metodo": "agenda",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.2585,
+        "empate": 0.2571,
+        "fora": 0.4844,
+        "n_casas_validas": 21,
+        "odds_medianas": {
+          "casa": 3.6,
+          "empate": 3.63,
+          "fora": 1.94
+        }
+      },
+      "palpite": "2",
+      "n_casas": 21,
+      "erro": null
+    }
+  ]
+}

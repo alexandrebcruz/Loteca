@@ -1,0 +1,32 @@
+{
+  "seq": 3,
+  "loteca": {
+    "home": "ARGENTINA",
+    "away": "AUSTRIA",
+    "data": "2026-06-22"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Argentina",
+    "away": "Áustria",
+    "data_exibida": "2026-06-22",
+    "mid": "Cpq2Y2FE",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.617,
+    "empate": 0.2366,
+    "fora": 0.1463,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 1.52,
+      "empate": 4.0,
+      "fora": 6.5
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

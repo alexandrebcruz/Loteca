@@ -1,0 +1,32 @@
+{
+  "seq": 12,
+  "loteca": {
+    "home": "MARROCOS",
+    "away": "HAITI",
+    "data": "2026-06-24"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Marrocos",
+    "away": "Haiti",
+    "data_exibida": "2026-06-24",
+    "mid": "n7TsyKKD",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.7919,
+    "empate": 0.145,
+    "fora": 0.0631,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 1.18,
+      "empate": 6.5,
+      "fora": 15.0
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

@@ -18,9 +18,10 @@ dicionários de nomes (de-para Loteca → casa de odds).
 - **`dev/`** — ferramentas fora de produção e experimentos. Dependem de `prod/`
   via `sys.path.insert(..., "..", "prod")` e importam `buscar_eventid_sofascore`.
   Não quebre esse path relativo ao mexer em `dev/`.
-- **`data/`** — saídas/cache, **NÃO versionado** (`.gitignore`). Histórico cru da
-  Caixa (`data/raw/`, re-baixável com `baixar_loteca_backtest.py`), checkpoints de
-  análise (`data/analise/<concurso>/`) e cache de preços.
+- **`data/`** — saídas/cache. `data/raw/` (histórico cru da Caixa, re-baixável com
+  `baixar_loteca_backtest.py`) e o cache de preços **NÃO** são versionados. A
+  exceção é **`data/analise/<concurso>/` — esse SIM é versionado** (checkpoints +
+  relatórios HTML das análises; `.gitignore` faz `data/*` + `!data/analise/`).
 
 ## Como rodar
 
@@ -60,4 +61,5 @@ ambiente; sem elas, use `--sem-auditar`/`--pular-auditoria` e sem `--proxy`.
 ## Git
 
 - Branch principal: `main`. Commite/pushe só quando solicitado.
-- `data/` e `.venv/` ficam fora do versionamento (ver `.gitignore`).
+- `.venv/`, `data/raw/` e o cache de preços ficam fora do versionamento; **`data/analise/`
+  é versionado** (ver `.gitignore`).

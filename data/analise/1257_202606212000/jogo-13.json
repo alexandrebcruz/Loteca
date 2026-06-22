@@ -1,0 +1,32 @@
+{
+  "seq": 13,
+  "loteca": {
+    "home": "AFRICA DO SUL",
+    "away": "COREIA DO SUL",
+    "data": "2026-06-24"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "África do Sul",
+    "away": "Coreia do Sul",
+    "data_exibida": "2026-06-25",
+    "mid": "4rr4ngNc",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.17,
+    "empate": 0.2434,
+    "fora": 0.5866,
+    "n_casas_validas": 21,
+    "odds_medianas": {
+      "casa": 5.5,
+      "empate": 3.85,
+      "fora": 1.6
+    }
+  },
+  "palpite": "2",
+  "n_casas": 21,
+  "erro": null
+}

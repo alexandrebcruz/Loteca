@@ -1,0 +1,32 @@
+{
+  "seq": 10,
+  "loteca": {
+    "home": "SUICA",
+    "away": "CANADA",
+    "data": "2026-06-24"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Suíça",
+    "away": "Canadá",
+    "data_exibida": "2026-06-24",
+    "mid": "2wQjwkpp",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.3847,
+    "empate": 0.3187,
+    "fora": 0.2966,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 2.44,
+      "empate": 2.93,
+      "fora": 3.14
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

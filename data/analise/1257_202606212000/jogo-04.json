@@ -1,0 +1,32 @@
+{
+  "seq": 4,
+  "loteca": {
+    "home": "FRANCA",
+    "away": "IRAQUE",
+    "data": "2026-06-22"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "França",
+    "away": "Iraque",
+    "data_exibida": "2026-06-22",
+    "mid": "KMRMTaNM",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.8758,
+    "empate": 0.0923,
+    "fora": 0.0319,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 1.07,
+      "empate": 10.0,
+      "fora": 30.0
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

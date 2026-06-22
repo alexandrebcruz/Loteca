@@ -1,0 +1,32 @@
+{
+  "seq": 2,
+  "loteca": {
+    "home": "NOVA ZELANDIA",
+    "away": "EGITO",
+    "data": "2026-06-21"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Nova Zelândia",
+    "away": "Egito",
+    "data_exibida": "2026-06-22",
+    "mid": "QeaikheU",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.1612,
+    "empate": 0.2416,
+    "fora": 0.5972,
+    "n_casas_validas": 24,
+    "odds_medianas": {
+      "casa": 5.9,
+      "empate": 3.92,
+      "fora": 1.58
+    }
+  },
+  "palpite": "2",
+  "n_casas": 24,
+  "erro": null
+}

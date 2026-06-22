@@ -1,0 +1,32 @@
+{
+  "seq": 6,
+  "loteca": {
+    "home": "PORTUGAL",
+    "away": "UZBEQUISTAO/UZB",
+    "data": "2026-06-23"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Portugal",
+    "away": "Uzbequistão",
+    "data_exibida": "2026-06-23",
+    "mid": "nRFcNx7D",
+    "metodo": "agenda",
+    "score": 0.9,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.7873,
+    "empate": 0.1463,
+    "fora": 0.0665,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 1.2,
+      "empate": 6.4,
+      "fora": 14.0
+    }
+  },
+  "palpite": "1",
+  "n_casas": 23,
+  "erro": null
+}

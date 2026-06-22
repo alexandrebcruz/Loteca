@@ -1,0 +1,32 @@
+{
+  "seq": 1,
+  "loteca": {
+    "home": "ESCOCIA/SCT",
+    "away": "BRASIL",
+    "data": "2026-06-24"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Escócia",
+    "away": "Brasil",
+    "data_exibida": "2026-06-24",
+    "mid": "EgVZxtj1",
+    "metodo": "agenda",
+    "score": 0.9,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.122,
+    "empate": 0.1913,
+    "fora": 0.6866,
+    "n_casas_validas": 23,
+    "odds_medianas": {
+      "casa": 7.78,
+      "empate": 4.9,
+      "fora": 1.37
+    }
+  },
+  "palpite": "2",
+  "n_casas": 23,
+  "erro": null
+}

@@ -1,0 +1,32 @@
+{
+  "seq": 9,
+  "loteca": {
+    "home": "COLOMBIA",
+    "away": "CONGO",
+    "data": "2026-06-23"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Colômbia",
+    "away": "R. D. Congo",
+    "data_exibida": "2026-06-24",
+    "mid": "K0YnEaMq",
+    "metodo": "agenda",
+    "score": 0.9,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.6217,
+    "empate": 0.2379,
+    "fora": 0.1404,
+    "n_casas_validas": 22,
+    "odds_medianas": {
+      "casa": 1.5,
+      "empate": 4.0,
+      "fora": 6.64
+    }
+  },
+  "palpite": "1",
+  "n_casas": 22,
+  "erro": null
+}

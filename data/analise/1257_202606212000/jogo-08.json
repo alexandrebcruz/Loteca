@@ -1,0 +1,32 @@
+{
+  "seq": 8,
+  "loteca": {
+    "home": "PANAMA",
+    "away": "CROACIA",
+    "data": "2026-06-23"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "Panamá",
+    "away": "Croácia",
+    "data_exibida": "2026-06-23",
+    "mid": "CSkWyxM6",
+    "metodo": "agenda",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.1483,
+    "empate": 0.2397,
+    "fora": 0.612,
+    "n_casas_validas": 22,
+    "odds_medianas": {
+      "casa": 6.31,
+      "empate": 3.96,
+      "fora": 1.53
+    }
+  },
+  "palpite": "2",
+  "n_casas": 22,
+  "erro": null
+}
