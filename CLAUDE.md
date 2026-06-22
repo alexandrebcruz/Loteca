@@ -55,12 +55,20 @@ ambiente; sem elas, use `--sem-auditar`/`--pular-auditoria` e sem `--proxy`.
   em PT raw-first (Alemanha→Alemanha). Não unifique — a tabela em inglês quebra o
   match no Flashscore.
 - **Odds AO VIVO (intragame) ≠ odds pré-jogo**: a página HTML de comparação
-  (`coletar_odds`) é a *closing line* congelada. As odds que ticam in-play vêm de
-  um GraphQL separado (`global.ds.lsapp.eu/odds/pq_graphql`, `findOddsByEventId`,
-  sem `x-fsign`) — exposto em `buscar_odds_live_flashscore()`. É um canal
-  **aditivo**: só o `acompanhamento_loteca.py` consome, e só para jogos `ao_vivo`;
-  **não toca** `coletar_odds`, o pipeline, nem as probabilidades/cobertura do
-  bilhete (que seguem as odds pré-jogo). Endpoint e mapeamento 1X2 no README.
+  (`coletar_odds`) é a *closing line* congelada. CUIDADO: o GraphQL
+  `findOddsByEventId` (`global.ds.lsapp.eu/odds/pq_graphql`) **também é pré-jogo** —
+  seu `value` não tica (time 1–0 seguia ≈ prob pré-jogo) e `hasLiveBettingOffers`
+  só sinaliza que a casa tem produto live. O preço que TICA vem de um **WebSocket**
+  (`wss://*.fsdatacentre.com`, protocolo PushClient): a aba de odds 1X2 assina
+  `/fsds/changes/dlo2/event/liveodds/<mid>/<bookmakerId>/HOME_DRAW_AWAY/FULL_TIME` e
+  o servidor empurra frames com home/draw/away rotulados — capturados via CDP
+  (`WebSocketFrameReceived`) em `buscar_odds_live_flashscore()`. Sutilezas: habilitar
+  Network antes do socket nascer + 1ª conexão limpa (`about:blank`→base→fragmento; a
+  SPA só assina no hashchange) e **remover os bytes de controle** do wire format
+  (`ord(c)<32`) antes de parsear. É um canal **aditivo**: só o
+  `acompanhamento_loteca.py` consome, e só para jogos `ao_vivo`; **não toca**
+  `coletar_odds`, o pipeline, nem as probabilidades/cobertura do bilhete (que seguem
+  as odds pré-jogo). Endpoint, mapeamento 1X2 e cuidados no README.
 - **Saída do pipeline**: pasta `data/analise/<concurso>_<AAAAMMDDHHMM>/`. O
   override de pasta nas etapas 1/2 é o flag `--saida` (seta `SAIDA_OVERRIDE`, que
   faz `_dir_concurso` ignorar o número do concurso).

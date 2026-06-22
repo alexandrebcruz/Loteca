@@ -844,132 +844,175 @@ async def coletar_odds(tab, match_url):
 
 
 # --------------------------------------------------------------------------- #
-# Odds AO VIVO (intragame) — canal GraphQL `findOddsByEventId` da Livesport.
+# Odds AO VIVO (intragame) — canal WebSocket `liveodds` da Livesport (PushClient).
 #
 # Por quê um caminho SEPARADO de coletar_odds(): a página HTML de comparação
 # (odds/1x2-odds/) mostra a linha de FECHAMENTO pré-jogo e NÃO atualiza com a bola
-# rolando. As cotações que ticam in-play vêm de um GraphQL limpo (JSON, sem
-# x-fsign): global.ds.lsapp.eu/odds/pq_graphql. Lá, cada mercado é por
-# casa × tipo (HOME_DRAW_AWAY = 1X2) × tempo (FULL_TIME), com `value` (cotação
-# corrente) + `opening` e a flag `hasLiveBettingOffers` — o sinal real de que a
-# casa está precificando AO VIVO. Cobertura é fina: na maioria dos jogos só um
-# punhado de casas oferece live (em liga grande, mais). Devolve no MESMO formato
-# de coletar_odds() (odds_por_casa/odds_1x2 em orientação FLASHSCORE: casa=mandante,
-# empate, fora=visitante), pra reusar estimar_prob(..., invertido=...) sem adaptar.
+# rolando. ATENÇÃO: o GraphQL `findOddsByEventId` (global.ds.lsapp.eu/odds/...)
+# também é pré-jogo — o `value` dele é a closing line congelada (NÃO reflete o
+# placar; confirmado de campo: time 1-0 seguia 1.44 ≈ prob pré-jogo). A flag
+# `hasLiveBettingOffers` ali só diz que a casa TEM produto ao vivo, não que aquele
+# número seja in-play.
+#
+# As cotações que de fato TICAM in-play chegam por um WEBSOCKET (wss://*.fsdatacentre.com,
+# protocolo "PushClient"): ao abrir a aba de odds 1X2 do jogo, o cliente assina, por
+# casa, o canal `/fsds/changes/dlo2/event/liveodds/<mid>/<bookmakerId>/HOME_DRAW_AWAY/
+# FULL_TIME`, e o servidor empurra frames `eventLiveOddsOverviewUpdate.oddsOverview`
+# com home/draw/away rotulados — cada um com `value` (corrente), `opening`, `active`
+# e `change{type:UP|DOWN, previous}`. Capturamos esses frames via CDP (Network).
+# Cobertura é fina: só as casas com produto ao vivo empurram (em liga grande, mais).
+# Devolve no MESMO formato de coletar_odds() (odds_por_casa/odds_1x2 em orientação
+# FLASHSCORE: casa=mandante=home, empate=draw, fora=away=visitante), pra reusar
+# estimar_prob(..., invertido=...) sem adaptar.
 # --------------------------------------------------------------------------- #
 _GQL_ODDS = ("https://global.ds.lsapp.eu/odds/pq_graphql?_hash=oce&eventId={mid}"
              "&projectId=401&geoIpCode={cc}&geoIpSubdivisionCode={sub}")
+# fragmento (rota SPA) da aba de odds 1X2 tempo-integral — é o que dispara as
+# subscriptions de liveodds no WebSocket.
+_LIVE_FRAG = "#/resumo-de-jogo/cotacoes-do-jogo/cotacoes-1x2/tempo-integral"
 
 
-def _team_ids_da_url(match_url):
-    """Da URL canônica /jogo/futebol/<slug>-<homeId>/<slug>-<awayId>/... extrai
-    (home_id, away_id). O 1º participante do caminho é o mandante. -> (str, str)|(None,None)."""
-    m = re.search(r"/jogo/[^/]+/[^/]*?-([A-Za-z0-9]{6,})/[^/]*?-([A-Za-z0-9]{6,})/", match_url or "")
-    return (m.group(1), m.group(2)) if m else (None, None)
-
-
-def _map_1x2(odds_items, home_id, away_id):
-    """Mapeia os 3 EventOddsItem -> {casa, empate, fora} (orientação Flashscore).
-    Empate = item com eventParticipantId nulo; mandante/visitante por id (com
-    fallback posicional [mandante, visitante] na ordem do array)."""
-    casa = empate = fora = None
-    sobra = []
-    for it in odds_items or []:
-        pid = it.get("eventParticipantId")
-        try:
-            v = float(it.get("value")) if it.get("value") is not None else None
-        except (TypeError, ValueError):
-            v = None
-        if pid is None:
-            empate = v
-        elif home_id and pid == home_id:
-            casa = v
-        elif away_id and pid == away_id:
-            fora = v
-        else:
-            sobra.append(v)
-    # fallback posicional p/ os participantes não casados por id
-    if casa is None and sobra:
-        casa = sobra.pop(0)
-    if fora is None and sobra:
-        fora = sobra.pop(0)
-    return {"casa": casa, "empate": empate, "fora": fora}
-
-
-async def buscar_odds_live_flashscore(tab, mid, match_url=None,
-                                      cc="BR", sub="BRSP", so_live=True):
-    """Odds 1X2 AO VIVO (intragame) de um jogo, via GraphQL da Livesport.
-
-    Usa uma `tab` já aberta (browser/consent já resolvidos pelo chamador) e faz um
-    fetch in-page do GraphQL findOddsByEventId. Filtra HOME_DRAW_AWAY + FULL_TIME.
-
-    so_live=True (default): devolve só as casas com hasLiveBettingOffers=True (as
-    que realmente precificam in-play). so_live=False: devolve todas as casas com
-    1X2 FT (útil pré-jogo), marcando quais são live.
-
-    -> dict no formato de coletar_odds():
-       {url, mid, n_casas, n_casas_live, casas_disponiveis, odds_por_casa:[
-          {casa, bookmaker_id, live(bool), odds_1x2:{casa,empate,fora},
-           opening_1x2:{casa,empate,fora}} ]}
-       Levanta RuntimeError se o GraphQL não responder; odds_por_casa pode vir
-       vazia (jogo sem oferta live) — o chamador trata."""
-    if not match_url:
-        match_url = await _canonical_from_mid(tab, mid)
-    home_id, away_id = _team_ids_da_url(match_url)
-
+async def _nomes_bookmakers(tab, mid, cc="BR", sub="BRSP"):
+    """De-para bookmakerId -> nome via settings.bookmakers do GraphQL pré-jogo.
+    Best-effort: {} se o fetch/parse falhar (cai no rótulo 'bk<id>')."""
     url = _GQL_ODDS.format(mid=mid, cc=cc, sub=sub)
     expr = ("(async()=>{try{const r=await fetch(%r);return await r.text();}"
             "catch(e){return '';}})()" % url)
     raw = _unwrap(await tab.evaluate(expr, await_promise=True)) or ""
+    nomes = {}
     try:
         node = json.loads(raw)["data"]["findOddsByEventId"]
+        for pb in (((node.get("settings") or {}).get("bookmakers")) or []):
+            bk = pb.get("bookmaker") or {}
+            if bk.get("id") is not None:
+                nomes[bk["id"]] = bk.get("name")
     except (ValueError, KeyError, TypeError):
-        raise RuntimeError(f"GraphQL de odds live não retornou JSON p/ mid={mid}")
+        pass
+    return nomes
 
-    # de-para bookmakerId -> nome (settings.bookmakers)
-    nomes = {}
-    for pb in (((node.get("settings") or {}).get("bookmakers")) or []):
-        bk = pb.get("bookmaker") or {}
-        if bk.get("id") is not None:
-            nomes[bk["id"]] = bk.get("name")
+
+def _lado_live(payload, lado):
+    """Extrai (value, opening, active) de um lado (home|draw|away) do frame WS de
+    liveodds. O payload é JS-ish (chaves sem aspas); `[^{}]` mantém a captura nos
+    campos planos do lado, antes do `change:{...}` aninhado. -> (float|None, float|None, bool)."""
+    m = re.search(
+        lado + r":\{[^{}]*?value:([0-9.]+)[^{}]*?opening:([0-9.]+)[^{}]*?active:(true|false)",
+        payload or "")
+    if not m:
+        return (None, None, False)
+    try:
+        return (float(m.group(1)), float(m.group(2)), m.group(3) == "true")
+    except ValueError:
+        return (None, None, False)
+
+
+def _parse_frame_liveodds(payload):
+    """Frame WS `.../liveodds/<mid>/<bid>/HOME_DRAW_AWAY/FULL_TIME{...}` ->
+    (bid, odds_1x2, opening_1x2) ou None. odds_1x2 em orientação Flashscore
+    (casa=home, empate=draw, fora=away). Só retorna se os 3 lados ativos e válidos.
+
+    O wire format do PushClient separa tokens por bytes de controle (ex.: o
+    payload vem como `value\\x1f\\x07:\\x1f\\x071.2`); removê-los reconstitui o
+    texto `value:1.2,opening:1.45,active:true` que os regexes esperam."""
+    payload = "".join(c for c in (payload or "") if ord(c) >= 32)
+    mb = re.search(r"liveodds/[^/]+/(\d+)/HOME_DRAW_AWAY/FULL_TIME", payload)
+    if not mb:
+        return None
+    h = _lado_live(payload, "home")
+    d = _lado_live(payload, "draw")
+    a = _lado_live(payload, "away")
+    vals = {"casa": h[0], "empate": d[0], "fora": a[0]}
+    abert = {"casa": h[1], "empate": d[1], "fora": a[1]}
+    if None in vals.values() or not (h[2] and d[2] and a[2]):
+        return None
+    return (mb.group(1), vals, abert)
+
+
+async def buscar_odds_live_flashscore(tab, mid, match_url=None, espera=8.0):
+    """Odds 1X2 AO VIVO (intragame, ticando) de um jogo, via WebSocket da Livesport.
+
+    Usa uma `tab` já aberta (browser/consent já resolvidos pelo chamador). Navega
+    para a aba de odds 1X2 do jogo (dispara as subscriptions de `liveodds`) e
+    captura, por até `espera` segundos, os frames WebSocket empurrados — um por
+    casa (bookmakerId), com value/opening/active de home/draw/away.
+
+    Só entram casas com os 3 lados ATIVOS (durante um gol o mercado é suspenso e
+    pode vir active:false — descartado). Os nomes das casas vêm do GraphQL pré-jogo
+    (settings.bookmakers), best-effort.
+
+    -> dict no formato de coletar_odds():
+       {url, mid, fonte, n_casas, n_casas_live, casas_disponiveis, odds_por_casa:[
+          {casa, bookmaker_id, live(True), odds_1x2:{casa,empate,fora},
+           opening_1x2:{casa,empate,fora}} ]}
+       odds_por_casa pode vir vazia (jogo sem oferta live ou nenhum frame no
+       intervalo) — o chamador trata."""
+    if not match_url:
+        match_url = await _canonical_from_mid(tab, mid)
+
+    frames = {}  # bid -> payload (mantém o último frame de cada casa)
+
+    def on_frame(ev):
+        try:
+            pl = ev.response.payload_data
+        except AttributeError:
+            return
+        if not pl or "liveodds/" not in pl or "HOME_DRAW_AWAY" not in pl:
+            return
+        mb = re.search(r"liveodds/[^/]+/(\d+)/HOME_DRAW_AWAY/FULL_TIME", pl)
+        if mb:
+            frames[mb.group(1)] = pl
+
+    tab.add_handler(cdp.network.WebSocketFrameReceived, on_frame)
+    try:
+        # CRÍTICO, dois pontos sutis:
+        # 1) habilita Network ANTES de o WS nascer, senão o CDP não rastreia os
+        #    frames de um socket que já existia. `about:blank` derruba qualquer WS
+        #    aberto numa navegação anterior, pra base abaixo ser a PRIMEIRA conexão.
+        #    (Um RELOAD do mesmo socket reconecta com permessage-deflate e os frames
+        #    chegam binários/comprimidos — só a primeira conexão vem em texto.)
+        # 2) a SPA só assina `liveodds` no HASHCHANGE p/ a aba de odds; carregar uma
+        #    URL que já traz o hash NÃO dispara. Por isso: base primeiro, fragmento
+        #    depois.
+        await tab.send(cdp.network.enable())
+        await _goto(tab, "about:blank")
+        await _goto(tab, match_url)
+        await tab.send(cdp.page.navigate(url=match_url + _LIVE_FRAG))
+        # coleta os frames empurrados; para cedo se já estabilizou
+        estavel, ultimo_n = 0, -1
+        for _ in range(int(espera / 0.5)):
+            await asyncio.sleep(0.5)
+            n = len(frames)
+            estavel = estavel + 1 if n == ultimo_n else 0
+            ultimo_n = n
+            if n and estavel >= 4:        # ~2s sem casa nova
+                break
+    finally:
+        tab.remove_handler(cdp.network.WebSocketFrameReceived, on_frame)
+
+    nomes = await _nomes_bookmakers(tab, mid)
 
     casas = []
-    for m in (node.get("odds") or []):
-        if m.get("bettingType") != "HOME_DRAW_AWAY" or m.get("bettingScope") != "FULL_TIME":
+    for bid, payload in frames.items():
+        parsed = _parse_frame_liveodds(payload)
+        if not parsed:
             continue
-        live = bool(m.get("hasLiveBettingOffers"))
-        if so_live and not live:
-            continue
-        bid = m.get("bookmakerId")
-        valores = _map_1x2(m.get("odds"), home_id, away_id)
-        if None in (valores["casa"], valores["empate"], valores["fora"]):
-            continue
-        abert = _map_1x2(
-            [{"eventParticipantId": it.get("eventParticipantId"),
-              "value": it.get("opening")} for it in (m.get("odds") or [])],
-            home_id, away_id)
+        _bid, vals, abert = parsed
         casas.append({
-            "casa": nomes.get(bid) or (f"bk{bid}" if bid is not None else None),
-            "bookmaker_id": bid,
-            "live": live,
-            "odds_1x2": valores,
+            "casa": nomes.get(int(bid)) or f"bk{bid}",
+            "bookmaker_id": int(bid),
+            "live": True,
+            "odds_1x2": vals,
             "opening_1x2": abert,
         })
-
-    # dedup por bookmaker_id (mantém a 1ª ocorrência)
-    seen, uniq = set(), []
-    for c in casas:
-        if c["bookmaker_id"] not in seen:
-            seen.add(c["bookmaker_id"]); uniq.append(c)
 
     return {
         "url": match_url,
         "mid": mid,
-        "fonte": "flashscore-live-graphql",
-        "n_casas": len(uniq),
-        "n_casas_live": sum(1 for c in uniq if c["live"]),
-        "casas_disponiveis": [c["casa"] for c in uniq],
-        "odds_por_casa": uniq,
+        "fonte": "flashscore-live-ws",
+        "n_casas": len(casas),
+        "n_casas_live": len(casas),
+        "casas_disponiveis": [c["casa"] for c in casas],
+        "odds_por_casa": casas,
     }
 
 
