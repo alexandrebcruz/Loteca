@@ -990,6 +990,17 @@ document.getElementById('subtitulo').innerHTML =
     return ok?s:null;
   }
 
+  function casasCell(j){
+    // nº de casas (bookmakers) cujas odds 1X2 entraram no consenso deste jogo.
+    // pendente: coleta ATUAL (j.prob); decidido: a coleta original da análise
+    // (j.prob_orig), já que não re-coletamos odds de jogo encerrado.
+    const p=j.prob||j.prob_orig||{};
+    const n=p.n_casas_validas;
+    let sub='';
+    if(j.live&&j.live.n_casas) sub='<div class="liveval" title="casas com odds ao vivo (in-play)">●&nbsp;'+j.live.n_casas+'</div>';
+    return '<td>'+(n!=null?n:'—')+sub+'</td>';
+  }
+
   function cobCell(j){
     let sub='';
     if(j.prob_live && j.estado==='ao_vivo'){
@@ -1014,6 +1025,7 @@ document.getElementById('subtitulo').innerHTML =
       '<td>'+placar+'</td>'+
       cobCell(j)+
       cellsFor(j)+
+      casasCell(j)+
     '</tr>';
   }
 
@@ -1041,7 +1053,9 @@ document.getElementById('subtitulo').innerHTML =
     '<b>Sorteio</b>: jogo não realizado/interrompido — resultado equiprovável 1X2. '+
     'Em jogos <b>ao vivo</b> com mercado in-play, sob cada coluna 1/X/2 aparece em '+
     '<span style="color:var(--warn)">amarelo</span> a <b>prob. ao vivo</b> e a variação em '+
-    'pp vs. a prob. pré-jogo (consenso das casas que precificam durante a partida).</p>'+
+    'pp vs. a prob. pré-jogo (consenso das casas que precificam durante a partida). '+
+    'A coluna <b>Casas</b> mostra quantas casas (bookmakers) tiveram odds 1X2 coletadas '+
+    'e usadas no consenso de cada jogo (selo ● = casas com odds ao vivo).</p>'+
     '<div class="ordena" id="ord-btns">'+
       '<button data-o="loteca">Ordem da Loteca</button>'+
       '<button data-o="horario">Data e hora</button>'+
@@ -1049,7 +1063,9 @@ document.getElementById('subtitulo').innerHTML =
     '</div>'+
     '<div class="tabela-wrap"><table><thead><tr>'+
     '<th class="conf">Confronto</th><th>Data/Hora</th><th>Situação</th><th>Aposta</th><th>Placar</th>'+
-    '<th>Cob.</th><th>1</th><th>X</th><th>2</th></tr></thead><tbody id="jogos-body"></tbody></table></div>';
+    '<th>Cob.</th><th>1</th><th>X</th><th>2</th>'+
+    '<th title="nº de casas (bookmakers) cujas odds 1X2 entraram no consenso">Casas</th>'+
+    '</tr></thead><tbody id="jogos-body"></tbody></table></div>';
   [...document.querySelectorAll('#ord-btns button')].forEach(b=>b.onclick=()=>{ ordem=b.dataset.o; render(); });
   render();
 })();
