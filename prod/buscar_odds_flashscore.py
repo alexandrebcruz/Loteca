@@ -974,18 +974,36 @@ async def buscar_odds_live_flashscore(tab, mid, match_url=None, espera=8.0):
         #    URL que já traz o hash NÃO dispara. Por isso: base primeiro, fragmento
         #    depois.
         await tab.send(cdp.network.enable())
-        await _goto(tab, "about:blank")
-        await _goto(tab, match_url)
-        await tab.send(cdp.page.navigate(url=match_url + _LIVE_FRAG))
-        # coleta os frames empurrados; para cedo se já estabilizou
-        estavel, ultimo_n = 0, -1
-        for _ in range(int(espera / 0.5)):
-            await asyncio.sleep(0.5)
-            n = len(frames)
-            estavel = estavel + 1 if n == ultimo_n else 0
-            ultimo_n = n
-            if n and estavel >= 4:        # ~2s sem casa nova
-                break
+        # Navegação+captura com RETRY: o load da base às vezes cai em
+        # `chrome-error://chromewebdata/` (falha de rede transitória). Como `_goto`
+        # só espera readyState=complete — e a página de erro do Chrome também fica
+        # complete —, a SPA nunca assina `liveodds` no hashchange e nenhum frame
+        # chega: o jogo saía com n_casas_live=0 mesmo tendo mercado ao vivo (mesma
+        # patologia que o retry do backtest resolveu). Re-navega o ciclo completo
+        # (about:blank→base→fragmento, p/ a 1ª conexão LIMPA do WS — ver nota 1) até
+        # captar frame; detecta o chrome-error cedo p/ não esperar `espera`s à toa.
+        for tentativa in range(3):
+            frames.clear()
+            await _goto(tab, "about:blank")
+            await _goto(tab, match_url)
+            try:
+                loc = str(_unwrap(await tab.evaluate("location.href")))
+            except Exception:
+                loc = ""
+            if loc.startswith("chrome-error"):     # nav falhou: re-tenta já
+                await asyncio.sleep(1.5 * (tentativa + 1))     # backoff
+                continue
+            await tab.send(cdp.page.navigate(url=match_url + _LIVE_FRAG))
+            # coleta os frames empurrados; para cedo se já estabilizou
+            estavel, ultimo_n = 0, -1
+            for _ in range(int(espera / 0.5)):
+                await asyncio.sleep(0.5)
+                n = len(frames)
+                estavel = estavel + 1 if n == ultimo_n else 0
+                ultimo_n = n
+                if n and estavel >= 4:        # ~2s sem casa nova
+                    break
+            break       # base carregou: aceita o resultado (com mercado ou sem)
     finally:
         tab.remove_handler(cdp.network.WebSocketFrameReceived, on_frame)
 

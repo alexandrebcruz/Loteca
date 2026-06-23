@@ -518,17 +518,29 @@ async def coletar_odds(tab, match_href):
     de buscar_odds_flashscore.coletar_odds (odds_por_casa[].odds_1x2={casa,empate,fora},
     na orientação do BetExplorer: casa=mandante, fora=visitante)."""
     url = ORIGIN + (match_href if match_href.startswith("/") else "/" + match_href)
-    await _goto(tab, url)
-    # a tabela vem renderizada; espera ativa curta por tr[data-bid]
-    for _ in range(12):
-        try:
-            n = int(_unwrap(await tab.evaluate(
-                "document.querySelectorAll('tr[data-bid]').length")))
-        except Exception:
-            n = 0
-        if n > 0:
+    # Navegação com RETRY: o load da página da partida às vezes cai em
+    # `chrome-error://chromewebdata/` (erro de rede transitório) — sem retry, o
+    # jogo saía com n_casas=0 mesmo tendo mercado 1X2. Re-navega até render a
+    # tabela `tr[data-bid]`; detecta o chrome-error cedo p/ não esperar 12s à toa.
+    rendered = False
+    for tentativa in range(3):
+        await _goto(tab, url)
+        for _ in range(12):
+            try:
+                loc = str(_unwrap(await tab.evaluate("location.href")))
+                n = int(_unwrap(await tab.evaluate(
+                    "document.querySelectorAll('tr[data-bid]').length")))
+            except Exception:
+                loc, n = "", 0
+            if n > 0:
+                rendered = True
+                break
+            if loc.startswith("chrome-error"):
+                break          # nav falhou — re-navega já, sem esperar o resto
+            await asyncio.sleep(1.0)
+        if rendered:
             break
-        await asyncio.sleep(1.0)
+        await asyncio.sleep(2.0 * (tentativa + 1))   # backoff antes de re-tentar
 
     dados = await _eval_json(tab, r"""JSON.stringify((()=>{
         const casas=[];
