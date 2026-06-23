@@ -949,14 +949,22 @@ async def buscar_odds_live_flashscore(tab, mid, match_url=None, espera=8.0):
     if not match_url:
         match_url = await _canonical_from_mid(tab, mid)
 
-    frames = {}  # bid -> payload (mantém o último frame de cada casa)
+    frames = {}                 # bid -> payload (último frame 1X2 de cada casa)
+    sinais = {"live": False}    # chegou ALGUM frame de odds ao vivo deste jogo?
 
     def on_frame(ev):
         try:
             pl = ev.response.payload_data
         except AttributeError:
             return
-        if not pl or "liveodds/" not in pl or "HOME_DRAW_AWAY" not in pl:
+        if not pl or "liveodds/" not in pl:
+            return
+        # qualquer mercado live do jogo (ex.: NEXT_GOAL) já prova que o WS está
+        # ativo p/ este mid — distingue "mercado 1X2 fechado/decidido" de "página
+        # não carregou / WS não nasceu".
+        if f"liveodds/{mid}/" in pl:
+            sinais["live"] = True
+        if "HOME_DRAW_AWAY" not in pl:
             return
         mb = re.search(r"liveodds/[^/]+/(\d+)/HOME_DRAW_AWAY/FULL_TIME", pl)
         if mb:
@@ -1029,6 +1037,7 @@ async def buscar_odds_live_flashscore(tab, mid, match_url=None, espera=8.0):
         "fonte": "flashscore-live-ws",
         "n_casas": len(casas),
         "n_casas_live": len(casas),
+        "live_ativo": sinais["live"],   # WS empurrou odds live (qualquer mercado)
         "casas_disponiveis": [c["casa"] for c in casas],
         "odds_por_casa": casas,
     }

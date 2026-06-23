@@ -476,7 +476,7 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose,
                 "mid": mid, "invertido": inv,
                 "prob_orig": prob_orig or None,
                 "prob": None, "placar": None, "resultado": None,
-                "prob_live": None, "live": None,
+                "prob_live": None, "live": None, "live_decidido": False,
                 "estado": "agendado", "inicio": None, "fim_est": None,
                 "_dt_utc": None, "coberto": None, "erro": None,
             }
@@ -549,6 +549,20 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose,
                             "n_casas": live["n_casas_live"],
                             "casas": live.get("casas_disponiveis") or [],
                         }
+                    elif live.get("live_ativo"):
+                        # WS empurra mercados live (ex.: próximo gol) mas NENHUMA casa
+                        # mantém o 1X2 vencedor → as casas fecharam o mercado por o jogo
+                        # estar decidido. Trata a prob ao vivo como 100% no resultado
+                        # CORRENTE do placar (1/X/2 na ordem da Loteca, já com `inv`).
+                        res = _resultado_loteca(reg["placar"], inv)
+                        if res:
+                            reg["prob_live"] = {
+                                "casa": 1.0 if res == "1" else 0.0,
+                                "empate": 1.0 if res == "X" else 0.0,
+                                "fora": 1.0 if res == "2" else 0.0,
+                            }
+                            reg["live"] = {"n_casas": 0, "decidido": True, "resultado": res}
+                            reg["live_decidido"] = True
                 except Exception as e:                          # noqa: BLE001
                     # falha de odds live não compromete o acompanhamento
                     if not reg["erro"]:
@@ -683,7 +697,11 @@ def _montar_dados(pasta, analise, jogos, bilhete):
         "finalizados": sum(1 for r in jogos if r["estado"] == "finalizado"),
         "sorteios": sum(1 for r in jogos if r["estado"] == "sorteio"),
         "ao_vivo": sum(1 for r in jogos if r["estado"] == "ao_vivo"),
-        "com_odds_live": sum(1 for r in jogos if r.get("prob_live")),
+        # jogos com odds 1X2 ao vivo REAIS (≥1 casa precificando) vs. jogos cujo
+        # mercado 1X2 ao vivo fechou por estarem decididos (prob_live = 100% no placar).
+        "com_odds_live": sum(1 for r in jogos
+                             if r.get("prob_live") and not r.get("live_decidido")),
+        "decididos_live": sum(1 for r in jogos if r.get("live_decidido")),
         "pendentes": sum(1 for r in jogos if r["estado"] in ("agendado", "indefinido")),
         "cobertos": sum(1 for r in jogos if r.get("coberto") is True),
         "furos": sum(1 for r in jogos if r.get("coberto") is False),
@@ -696,10 +714,11 @@ def _montar_dados(pasta, analise, jogos, bilhete):
     # (data/hora/minuto) em que o script rodou. Fica SÓ na tabela — não entra no
     # gráfico, que mostra a progressão real conforme os jogos terminam.
     live_point = None
-    if resumo["com_odds_live"]:
+    if resumo["com_odds_live"] or resumo["decididos_live"]:
         live_point = {
             "t": agora_br.strftime("%d/%m %H:%M"),
             "n_live": resumo["com_odds_live"],
+            "n_dec": resumo["decididos_live"],
             **atual_live,
         }
 
@@ -891,6 +910,12 @@ function ppBadge(now,was,suf){
   const cls=d>0?'delta-up':'delta-dn', sig=d>0?'▲':'▼';
   return ' <span class="'+cls+'">'+sig+(Math.abs(d)*100).toFixed(1)+u+'</span>';
 }
+// rótulo do ponto "ao vivo": jogos com odds in-play e/ou decididos (1X2 fechado)
+function lpDesc(lp){
+  const a=lp.n_live?(lp.n_live+' in-play'):'';
+  const b=lp.n_dec?(lp.n_dec+' decidido'+(lp.n_dec>1?'s':'')):'';
+  return (a&&b)?(a+' + '+b):(a||b||'0 in-play');
+}
 
 /* cabeçalho */
 document.getElementById('titulo').textContent = 'Loteca '+D.concurso+' — acompanhamento';
@@ -924,7 +949,8 @@ document.getElementById('subtitulo').innerHTML =
     '<tr><td class="k">Jogos finalizados</td><td class="v">'+r.finalizados+' de '+r.total+'</td></tr>'+
     (r.sorteios?'<tr><td class="k">Definidos por sorteio</td><td class="v">'+r.sorteios+'</td></tr>':'')+
     '<tr><td class="k">Ao vivo agora</td><td class="v">'+r.ao_vivo+
-      (r.com_odds_live?' <span style="color:var(--warn);font-weight:700">('+r.com_odds_live+' com odds ao vivo)</span>':'')+'</td></tr>'+
+      (r.com_odds_live?' <span style="color:var(--warn);font-weight:700">('+r.com_odds_live+' com odds ao vivo)</span>':'')+
+      (r.decididos_live?' <span style="color:var(--warn);font-weight:700">(⚑ '+r.decididos_live+' decidido'+(r.decididos_live>1?'s':'')+')</span>':'')+'</td></tr>'+
     '<tr><td class="k">Ainda por jogar</td><td class="v">'+r.pendentes+'</td></tr>'+
     (D.fim_apostas?'<tr><td class="k">Apostas até</td><td class="v">'+esc(D.fim_apostas)+'</td></tr>':'')+
     '</tbody></table>';
@@ -937,7 +963,8 @@ document.getElementById('subtitulo').innerHTML =
   function badgeFor(j){
     if(j.estado==='finalizado'){ const ok=j.coberto; return '<span class="badge '+(ok?'ok':'no')+'">'+(ok?'✓ coberto':'✗ furou')+'</span>'; }
     if(j.estado==='sorteio'){ return '<span class="badge sort">⚄ sorteio</span>'; }
-    if(j.estado==='ao_vivo'){ return '<span class="badge live">● ao vivo</span>'; }
+    if(j.estado==='ao_vivo'){ return '<span class="badge live">● ao vivo</span>'+
+      (j.live_decidido?' <span class="badge fin" title="mercado 1X2 ao vivo fechado: jogo decidido">⚑ decidido</span>':''); }
     if(j.estado==='indefinido'){ return '<span class="badge fin">encerrado</span>'; }
     return '<span class="badge ag">agendado</span>';
   }
@@ -967,8 +994,9 @@ document.getElementById('subtitulo').innerHTML =
       let sub='';
       if(pl){
         const lv=pl[KEY[k]];
-        sub='<div class="liveval" title="odds ao vivo (in-play)">●&nbsp;'+pct(lv)+
-            ppBadge(lv,v)+'</div>';
+        sub = j.live_decidido
+          ? '<div class="liveval" title="jogo decidido: 1X2 ao vivo fechado — resultado atual tido como certo">⚑&nbsp;'+pct(lv)+'</div>'
+          : '<div class="liveval" title="odds ao vivo (in-play)">●&nbsp;'+pct(lv)+ppBadge(lv,v)+'</div>';
       }
       return '<td><span class="prob'+fav+'" style="background:'+grad(v)+'">'+pct(v)+'</span>'+sub+'</td>';
     }).join('');
@@ -976,6 +1004,8 @@ document.getElementById('subtitulo').innerHTML =
 
   function liveLine(j){
     // selinho de odds AO VIVO (os valores vão sob cada coluna 1/X/2, em cellsFor)
+    if(j.live_decidido) return '<div style="margin-top:3px;font-size:.72rem;color:var(--warn);font-weight:700">'+
+      '⚑ jogo decidido — mercado 1X2 ao vivo fechado (resultado atual considerado certo)</div>';
     if(!j.prob_live) return '';
     const n=(j.live&&j.live.n_casas)||0;
     return '<div style="margin-top:3px;font-size:.72rem;color:var(--warn);font-weight:700">'+
@@ -1005,8 +1035,11 @@ document.getElementById('subtitulo').innerHTML =
     let sub='';
     if(j.prob_live && j.estado==='ao_vivo'){
       const lc=cobDe(j.prob_live, j.marcas);
-      if(lc!=null) sub='<div class="liveval" title="cobertura ao vivo">●&nbsp;'+
-        pct(lc)+ppBadge(lc,j.cob)+'</div>';
+      if(lc!=null){
+        const mk=j.live_decidido?'⚑':'●';
+        const ti=j.live_decidido?'cobertura com o resultado atual (jogo decidido)':'cobertura ao vivo';
+        sub='<div class="liveval" title="'+ti+'">'+mk+'&nbsp;'+pct(lc)+ppBadge(lc,j.cob)+'</div>';
+      }
     }
     return '<td>'+pct(j.cob)+sub+'</td>';
   }
@@ -1073,7 +1106,7 @@ document.getElementById('subtitulo').innerHTML =
 /* card KPIs atuais (com o delta vs. início) */
 (function(){
   const a=D.atual, ini=D.inicial||{}, al=D.atual_live||{};
-  const hasLive = (D.resumo&&D.resumo.com_odds_live>0);
+  const hasLive = (D.resumo&&(D.resumo.com_odds_live>0||D.resumo.decididos_live>0));
   function delta(now,was){
     if(now==null||was==null) return '';
     const d=now-was; if(Math.abs(d)<1e-9) return ' <span style="color:var(--muted)">=</span>';
@@ -1179,7 +1212,7 @@ document.getElementById('subtitulo').innerHTML =
       lpc.classList.add('sel');
       document.getElementById('dica').innerHTML='<b>'+esc(lp.t)+'</b> · '+
         '<span style="color:var(--warn);font-weight:700">considerando odds ao vivo</span> ('+
-        lp.n_live+' jogo'+(lp.n_live>1?'s':'')+' in-play) · '+
+        lpDesc(lp)+') · '+
         METR.find(m=>m.k===metr).rot+' = <b>'+pct(lp[metr])+'</b> ('+umEm(lp[metr])+')';
     };
   }
@@ -1205,7 +1238,7 @@ document.getElementById('subtitulo').innerHTML =
     rows+='<tr style="background:#fffaf0">'+
       '<td>'+esc(lp.t)+'</td>'+
       '<td class="conf"><span style="color:var(--warn);font-weight:700">● considerando odds ao vivo</span> '+
-        '<span style="color:var(--muted);font-size:.8rem">('+lp.n_live+' jogo'+(lp.n_live>1?'s':'')+' in-play)</span></td>'+
+        '<span style="color:var(--muted);font-size:.8rem">('+lpDesc(lp)+')</span></td>'+
       '<td>'+pct(lp.p13mais)+ppBadge(lp.p13mais,a.p13mais)+'</td>'+
       '<td>'+pct(lp.p14)+ppBadge(lp.p14,a.p14)+'</td>'+
       '<td>'+pct(lp.p13)+ppBadge(lp.p13,a.p13)+'</td></tr>';
