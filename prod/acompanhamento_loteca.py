@@ -543,6 +543,17 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose,
                     if url is None:        # no híbrido o estado veio do BX; resolve a URL FS
                         url = await _canonical_from_mid(tab, mid)
                     live = await buscar_odds_live_flashscore(tab, mid, match_url=url)
+                    # placar PARCIAL ao vivo: o feed-do-dia do BX NÃO tica o in-play
+                    # (mostra '-' até o FIM, só preenche o placar final). A página do
+                    # FS — já aberta logo acima p/ as odds live — traz o placar corrente
+                    # no header (.detailScore__wrapper); lê de lá quando o BX não trouxe.
+                    if not reg["placar"]:
+                        try:
+                            pag_fs = await _ler_pagina(tab, data_exib, agora)
+                            if pag_fs.get("placar"):
+                                reg["placar"] = pag_fs["placar"]
+                        except Exception:                          # noqa: BLE001
+                            pass
                     if live.get("n_casas_live"):
                         reg["prob_live"] = estimar_prob(live, invertido=inv)
                         reg["live"] = {
