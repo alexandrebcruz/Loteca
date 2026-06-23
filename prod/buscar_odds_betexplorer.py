@@ -454,6 +454,37 @@ def _casar_por_id(eventos, home_id, away_id, data, janela_dias):
     return ev, inv
 
 
+# camada B½: só ancora-por-data-única se o lado-âncora resolveu com score ALTO
+# (acima de TIME_THRESHOLD=0.50, que é frouxo). Evita disparar quando os dois
+# lados são fracos — aí a unicidade-na-data poderia casar o jogo errado.
+ANCORA_DATA_MIN = 0.80
+
+
+def _casar_por_data_unica(eventos, data, anc_id, anc_lado):
+    """Camada B½ — ÂNCORA + DATA ÚNICA. Quando A (id) e B (string) falham porque o
+    ADVERSÁRIO vem brutalmente abreviado no programa (continentais: 'UNION S.FE',
+    'UNIV CAT EQUADOR'), mas UM lado já é âncora confiável: na página de jogos da
+    âncora ela joga ≤1×/dia, então se há EXATAMENTE UM jogo na data EXATA (±0) da
+    Loteca, esse jogo É o confronto — sem depender do nome do adversário. Casa só na
+    data exata + unicidade (um clube não joga 2× no mesmo dia) -> seguro contra
+    falso-positivo. `invertido` sai da orientação do BX vs o lado (home/away) que a
+    âncora ocupa na Loteca. -> (ev, invertido) ou (None, False)."""
+    if not anc_id or not data:
+        return None, False
+    try:
+        alvo = datetime.date.fromisoformat(data)
+    except (TypeError, ValueError):
+        return None, False
+    namo = [e for e in eventos if e.get("_date") == alvo          # data EXATA (±0)
+            and anc_id in {e.get("_home_id"), e.get("_away_id")}]  # âncora presente
+    if len(namo) != 1:                       # 0 ou ambíguo -> não arrisca
+        return None, False
+    ev = namo[0]
+    bx_home = (anc_id == ev.get("_home_id"))
+    inv = (anc_lado == "home") ^ bx_home     # ver _casar_por_id p/ a semântica de `inv`
+    return ev, inv
+
+
 async def _resolver_jogo(tab, home, away, data, ph=None, pa=None, janela_dias=3,
                          verbose=True):
     """Resolve o jogo -> dict {match_href, home, away, invertido, score, metodo}.
@@ -467,7 +498,7 @@ async def _resolver_jogo(tab, home, away, data, ph=None, pa=None, janela_dias=3,
     for lado, nome, p in (("home", home, ph), ("away", away, pa)):
         cand, sc = _melhor_time(await _buscar_time(tab, nome), nome, p)
         if cand:
-            cand = dict(cand, _score=sc)
+            cand = dict(cand, _score=sc, _lado=lado)
             times[lado] = cand
             if verbose:
                 print(f"[bx] '{nome}' -> {cand['nome']} ({cand.get('pais')}) "
@@ -492,6 +523,18 @@ async def _resolver_jogo(tab, home, away, data, ph=None, pa=None, janela_dias=3,
             ev, score, inv = _casar_confronto(eventos, home, away, ph, pa,
                                                data, janela_dias)
             metodo = "busca+time"
+            # 2½) camada B½: adversário abreviado (continental) furou A e B, mas a
+            # âncora é forte e há UM só jogo dela na data exata -> esse é o jogo.
+            if not ev and anc.get("_score", 0.0) >= ANCORA_DATA_MIN:
+                ev2, inv2 = _casar_por_data_unica(eventos, data, anc.get("id"),
+                                                  anc.get("_lado"))
+                if ev2:
+                    ev, inv, score = ev2, inv2, round(anc["_score"], 3)
+                    metodo = "busca+ancora-data"
+                    if verbose:
+                        print(f"[bx] âncora+data-única: {ev['homeTeam']['name']} x "
+                              f"{ev['awayTeam']['name']} ({ev.get('_date')}) "
+                              f"via '{anc['nome']}'", file=sys.stderr)
         else:
             score = 1.0
         if ev:
