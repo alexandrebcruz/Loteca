@@ -525,7 +525,11 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose,
             # Fonte das odds PRÉ-JOGO: BetExplorer (via match_href do checkpoint) no
             # híbrido, senão Flashscore. Volta p/ o Flashscore no próximo jogo via
             # _canonical_from_mid. O ao vivo abaixo é SEMPRE Flashscore.
-            if reg["resultado"] is None and reg["estado"] != "sorteio":
+            # Jogo AO VIVO não re-raspa pré-jogo: a closing line congela ao apito e o
+            # BX tira a tabela 1X2 do ar (raspagem voltaria vazia → ⚠ falso-positivo).
+            # As métricas já usam prob_orig (checkpoint) como baseline pré-jogo; o
+            # consenso ao vivo vem do WebSocket (bloco abaixo).
+            if reg["resultado"] is None and reg["estado"] not in ("sorteio", "ao_vivo"):
                 try:
                     if fonte == "betexplorer" and match_href:
                         odds = await BX.coletar_odds(tab, match_href)
