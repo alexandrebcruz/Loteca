@@ -7,9 +7,9 @@ Roda, em sequência, três etapas que hoje são chamadas à mão:
                              probabilidades 1X2 (grava data/analise/<pasta>/analise.json).
   2. otimizador_loteca.py -> lê esse analise.json e gera o relatório
                              otimizacao.html na MESMA pasta.
-  3. audita_apelidos_loteca_flashscore.py -> audita o de-para Flashscore
-                             (saúde do dicionário de apelidos). É independente do
-                             concurso; o relatório JSON é gravado na pasta do run.
+  3. audita_apelidos_loteca_<fonte>.py -> audita o de-para da FONTE escolhida
+                             (betexplorer por default; saúde do dicionário de apelidos).
+                             É independente do concurso; o JSON vai p/ a pasta do run.
 
 Pasta de saída (sob data/analise): por padrão `<concurso>_<AAAAMMDDHHMM>` — o
 número do concurso + o instante de execução do pipeline. As etapas 1 e 2
@@ -67,13 +67,17 @@ def main():
                     help="usa uma programação/concurso já salvo em vez de "
                          "consultar a Caixa")
     # --- passthrough p/ a etapa 1 (analise_loteca) ---
+    ap.add_argument("--fonte", choices=["betexplorer", "flashscore"],
+                    default="betexplorer",
+                    help="fonte das odds 1X2 (default: betexplorer). Define também "
+                         "qual auditor de apelidos roda na etapa 3.")
     ap.add_argument("--proxy", nargs="?", choices=["none", "rotativo", "fixo"],
                     const="fixo", default=None,
                     help="proxy p/ análise e auditoria (sem o flag: IP da máquina)")
     ap.add_argument("--country", default="BR",
                     help="ISO-2 do país p/ --proxy fixo (default: BR)")
     ap.add_argument("--modo", choices=["fuzzy", "id"], default=None,
-                    help="modo de resolução de times na análise (default do script)")
+                    help="[só fonte=flashscore] modo de resolução de times na análise")
     ap.add_argument("--janela-dias", type=int, default=None, dest="janela_dias",
                     help="janela (dias) p/ tolerar jogo em data próxima")
     ap.add_argument("--auditar", action="store_true",
@@ -124,7 +128,7 @@ def main():
 
     # ----------------------------------------------------------------- etapa 1
     cmd1 = [PY, "analise_loteca.py", "--saida", pasta,
-            "--concurso-json", prog_path]
+            "--concurso-json", prog_path, "--fonte", a.fonte]
     if a.proxy:
         cmd1 += ["--proxy", a.proxy, "--country", a.country]
     if a.modo:
@@ -160,7 +164,9 @@ def main():
     audit_path = None
     if not a.pular_audit:
         audit_path = os.path.join(cdir, "auditoria_apelidos.json")
-        cmd3 = [PY, "audita_apelidos_loteca_flashscore.py", "--etapa", "12", "--json"]
+        # auditor da MESMA fonte da análise (de-para próprio de cada fonte).
+        auditor = f"audita_apelidos_loteca_{a.fonte}.py"
+        cmd3 = [PY, auditor, "--etapa", "12", "--json"]
         if a.proxy:
             cmd3 += ["--proxy", a.proxy, "--country", a.country]
         if a.via_time:

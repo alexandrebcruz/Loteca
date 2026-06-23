@@ -1,0 +1,33 @@
+{
+  "seq": 5,
+  "loteca": {
+    "home": "TURQUIA",
+    "away": "ESTADOS UNIDOS",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "turkey",
+    "away": "usa",
+    "data_exibida": "2026-06-26",
+    "match_href": "/br/football/world/world-championship-2026/turkey-usa/SCvmMa2U/",
+    "mid": "SCvmMa2U",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2743,
+    "empate": 0.2346,
+    "fora": 0.491,
+    "n_casas_validas": 19,
+    "odds_medianas": {
+      "casa": 3.45,
+      "empate": 4.0,
+      "fora": 1.92
+    }
+  },
+  "palpite": "2",
+  "n_casas": 19,
+  "erro": null
+}

@@ -1,0 +1,33 @@
+{
+  "seq": 6,
+  "loteca": {
+    "home": "PARAGUAI",
+    "away": "AUSTRALIA",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "paraguay",
+    "away": "australia",
+    "data_exibida": "2026-06-26",
+    "match_href": "/br/football/world/world-championship-2026/paraguay-australia/lGmJTJSg/",
+    "mid": "lGmJTJSg",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.3301,
+    "empate": 0.4263,
+    "fora": 0.2436,
+    "n_casas_validas": 19,
+    "odds_medianas": {
+      "casa": 2.83,
+      "empate": 2.2,
+      "fora": 3.81
+    }
+  },
+  "palpite": "X",
+  "n_casas": 19,
+  "erro": null
+}

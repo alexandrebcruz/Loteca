@@ -74,7 +74,19 @@ from buscar_odds_flashscore import (                             # noqa: E402
     resolver_proxy, _egress_ip, _consent, _goto, coletar_odds,
     buscar_odds_live_flashscore, _canonical_from_mid, _esperar, ORIGIN,
 )
+import buscar_odds_betexplorer as BX                             # noqa: E402
 from analise_loteca import estimar_prob                          # noqa: E402
+
+
+def _fonte_da_analise(analise, override=None):
+    """Resolve a FONTE das odds pré-jogo do acompanhamento. Default: a mesma fonte
+    da análise (campo `fonte_odds`); `override` (CLI --fonte) tem prioridade.
+    -> 'betexplorer' | 'flashscore'. NB: placar/status e odds AO VIVO seguem SEMPRE
+    no Flashscore (página do jogo + WebSocket Livesport), via o mid compartilhado."""
+    if override:
+        return override
+    rot = (analise.get("fonte_odds") or "").lower()
+    return "betexplorer" if "betexplorer" in rot else "flashscore"
 
 PALP2KEY = {"1": "casa", "X": "empate", "2": "fora"}
 
@@ -302,6 +314,68 @@ def _classificar(status, placar, dt_utc, agora):
     return "finalizado" if placar else "indefinido"
 
 
+# --------------------------------------------------------------------------- #
+# Estado via BetExplorer (feed-do-dia): placar + status + início, sem o Flashscore.
+# --------------------------------------------------------------------------- #
+def _parse_dt_bx(s):
+    """'13,6,2026,3,00' (d,m,y,h,min) -> datetime naive (no fuso do feed). None se ilegível."""
+    try:
+        d, mo, y, hh, mm = (int(x) for x in (s or "").split(",")[:5])
+        return dt.datetime(y, mo, d, hh, mm)
+    except (ValueError, TypeError):
+        return None
+
+
+def _start_utc_bx(dt_raw, dt_now, agora=None):
+    """Kickoff do feed BX -> UTC naive. O feed dá o horário no SEU fuso (data-dt) e o
+    relógio do servidor (data-dt-now); a diferença data-dt-now − UTC_agora dá o offset
+    do fuso (arredondado a 15 min) p/ converter o kickoff. Sem dt_now, devolve cru."""
+    kick = _parse_dt_bx(dt_raw)
+    if not kick:
+        return None
+    feed_now = _parse_dt_bx(dt_now)
+    agora = agora or dt.datetime.utcnow()
+    if feed_now:
+        off_min = round(((feed_now - agora).total_seconds() / 60.0) / 15.0) * 15
+        return kick - dt.timedelta(minutes=off_min)
+    return kick
+
+
+def _norm_status_bx(s):
+    """Mapeia o status abreviado do BetExplorer p/ termos que `_classificar` entende
+    (FIN->encerrado, ADI->adiado, minuto->ao vivo, HH:MM->sem keyword=agendado). Casos
+    desconhecidos passam crus (caem na decisão por horário). Best-effort: o vocabulário
+    AO VIVO/parado do BX não foi 100% observado em campo (jogo ao vivo)."""
+    if not s:
+        return ""
+    u = s.strip().upper()
+    if u in ("FIN", "FT", "AET", "AP", "PEN", "AAET", "APEN"):
+        return "encerrado"
+    parado = {"ADI": "adiado", "POSTP": "adiado", "CAN": "cancelado",
+              "CANC": "cancelado", "ABD": "abandonado", "ABN": "abandonado",
+              "SUSP": "suspenso", "WO": "walkover", "AWA": "walkover"}
+    for k, v in parado.items():
+        if u.startswith(k):
+            return v
+    if u in ("HT", "INTERVALO"):
+        return "intervalo"                       # _VIVO_KW ('interv') -> ao vivo
+    if re.match(r"^\d{1,3}\+?'?$", u):            # minuto (ex.: 67, 45+, 90') -> ao vivo
+        return u.rstrip("'") + "'"
+    if re.match(r"^\d{1,2}:\d{2}$", u):           # hora agendada -> sem keyword (horário decide)
+        return ""
+    return s
+
+
+def _estado_bx(est, agora):
+    """Adapta o dict de `BX.estado_por_mid` ao formato de `_ler_pagina`
+    ({placar, status, dt_utc, estado}), reusando `_classificar`."""
+    placar = est.get("placar")
+    dt_utc = _start_utc_bx(est.get("dt_raw"), est.get("dt_now"), agora)
+    estado = _classificar(_norm_status_bx(est.get("status_raw")), placar, dt_utc, agora)
+    return {"placar": placar, "status": est.get("status_raw"),
+            "dt_utc": dt_utc, "estado": estado}
+
+
 async def _ler_pagina(tab, data_exibida, agora):
     """Lê estado/placar/início da página do jogo já aberta. -> dict."""
     await _esperar(tab, '[class*="duelParticipant"]', tentativas=6, intervalo=1.5)
@@ -329,7 +403,8 @@ def _fmt_br(dt_utc):
 # --------------------------------------------------------------------------- #
 # Coleta principal (visita a página de cada jogo)
 # --------------------------------------------------------------------------- #
-async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
+async def _coletar(analise, marcas_por_seq, proxy, country, verbose,
+                   fonte="flashscore"):
     jogos_src = analise.get("jogos") or []
 
     pr = resolver_proxy(proxy, country)
@@ -364,17 +439,28 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
             if verbose:
                 _log(f"IP de saída: {await _egress_ip(tab)}")
 
-        # home + consent (uma vez)
+        # home + consent (uma vez). O Flashscore é sempre necessário (placar/status +
+        # odds AO VIVO via mid). Se as odds pré-jogo vierem do BetExplorer, aceito
+        # TAMBÉM o consent do BX uma vez aqui — depois a re-coleta navega direto p/ o
+        # match_href do checkpoint (cookies/consent já valem na sessão).
         await _goto(tab, ORIGIN + "/")
         await asyncio.sleep(3)
         await _consent(tab)
         await asyncio.sleep(1)
+        if fonte == "betexplorer":
+            await _goto(tab, BX.ORIGIN + "/br/")
+            await asyncio.sleep(3)
+            await BX._consent(tab)
+            await asyncio.sleep(1)
+            if verbose:
+                _log("odds pré-jogo + placar/status: BetExplorer (só odds AO VIVO: Flashscore)")
 
         jogos = []
         for j in jogos_src:
             res = j.get("resolvido") or {}
             lot = j.get("loteca") or {}
             mid = res.get("mid")
+            match_href = res.get("match_href")    # BetExplorer (p/ odds pré-jogo no híbrido)
             inv = bool(res.get("invertido"))
             palp = j.get("palpite")
             data_exib = res.get("data_exibida") or lot.get("data")
@@ -401,9 +487,20 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
                 continue
 
             agora = dt.datetime.utcnow()
+            url = None      # URL Flashscore (resolvida sob demanda: fallback + ao vivo)
             try:
-                url = await _canonical_from_mid(tab, mid)
-                pag = await _ler_pagina(tab, data_exib, agora)
+                if fonte == "betexplorer":
+                    # placar/status/início pelo FEED-DO-DIA do BetExplorer (1 fetch/data,
+                    # cacheado). Só cai no Flashscore se o mid não vier no feed.
+                    est = await BX.estado_por_mid(tab, mid, data_exib)
+                    if est:
+                        pag = _estado_bx(est, agora)
+                    else:
+                        url = await _canonical_from_mid(tab, mid)
+                        pag = await _ler_pagina(tab, data_exib, agora)
+                else:
+                    url = await _canonical_from_mid(tab, mid)
+                    pag = await _ler_pagina(tab, data_exib, agora)
             except Exception as e:                              # noqa: BLE001
                 reg["erro"] = f"página: {str(e)[:120]}"
                 jogos.append(reg)
@@ -424,10 +521,16 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
                     reg["resultado"] = resultado
                     reg["coberto"] = resultado in marcas
 
-            # odds ATUAIS só para jogos ainda não decididos (sorteio não tem odds)
+            # odds ATUAIS só para jogos ainda não decididos (sorteio não tem odds).
+            # Fonte das odds PRÉ-JOGO: BetExplorer (via match_href do checkpoint) no
+            # híbrido, senão Flashscore. Volta p/ o Flashscore no próximo jogo via
+            # _canonical_from_mid. O ao vivo abaixo é SEMPRE Flashscore.
             if reg["resultado"] is None and reg["estado"] != "sorteio":
                 try:
-                    odds = await coletar_odds(tab, url)
+                    if fonte == "betexplorer" and match_href:
+                        odds = await BX.coletar_odds(tab, match_href)
+                    else:
+                        odds = await coletar_odds(tab, url)
                     reg["prob"] = estimar_prob(odds, invertido=inv)
                 except Exception as e:                          # noqa: BLE001
                     reg["erro"] = str(e)[:160]
@@ -437,6 +540,8 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose):
             # das casas que precificam ao vivo (consenso de-vig sobre elas).
             if reg["estado"] == "ao_vivo":
                 try:
+                    if url is None:        # no híbrido o estado veio do BX; resolve a URL FS
+                        url = await _canonical_from_mid(tab, mid)
                     live = await buscar_odds_live_flashscore(tab, mid, match_url=url)
                     if live.get("n_casas_live"):
                         reg["prob_live"] = estimar_prob(live, invertido=inv)
@@ -1120,18 +1225,23 @@ def main():
                     const="fixo", default=None,
                     help="proxy p/ a coleta (sem o flag: IP da máquina)")
     ap.add_argument("--country", default="BR", help="ISO-2 p/ --proxy fixo (default BR)")
+    ap.add_argument("--fonte", choices=["betexplorer", "flashscore"], default=None,
+                    help="fonte das odds PRÉ-JOGO (default: a mesma da análise). "
+                         "placar/status e odds AO VIVO seguem sempre no Flashscore.")
     ap.add_argument("--quiet", action="store_true", help="silencia o progresso")
     a = ap.parse_args()
     verbose = not a.quiet
 
     cdir, analise = _carregar_analise(a.pasta)
+    fonte = _fonte_da_analise(analise, a.fonte)
     if verbose:
         _log(f"concurso {analise.get('concurso')} · {len(analise.get('jogos') or [])} jogos · "
-             f"pasta {a.pasta} · bilhete R$ {a.valor:.2f}")
+             f"pasta {a.pasta} · bilhete R$ {a.valor:.2f} · odds pré-jogo: {fonte}")
 
     marcas_por_seq, bilhete = _reconstruir_bilhete(a.pasta, cdir, analise, a.valor, verbose)
 
-    jogos = asyncio.run(_coletar(analise, marcas_por_seq, a.proxy, a.country, verbose))
+    jogos = asyncio.run(_coletar(analise, marcas_por_seq, a.proxy, a.country, verbose,
+                                 fonte=fonte))
     dados = _montar_dados(a.pasta, analise, jogos, bilhete)
 
     ts = dt.datetime.now(BR_TZ).strftime("%Y%m%d%H%M")

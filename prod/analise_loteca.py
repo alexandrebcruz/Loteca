@@ -53,6 +53,10 @@ from buscar_odds_flashscore import (
     resolver_proxy, _egress_ip, ORIGIN, _goto, _consent,
     _resolver_jogo, coletar_odds, _pista,
 )
+# Fonte das odds (default): BetExplorer — mesma rede Livesport, busca por país/UF
+# desambiguada + arquivo profundo (resolução + odds PRÉ-JOGO). O ao vivo (acompanhamento)
+# segue no WebSocket do Flashscore via mid compartilhado. Ver [[backtest-flashscore-horizonte]].
+# Importado LAZY dentro das funções (BX importa `estimar_prob` daqui -> evita ciclo).
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 RAIZ = os.path.dirname(AQUI)
@@ -204,9 +208,13 @@ def _palpite(prob):
 # --------------------------------------------------------------------------- #
 # Orquestração: uma sessão de Chrome p/ os 14 jogos
 # --------------------------------------------------------------------------- #
-async def _abrir_browser(proxy, country, verbose):
+async def _abrir_browser(proxy, country, verbose, fonte="betexplorer"):
     """Sobe o Chrome (nodriver) com proxy opcional e devolve (browser, tab) com o
-    consent já aceito. Replica o setup de proxy/consent do buscar_odds_flashscore."""
+    consent já aceito. Delega ao setup da FONTE (BetExplorer ou Flashscore), que diferem
+    no ORIGIN e no banner de consent."""
+    if fonte == "betexplorer":
+        import buscar_odds_betexplorer as BX        # lazy: evita import circular
+        return await BX.abrir_browser(proxy, country, verbose)
     pr = resolver_proxy(proxy, country)
     args = ["--no-sandbox"]
     if pr:
@@ -245,10 +253,17 @@ async def _abrir_browser(proxy, country, verbose):
     return browser, tab
 
 
-async def _analisar_jogo(tab, jg, modo, janela_dias, auditar, llm_model, verbose):
-    """Resolve UM jogo no Flashscore e estima a probabilidade 1X2. -> dict do jogo.
+async def _analisar_jogo(tab, jg, modo, janela_dias, auditar, llm_model, verbose,
+                         fonte="betexplorer"):
+    """Resolve UM jogo na FONTE escolhida e estima a probabilidade 1X2. -> dict do jogo.
     Nunca levanta: em falha, devolve o registro com `erro` preenchido (e prob=None),
-    p/ o concurso inteiro sair mesmo que um jogo não resolva."""
+    p/ o concurso inteiro sair mesmo que um jogo não resolva. O BetExplorer delega ao
+    `BX.analisar_jogo` (mesma forma de registro, drop-in)."""
+    if fonte == "betexplorer":
+        import buscar_odds_betexplorer as BX        # lazy: evita import circular
+        return await BX.analisar_jogo(tab, jg, janela_dias=janela_dias,
+                                      verbose=verbose, auditar=auditar,
+                                      llm_model=llm_model)
     reg = {"seq": jg["seq"], "loteca": {"home": jg["home"], "away": jg["away"],
                                         "data": jg["data"]},
            "campeonato": jg["campeonato"], "resolvido": None, "prob_1x2": None,
@@ -290,14 +305,17 @@ async def _analisar_jogo(tab, jg, modo, janela_dias, auditar, llm_model, verbose
     return reg
 
 
-def _resumo(concurso, aberto, prazo, analises):
+_FONTE_ROTULO = {"betexplorer": "betexplorer.com", "flashscore": "flashscore.com.br"}
+
+
+def _resumo(concurso, aberto, prazo, analises, fonte="betexplorer"):
     """Monta o dict de análise do concurso a partir dos registros dos jogos."""
     ok = sum(1 for a in analises if a.get("prob_1x2"))
     return {
         "concurso": concurso.get("nuConcurso"),
         "aberto": aberto,
         "fim_apostas": (f"{prazo:%d/%m/%Y %H}h" if prazo else None),
-        "fonte_odds": "flashscore.com.br",
+        "fonte_odds": _FONTE_ROTULO.get(fonte, fonte),
         "jogos_resolvidos": ok,
         "jogos_total": len(analises),
         "jogos": analises,
@@ -306,7 +324,7 @@ def _resumo(concurso, aberto, prazo, analises):
 
 async def _run(proxy="none", country="BR", modo="fuzzy", janela_dias=2,
                auditar=False, llm_model="claude-sonnet-4-5", concurso_json=None,
-               refazer=False, verbose=True, saida=None):
+               refazer=False, verbose=True, saida=None, fonte="betexplorer"):
     global SAIDA_OVERRIDE
     if saida:
         SAIDA_OVERRIDE = saida
@@ -342,11 +360,12 @@ async def _run(proxy="none", country="BR", modo="fuzzy", janela_dias=2,
             pendentes.append((i, jg))
 
     if pendentes:
-        browser, tab = await _abrir_browser(proxy, country, verbose)
+        browser, tab = await _abrir_browser(proxy, country, verbose, fonte=fonte)
         try:
             for i, jg in pendentes:
                 reg = await _analisar_jogo(
-                    tab, jg, modo, janela_dias, auditar, llm_model, verbose)
+                    tab, jg, modo, janela_dias, auditar, llm_model, verbose,
+                    fonte=fonte)
                 _salvar_json(_path_jogo(cdir, jg["seq"]), reg)   # checkpoint do jogo
                 analises[i] = reg
         finally:
@@ -358,28 +377,36 @@ async def _run(proxy="none", country="BR", modo="fuzzy", janela_dias=2,
         print("[checkpoint] todos os jogos já estavam resolvidos no disco.",
               file=sys.stderr)
 
-    res = _resumo(concurso, aberto, prazo, analises)
+    res = _resumo(concurso, aberto, prazo, analises, fonte=fonte)
     _salvar_json(os.path.join(cdir, "analise.json"), res)        # agregado final
     return res
 
 
 def analisar_loteca(proxy="none", country="BR", modo="fuzzy", janela_dias=2,
                     auditar=False, llm_model="claude-sonnet-4-5",
-                    concurso_json=None, refazer=False, verbose=True, saida=None):
+                    concurso_json=None, refazer=False, verbose=True, saida=None,
+                    fonte="betexplorer"):
     """API síncrona: roda o pipeline completo e devolve o dict de análise (ver _run).
-    Retoma do checkpoint em data/analise/<concurso>/; `refazer=True` ignora o cache."""
+    Retoma do checkpoint em data/analise/<concurso>/; `refazer=True` ignora o cache.
+    `fonte`: 'betexplorer' (default) ou 'flashscore'."""
     return asyncio.run(_run(proxy=proxy, country=country, modo=modo,
                             janela_dias=janela_dias, auditar=auditar,
                             llm_model=llm_model, concurso_json=concurso_json,
-                            refazer=refazer, verbose=verbose, saida=saida))
+                            refazer=refazer, verbose=verbose, saida=saida,
+                            fonte=fonte))
 
 
 def main():
     ap = argparse.ArgumentParser(
         description="Análise 1X2 do concurso aberto da Loteca via odds multi-casa "
                     "do Flashscore.com.br.")
+    ap.add_argument("--fonte", choices=["betexplorer", "flashscore"],
+                    default="betexplorer",
+                    help="fonte das odds 1X2. betexplorer (default): busca por país/UF "
+                         "+ arquivo profundo (mesma rede Livesport). flashscore: feed de "
+                         "agenda (~7 dias) + infra de odds AO VIVO (WebSocket).")
     ap.add_argument("--modo", choices=["fuzzy", "id"], default="fuzzy",
-                    help="fuzzy: agenda(feed)+apelidos (default). id: search-first")
+                    help="[só fonte=flashscore] fuzzy: agenda(feed)+apelidos. id: search-first")
     ap.add_argument("--janela-dias", type=int, default=2, dest="janela_dias",
                     help="janela (dias) p/ tolerar jogo em data próxima (default: 2)")
     ap.add_argument("--auditar", action="store_true",
@@ -408,7 +435,8 @@ def main():
         res = analisar_loteca(proxy=a.proxy, country=a.country, modo=a.modo,
                               janela_dias=a.janela_dias, auditar=a.auditar,
                               llm_model=a.llm_model, concurso_json=a.concurso_json,
-                              refazer=a.refazer, verbose=not a.quiet, saida=a.saida)
+                              refazer=a.refazer, verbose=not a.quiet, saida=a.saida,
+                              fonte=a.fonte)
     except Exception as e:  # noqa: BLE001
         print(f"[erro] {e}", file=sys.stderr)
         sys.exit(1)

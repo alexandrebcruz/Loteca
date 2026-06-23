@@ -2,7 +2,7 @@
   "concurso": 1257,
   "aberto": true,
   "fim_apostas": "21/06/2026 21h",
-  "fonte_odds": "flashscore.com.br",
+  "fonte_odds": "betexplorer.com",
   "jogos_resolvidos": 14,
   "jogos_total": 14,
   "jogos": [
@@ -21,7 +21,8 @@
         "mid": "EgVZxtj1",
         "metodo": "agenda",
         "score": 0.9,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/scotland-brazil/EgVZxtj1/"
       },
       "prob_1x2": {
         "casa": 0.122,
@@ -53,7 +54,8 @@
         "mid": "QeaikheU",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/new-zealand-egypt/QeaikheU/"
       },
       "prob_1x2": {
         "casa": 0.1612,
@@ -85,7 +87,8 @@
         "mid": "Cpq2Y2FE",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/argentina-austria/Cpq2Y2FE/"
       },
       "prob_1x2": {
         "casa": 0.617,
@@ -117,7 +120,8 @@
         "mid": "KMRMTaNM",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/france-iraq/KMRMTaNM/"
       },
       "prob_1x2": {
         "casa": 0.8758,
@@ -149,7 +153,8 @@
         "mid": "xSUJLPV8",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/norway-senegal/xSUJLPV8/"
       },
       "prob_1x2": {
         "casa": 0.4194,
@@ -181,7 +186,8 @@
         "mid": "nRFcNx7D",
         "metodo": "agenda",
         "score": 0.9,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/portugal-uzbekistan/nRFcNx7D/"
       },
       "prob_1x2": {
         "casa": 0.7873,
@@ -213,7 +219,8 @@
         "mid": "KhgvzGjJ",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/england-ghana/KhgvzGjJ/"
       },
       "prob_1x2": {
         "casa": 0.7791,
@@ -245,7 +252,8 @@
         "mid": "CSkWyxM6",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/panama-croatia/CSkWyxM6/"
       },
       "prob_1x2": {
         "casa": 0.1483,
@@ -277,7 +285,8 @@
         "mid": "K0YnEaMq",
         "metodo": "agenda",
         "score": 0.9,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/colombia-d-r-congo/K0YnEaMq/"
       },
       "prob_1x2": {
         "casa": 0.6217,
@@ -309,7 +318,8 @@
         "mid": "2wQjwkpp",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/switzerland-canada/2wQjwkpp/"
       },
       "prob_1x2": {
         "casa": 0.3847,
@@ -341,7 +351,8 @@
         "mid": "jRyHEZGP",
         "metodo": "agenda",
         "score": 0.919,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/bosnia-herzegovina-qatar/jRyHEZGP/"
       },
       "prob_1x2": {
         "casa": 0.6581,
@@ -373,7 +384,8 @@
         "mid": "n7TsyKKD",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/morocco-haiti/n7TsyKKD/"
       },
       "prob_1x2": {
         "casa": 0.7919,
@@ -405,7 +417,8 @@
         "mid": "4rr4ngNc",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/south-africa-south-korea/4rr4ngNc/"
       },
       "prob_1x2": {
         "casa": 0.17,
@@ -437,7 +450,8 @@
         "mid": "GCoIA5bf",
         "metodo": "agenda",
         "score": 1.0,
-        "invertido": false
+        "invertido": false,
+        "match_href": "/br/football/world/world-championship-2026/czech-republic-mexico/GCoIA5bf/"
       },
       "prob_1x2": {
         "casa": 0.2585,

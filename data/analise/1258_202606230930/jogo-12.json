@@ -1,0 +1,33 @@
+{
+  "seq": 12,
+  "loteca": {
+    "home": "COLOMBIA",
+    "away": "PORTUGAL",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "colombia",
+    "away": "portugal",
+    "data_exibida": "2026-06-28",
+    "match_href": "/br/football/world/world-championship-2026/colombia-portugal/vL2qotaK/",
+    "mid": "vL2qotaK",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2608,
+    "empate": 0.2744,
+    "fora": 0.4649,
+    "n_casas_validas": 18,
+    "odds_medianas": {
+      "casa": 3.6,
+      "empate": 3.4,
+      "fora": 2.0
+    }
+  },
+  "palpite": "2",
+  "n_casas": 18,
+  "erro": null
+}

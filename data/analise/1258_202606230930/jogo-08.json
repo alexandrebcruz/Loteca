@@ -1,0 +1,33 @@
+{
+  "seq": 8,
+  "loteca": {
+    "home": "SENEGAL",
+    "away": "IRAQUE",
+    "data": "2026-06-26"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "senegal",
+    "away": "iraq",
+    "data_exibida": "2026-06-26",
+    "match_href": "/br/football/world/world-championship-2026/senegal-iraq/j5IhOwop/",
+    "mid": "j5IhOwop",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.7642,
+    "empate": 0.1557,
+    "fora": 0.0801,
+    "n_casas_validas": 18,
+    "odds_medianas": {
+      "casa": 1.22,
+      "empate": 6.0,
+      "fora": 12.0
+    }
+  },
+  "palpite": "1",
+  "n_casas": 18,
+  "erro": null
+}
