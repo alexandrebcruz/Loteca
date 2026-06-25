@@ -146,6 +146,7 @@ async def backtest_concurso(tab, numero, jogos, resultados, modo, janela_dias,
         p = ({"1": pr["casa"], "X": pr["empate"], "2": pr["fora"]} if pr else None)
         jogos_opt.append({"seq": reg["seq"], "home": jg["home"], "away": jg["away"],
                           "p": p, "n_casas": reg.get("n_casas", 0),
+                          "odds_casas": reg.get("odds_casas"),
                           "erro": reg.get("erro")})
 
     jogos_com_odds = sum(1 for j in jogos_opt if j["p"])
@@ -179,20 +180,96 @@ async def backtest_concurso(tab, numero, jogos, resultados, modo, janela_dias,
     }
 
 
+_COLS = ("1", "X", "2")
+
+
+def line_shop_ev(odds_casas, p):
+    """Line-shopping + EV por jogo.
+
+    Para cada coluna pega a MELHOR odd entre as casas e calcula
+    EV = melhor_odd * p_consenso - 1 (lucro esperado por 1u apostada).
+    Retorna {por_coluna:{c:{odd,casa,ev}}, melhor:{coluna,odd,casa,ev}} ou None.
+    """
+    if not odds_casas or not p:
+        return None
+    por_col = {}
+    for c in _COLS:
+        bo, bc = 0.0, None
+        for ca in odds_casas:
+            o = ca.get(c) or 0
+            if o > bo:
+                bo, bc = o, ca.get("casa")
+        if bo <= 0 or not p.get(c):
+            continue
+        por_col[c] = {"odd": round(bo, 2), "casa": bc,
+                      "ev": round(bo * p[c] - 1, 4)}
+    if not por_col:
+        return None
+    mc = max(por_col, key=lambda c: por_col[c]["ev"])
+    return {"por_coluna": por_col,
+            "melhor": {"coluna": mc, **por_col[mc]}}
+
+
+def resumo_ev(resultados):
+    """Agrega o desempenho das estrategias EV+ no concurso.
+
+    Para cada estrategia: aposta de 1u; retorno_esperado = soma dos EV
+    (lucro esperado pelo consenso); retorno_realizado = lucro de fato pelo
+    resultado real. ROI = lucro / investido.
+      A) toda coluna com EV+ ;  B) melhor coluna do jogo, so se EV+.
+    """
+    def _vazio():
+        return {"apostas": 0, "investido": 0,
+                "retorno_esperado": 0.0, "roi_esperado": None,
+                "retorno_realizado": 0.0, "roi_realizado": None}
+    A, B = _vazio(), _vazio()
+
+    def _aposta(acc, col, info, real):
+        acc["apostas"] += 1
+        acc["investido"] += 1
+        acc["retorno_esperado"] += info["ev"]              # lucro esperado (1u)
+        acc["retorno_realizado"] += (info["odd"] - 1) if col == real else -1
+
+    for r in resultados:
+        ls = r.get("line_shop")
+        real = r.get("resultado")
+        if not ls:
+            continue
+        for c, info in ls["por_coluna"].items():
+            if info["ev"] > 0:
+                _aposta(A, c, info, real)
+        mc = ls["melhor"]["coluna"]
+        if ls["melhor"]["ev"] > 0:
+            _aposta(B, mc, ls["melhor"], real)
+
+    for acc in (A, B):
+        if acc["investido"]:
+            acc["roi_esperado"] = round(acc["retorno_esperado"] / acc["investido"], 4)
+            acc["roi_realizado"] = round(acc["retorno_realizado"] / acc["investido"], 4)
+        acc["retorno_esperado"] = round(acc["retorno_esperado"], 4)
+        acc["retorno_realizado"] = round(acc["retorno_realizado"], 4)
+    return {"toda_coluna_ev+": A, "melhor_coluna_ev+": B}
+
+
 def montar_saida(numero, raw, jogos, resultados, res):
     """Monta o JSON final do concurso."""
+    linhas = []
+    for jg, jo in zip(jogos, res["jogos_opt"]):
+        ls = line_shop_ev(jo.get("odds_casas"), jo["p"])
+        linhas.append(
+            {"seq": jg["seq"], "home": jg["home"], "away": jg["away"],
+             "data": jg["data"], "resultado": resultados.get(jg["seq"]),
+             "n_casas": jo["n_casas"], "prob_1x2": jo["p"],
+             "odds_casas": jo.get("odds_casas"),
+             "line_shop": ls})
     return {
         "concurso": numero,
         "data_apuracao": raw.get("dataApuracao"),
         "jogos_total": len(jogos),
         "jogos_com_odds": res["jogos_com_odds"],
         "rateio": _rateio(raw),
-        "resultados": [
-            {"seq": jg["seq"], "home": jg["home"], "away": jg["away"],
-             "data": jg["data"], "resultado": resultados.get(jg["seq"]),
-             "n_casas": jo["n_casas"], "prob_1x2": jo["p"]}
-            for jg, jo in zip(jogos, res["jogos_opt"])
-        ],
+        "resultados": linhas,
+        "ev_resumo": resumo_ev(linhas),
         "apostas": res["apostas"],
     }
 

@@ -93,7 +93,7 @@ from buscar_eventid_sofascore import (
 # Helpers de navegação/avaliação genéricos (origin-agnósticos) já prontos no Flashscore.
 from buscar_odds_flashscore import _goto, _unwrap, _eval_json
 # A estimativa de probabilidade é a MESMA do pipeline (de-vig + média).
-from analise_loteca import estimar_prob
+from analise_loteca import estimar_prob, odds_por_casa
 
 ORIGIN = "https://www.betexplorer.com"
 SEARCH_EP = ORIGIN + "/gres/ajax/search.php?text={q}&sid=0&lang=br"
@@ -588,10 +588,13 @@ async def coletar_odds(tab, match_href):
     dados = await _eval_json(tab, r"""JSON.stringify((()=>{
         const casas=[];
         document.querySelectorAll('tr[data-bid]').forEach(tr=>{
-          const bid=tr.getAttribute('data-bid');
-          const al=tr.querySelector('a[title]');
-          const nome=tr.getAttribute('data-bookmaker')
-                || (al?(al.getAttribute('title')||'').trim():'')
+          // id ESTÁVEL da casa = data-bookie-id (o data-bid da <tr> é id da linha/oferta);
+          // NOME da casa = texto do <a> (ex.: "1xBet.br"); data-bookmaker/title vêm vazios.
+          const bid=(tr.getAttribute('data-bookie-id')||tr.getAttribute('data-bid')||'').trim();
+          const a=tr.querySelector('a');
+          const nome=(a?(a.innerText||a.textContent||'').trim():'')
+                || tr.getAttribute('data-bookmaker')
+                || (a?(a.getAttribute('title')||'').trim():'')
                 || ('bk'+bid);
           const odds=[...tr.querySelectorAll('[data-odd-current],[data-odd]')]
             .map(e=>e.getAttribute('data-odd-current')||e.getAttribute('data-odd'))
@@ -1086,6 +1089,7 @@ async def analisar_jogo(tab, jg, janela_dias=3, verbose=True, auditar=False,
             reg["apelido_sugerido"] = ev["apelido_sugerido"]
         reg["n_casas"] = odds.get("n_casas", 0)
         reg["prob_1x2"] = prob
+        reg["odds_casas"] = odds_por_casa(odds, invertido=bool(ev.get("invertido")))
         reg["palpite"] = (max((("1", prob["casa"]), ("X", prob["empate"]),
                                ("2", prob["fora"])), key=lambda kv: kv[1])[0]
                           if prob else None)

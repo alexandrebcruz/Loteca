@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loteca — acompanhamento</title>
+<style>
+  :root{
+    --bg:#0f1419; --card:#ffffff; --ink:#1a2330; --muted:#5d6b7a;
+    --line:#e3e8ee; --accent:#0a7d3b; --accent2:#0b66c3; --warn:#b8860b;
+    --red:#c0392b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef2f6;color:var(--ink);
+    font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-text-size-adjust:100%;}
+  main{max-width:980px;margin:0 auto;padding:16px 14px 60px}
+  header h1{font-size:1.35rem;margin:.2em 0 .1em}
+  header p{color:var(--muted);margin:.1em 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 16px 18px;margin:16px 0;box-shadow:0 1px 3px rgba(20,30,50,.06)}
+  .card h2{font-size:1.08rem;margin:.1em 0 .7em}
+  .sub-h{font-size:.98rem;margin:1.4em 0 .6em;padding-top:1.1em;
+    border-top:1px solid var(--line)}
+  .sub{color:var(--muted);font-size:.86rem;margin:-.3em 0 .8em}
+  .tabela-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:7px 9px;text-align:center;white-space:nowrap}
+  th{background:#f4f7fa;color:var(--muted);font-weight:600;font-size:.8rem;
+    text-transform:uppercase;letter-spacing:.02em;border-bottom:2px solid var(--line)}
+  td{border-bottom:1px solid var(--line)}
+  td.conf,th.conf{text-align:left;white-space:normal;min-width:160px}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.74rem;
+    font-weight:700}
+  .badge.fin{background:#eef2f6;color:var(--muted)}
+  .badge.ok{background:#e4f5ea;color:var(--accent)}
+  .badge.no{background:#fbe6e3;color:var(--red)}
+  .badge.live{background:#fbf1dc;color:var(--warn)}
+  .badge.ag{background:#eaf1fb;color:var(--accent2)}
+  .badge.sort{background:#efe7fb;color:#6b3fb0}
+  .prob{font-variant-numeric:tabular-nums;font-weight:600;border-radius:5px;
+    padding:3px 6px;display:inline-block;min-width:46px}
+  .liveval{font-size:.72rem;margin-top:3px;color:var(--warn);font-weight:700;
+    font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1.25}
+  .kpi-live{margin-top:6px;padding-top:5px;border-top:1px dashed #e8d9b0;
+    font-size:.8rem;color:var(--warn);font-weight:700;font-variant-numeric:tabular-nums}
+  .fav{outline:2px solid var(--accent);outline-offset:-2px;font-weight:800}
+  .placar{font-weight:800;font-variant-numeric:tabular-nums}
+  .mk{font-weight:800;letter-spacing:.06em}
+  .res-ok{color:var(--accent);font-weight:800}
+  .res-no{color:var(--red);font-weight:800}
+  /* KPIs */
+  .resumo{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 2px}
+  .kpi{flex:1 1 150px;background:#f4f7fa;border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px}
+  .kpi .lab{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.03em}
+  .kpi .val{font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+  .kpi .sub2{color:var(--muted);font-size:.74rem;margin-top:1px}
+  .kpi.destaque{background:#e4f5ea;border-color:#bfe6cd}
+  .kpi.destaque .val{color:var(--accent)}
+  .delta-up{color:var(--accent);font-weight:700}
+  .delta-dn{color:var(--red);font-weight:700}
+  /* placar de acertos/erros (destaque) */
+  .placar-box{display:flex;gap:10px;margin:4px 0 14px}
+  .pl-item{flex:1 1 0;border-radius:12px;padding:14px 10px;text-align:center;
+    border:1px solid var(--line)}
+  .pl-item .pl-num{font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+  .pl-item .pl-lab{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;margin-top:5px}
+  .pl-item.ok{background:#e4f5ea;border-color:#bfe6cd}
+  .pl-item.ok .pl-num{color:var(--accent)}
+  .pl-item.no{background:#fbe6e3;border-color:#f0c8c2}
+  .pl-item.no .pl-num{color:var(--red)}
+  .pl-item.sort{background:#efe7fb;border-color:#d9c9f0}
+  .pl-item.sort .pl-num{color:#6b3fb0}
+  /* botões de ordenação dos jogos */
+  .ordena{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+  .ordena button{cursor:pointer;border:1px solid var(--line);background:#f4f7fa;
+    color:var(--muted);border-radius:9px;padding:8px 12px;font-size:.84rem;
+    font-weight:700;transition:.12s}
+  .ordena button.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+  /* gráfico */
+  .metricas{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+  .metricas button{flex:1 1 auto;min-width:120px;cursor:pointer;border:1px solid var(--line);
+    background:#f4f7fa;color:var(--muted);border-radius:9px;padding:9px 10px;font-size:.86rem;
+    font-weight:700;transition:.12s}
+  .metricas button.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+  svg.chart{width:100%;height:auto;display:block;touch-action:manipulation}
+  svg.chart text{fill:var(--muted);font-size:11px}
+  svg.chart .grid{stroke:#eef2f6}
+  svg.chart .axis{stroke:#c9d3dd}
+  svg.chart .line{fill:none;stroke:var(--accent2);stroke-width:2.5}
+  svg.chart .area{fill:rgba(11,102,195,.08);stroke:none}
+  svg.chart .pt{fill:#fff;stroke:var(--accent2);stroke-width:2;cursor:pointer}
+  svg.chart .pt.sel{fill:var(--accent);stroke:var(--accent)}
+  svg.chart .line-live{fill:none;stroke:var(--warn);stroke-width:2.5;stroke-dasharray:5 4}
+  svg.chart .pt-live{fill:#fff;stroke:var(--warn);stroke-width:2.5;cursor:pointer}
+  svg.chart .pt-live.sel{fill:var(--warn)}
+  .dica{color:var(--muted);font-size:.82rem;margin:.5em 0 0;text-align:center}
+  .info-tab{table-layout:fixed;width:100%}
+  .info-tab td{text-align:left;border:none;padding:5px 8px;white-space:normal}
+  .info-tab td.k{color:var(--muted);width:42%;font-size:.86rem}
+  .info-tab td.v{font-weight:600}
+  .rodape{color:var(--muted);font-size:.8rem;margin-top:22px}
+  @media (max-width:560px){
+    header h1{font-size:1.15rem}
+    .kpi{flex:1 1 45%}
+    th,td{padding:6px 6px;font-size:.86rem}
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1 id="titulo">Loteca — acompanhamento</h1>
+    <p id="subtitulo"></p>
+  </header>
+  <section id="info" class="card"></section>
+  <section id="jogos-sec" class="card"></section>
+  <section id="kpi-sec" class="card"></section>
+  <section id="grafico-sec" class="card"></section>
+  <p class="rodape">Probabilidades de <b>consenso de mercado</b> (de-vig + média
+  entre casas) do <b>bilhete efetivamente jogado</b>: a cobertura de cada jogo é a
+  soma das probabilidades das colunas marcadas (simples/duplo/triplo). Jogos
+  decididos entram com 1 (o resultado caiu numa coluna marcada) ou 0 (furou). O
+  término de cada jogo é <b>estimado</b> em início + 120&nbsp;min (o Flashscore não
+  publica a hora exata). Jogos não realizados ou interrompidos sem chegar ao fim
+  entram na Loteca como <b>sorteio</b> — resultado equiprovável entre 1, X e 2
+  (a cobertura vira o nº de colunas marcadas ÷ 3). Na evolução temporal, os jogos
+  ainda pendentes são mantidos na sua cobertura atual (não há histórico de odds
+  para reconstruir). Para jogos <b>em andamento</b> com mercado in-play, mostramos
+  ainda a <b>odd 1X2 ao vivo</b> (consenso de-vig das casas que precificam durante a
+  partida, via Flashscore/Livesport) — é uma leitura informativa adicional e
+  <b>não entra</b> no cálculo de cobertura nem nas probabilidades do bilhete.</p>
+</main>
+<script id="dados" type="application/json">{"concurso": 1257, "pasta": "1257_202606212000", "gerado_em": "24/06/2026 23:24", "fonte": "betexplorer.com", "fim_apostas": "21/06/2026 21h", "bilhete": {"valor_input": 108.0, "custo": 108.0, "combos": 54, "d": 1, "t": 3, "valido": true, "motivo": "", "p14_ini": 0.022367619923320765, "p13_ini": 0.10460885194411608, "p13mais_ini": 0.12697647186743685}, "resumo": {"total": 14, "finalizados": 12, "sorteios": 0, "ao_vivo": 2, "com_odds_live": 2, "decididos_live": 0, "pendentes": 0, "cobertos": 11, "furos": 1}, "inicial": {"p14": 0.02236985668531309, "p13": 0.10461707606731815, "p13mais": 0.12698693275263123}, "atual": {"p14": 0.0, "p13": 0.8300000000000001, "p13mais": 0.8300000000000001}, "atual_live": {"p14": 0.0, "p13": 0.5383, "p13mais": 0.5383}, "live_point": {"t": "24/06 23:24", "n_live": 2, "n_dec": 0, "p14": 0.0, "p13": 0.5383, "p13mais": 0.5383}, "jogos": [{"seq": 1, "home": "ESCOCIA/SCT", "away": "BRASIL", "palpite": "2", "marcas": ["2"], "mid": "EgVZxtj1", "invertido": false, "prob_orig": {"casa": 0.122, "empate": 0.1913, "fora": 0.6866, "n_casas_validas": 23, "odds_medianas": {"casa": 7.78, "empate": 4.9, "fora": 1.37}}, "prob": null, "placar": "0-3", "resultado": "2", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "24/06 19:00", "fim_est": "24/06 21:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782338400}, {"seq": 2, "home": "NOVA ZELANDIA", "away": "EGITO", "palpite": "2", "marcas": ["2"], "mid": "QeaikheU", "invertido": false, "prob_orig": {"casa": 0.1612, "empate": 0.2416, "fora": 0.5972, "n_casas_validas": 24, "odds_medianas": {"casa": 5.9, "empate": 3.92, "fora": 1.58}}, "prob": null, "placar": "1-3", "resultado": "2", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "21/06 22:00", "fim_est": "22/06 00:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782090000}, {"seq": 3, "home": "ARGENTINA", "away": "AUSTRIA", "palpite": "1", "marcas": ["1"], "mid": "Cpq2Y2FE", "invertido": false, "prob_orig": {"casa": 0.617, "empate": 0.2366, "fora": 0.1463, "n_casas_validas": 23, "odds_medianas": {"casa": 1.52, "empate": 4.0, "fora": 6.5}}, "prob": null, "placar": "2-0", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "22/06 14:00", "fim_est": "22/06 16:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782147600}, {"seq": 4, "home": "FRANCA", "away": "IRAQUE", "palpite": "1", "marcas": ["1"], "mid": "KMRMTaNM", "invertido": false, "prob_orig": {"casa": 0.8758, "empate": 0.0923, "fora": 0.0319, "n_casas_validas": 23, "odds_medianas": {"casa": 1.07, "empate": 10.0, "fora": 30.0}}, "prob": null, "placar": "3-0", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "22/06 18:00", "fim_est": "22/06 20:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782162000}, {"seq": 5, "home": "NORUEGA", "away": "SENEGAL", "palpite": "1", "marcas": ["1", "X", "2"], "mid": "xSUJLPV8", "invertido": false, "prob_orig": {"casa": 0.4194, "empate": 0.2708, "fora": 0.3099, "n_casas_validas": 23, "odds_medianas": {"casa": 2.25, "empate": 3.5, "fora": 3.06}}, "prob": null, "placar": "3-2", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "22/06 21:00", "fim_est": "22/06 23:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782172800}, {"seq": 6, "home": "PORTUGAL", "away": "UZBEQUISTAO/UZB", "palpite": "1", "marcas": ["1"], "mid": "nRFcNx7D", "invertido": false, "prob_orig": {"casa": 0.7873, "empate": 0.1463, "fora": 0.0665, "n_casas_validas": 23, "odds_medianas": {"casa": 1.2, "empate": 6.4, "fora": 14.0}}, "prob": null, "placar": "5-0", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "23/06 14:00", "fim_est": "23/06 16:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782234000}, {"seq": 7, "home": "INGLATERRA", "away": "GANA", "palpite": "1", "marcas": ["1"], "mid": "KhgvzGjJ", "invertido": false, "prob_orig": {"casa": 0.7791, "empate": 0.1522, "fora": 0.0687, "n_casas_validas": 22, "odds_medianas": {"casa": 1.21, "empate": 6.15, "fora": 13.25}}, "prob": null, "placar": "0-0", "resultado": "X", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "23/06 17:00", "fim_est": "23/06 19:00", "coberto": false, "erro": null, "cob": 0.0, "ts_ini": 1782244800}, {"seq": 8, "home": "PANAMA", "away": "CROACIA", "palpite": "2", "marcas": ["2"], "mid": "CSkWyxM6", "invertido": false, "prob_orig": {"casa": 0.1483, "empate": 0.2397, "fora": 0.612, "n_casas_validas": 22, "odds_medianas": {"casa": 6.31, "empate": 3.96, "fora": 1.53}}, "prob": null, "placar": "0-1", "resultado": "2", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "23/06 20:00", "fim_est": "23/06 22:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782255600}, {"seq": 9, "home": "COLOMBIA", "away": "CONGO", "palpite": "1", "marcas": ["1"], "mid": "K0YnEaMq", "invertido": false, "prob_orig": {"casa": 0.6217, "empate": 0.2379, "fora": 0.1404, "n_casas_validas": 22, "odds_medianas": {"casa": 1.5, "empate": 4.0, "fora": 6.64}}, "prob": null, "placar": "1-0", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "23/06 23:00", "fim_est": "24/06 01:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782266400}, {"seq": 10, "home": "SUICA", "away": "CANADA", "palpite": "1", "marcas": ["1", "X", "2"], "mid": "2wQjwkpp", "invertido": false, "prob_orig": {"casa": 0.3847, "empate": 0.3187, "fora": 0.2966, "n_casas_validas": 23, "odds_medianas": {"casa": 2.44, "empate": 2.93, "fora": 3.14}}, "prob": null, "placar": "2-1", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "24/06 16:00", "fim_est": "24/06 18:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782327600}, {"seq": 11, "home": "BOSNIA HERZEGOVIN", "away": "CATAR", "palpite": "1", "marcas": ["1"], "mid": "jRyHEZGP", "invertido": false, "prob_orig": {"casa": 0.6581, "empate": 0.2012, "fora": 0.1407, "n_casas_validas": 23, "odds_medianas": {"casa": 1.42, "empate": 4.7, "fora": 6.6}}, "prob": null, "placar": "3-1", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "24/06 16:00", "fim_est": "24/06 18:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782327600}, {"seq": 12, "home": "MARROCOS", "away": "HAITI", "palpite": "1", "marcas": ["1"], "mid": "n7TsyKKD", "invertido": false, "prob_orig": {"casa": 0.7919, "empate": 0.145, "fora": 0.0631, "n_casas_validas": 23, "odds_medianas": {"casa": 1.18, "empate": 6.5, "fora": 15.0}}, "prob": null, "placar": "4-2", "resultado": "1", "prob_live": null, "live": null, "live_decidido": false, "estado": "finalizado", "inicio": "24/06 19:00", "fim_est": "24/06 21:00", "coberto": true, "erro": null, "cob": 1.0, "ts_ini": 1782338400}, {"seq": 13, "home": "AFRICA DO SUL", "away": "COREIA DO SUL", "palpite": "2", "marcas": ["X", "2"], "mid": "4rr4ngNc", "invertido": false, "prob_orig": {"casa": 0.17, "empate": 0.2434, "fora": 0.5866, "n_casas_validas": 21, "odds_medianas": {"casa": 5.5, "empate": 3.85, "fora": 1.6}}, "prob": null, "placar": "1-0", "resultado": null, "prob_live": {"casa": 0.4618, "empate": 0.3499, "fora": 0.1884, "n_casas_validas": 9, "odds_medianas": {"casa": 1.57, "empate": 3.21, "fora": 7.5}}, "live": {"n_casas": 9, "casas": ["bet365", "Estrelabet", "1xBet.br", "Esportivabet", "BetEsporte", "Betboom.br", "BR4Bet", "Bet7k", "Betnacional"], "odds_casas": [{"casa": "bet365", "id": 16, "1": 1.57, "X": 3.25, "2": 8.5}, {"casa": "Estrelabet", "id": 833, "1": 5.0, "X": 1.96, "2": 2.9}, {"casa": "1xBet.br", "id": 1157, "1": 1.6, "X": 3.4, "2": 7.5}, {"casa": "Esportivabet", "id": 959, "1": 5.0, "X": 1.96, "2": 2.9}, {"casa": "BetEsporte", "id": 863, "1": 1.57, "X": 3.21, "2": 7.56}, {"casa": "Betboom.br", "id": 943, "1": 1.57, "X": 3.2, "2": 7.5}, {"casa": "BR4Bet", "id": 999, "1": 5.0, "X": 1.96, "2": 2.9}, {"casa": "Bet7k", "id": 1069, "1": 1.48, "X": 3.42, "2": 8.0}, {"casa": "Betnacional", "id": 995, "1": 1.57, "X": 3.3, "2": 8.0}]}, "live_decidido": false, "estado": "ao_vivo", "inicio": "24/06 22:00", "fim_est": "25/06 00:00", "coberto": null, "erro": null, "cob": 0.8300000000000001, "ts_ini": 1782349200}, {"seq": 14, "home": "REPUBLICA TCHECA", "away": "MEXICO", "palpite": "2", "marcas": ["1", "X", "2"], "mid": "GCoIA5bf", "invertido": false, "prob_orig": {"casa": 0.2585, "empate": 0.2571, "fora": 0.4844, "n_casas_validas": 21, "odds_medianas": {"casa": 3.6, "empate": 3.63, "fora": 1.94}}, "prob": null, "placar": "0-2", "resultado": null, "prob_live": {"casa": 0.0162, "empate": 0.0574, "fora": 0.9264, "n_casas_validas": 7, "odds_medianas": {"casa": 58.67, "empate": 18.0, "fora": 1.02}}, "live": {"n_casas": 7, "casas": ["bet365", "Betnacional", "BetEsporte", "1xBet.br", "Superbet.br", "Betboom.br", "Bet7k"], "odds_casas": [{"casa": "bet365", "id": 16, "1": 51.0, "X": 19.0, "2": 1.02}, {"casa": "Betnacional", "id": 995, "1": 95.0, "X": 15.0, "2": 1.02}, {"casa": "BetEsporte", "id": 863, "1": 58.67, "X": 11.8, "2": 1.02}, {"casa": "1xBet.br", "id": 1157, "1": 53.0, "X": 18.0, "2": 1.02}, {"casa": "Superbet.br", "id": 933, "1": 90.0, "X": 22.0, "2": 1.02}, {"casa": "Betboom.br", "id": 943, "1": 100.0, "X": 20.0, "2": 1.02}, {"casa": "Bet7k", "id": 1069, "1": 30.0, "X": 14.0, "2": 1.02}]}, "live_decidido": false, "estado": "ao_vivo", "inicio": "24/06 22:00", "fim_est": "25/06 00:00", "coberto": null, "erro": null, "cob": 1.0, "ts_ini": 1782349200}], "timeline": [{"ts": 1782086400, "t": "21/06 21:00", "jogo": null, "resultado": null, "coberto": null, "sorteio": false, "p14": 0.02236985668531309, "p13": 0.10461707606731815, "p13mais": 0.12698693275263123}, {"ts": 1782097200, "t": "22/06 00:00", "jogo": "NOVA ZELANDIA x EGITO", "resultado": "2", "coberto": true, "sorteio": false, "p14": 0.03745789799951958, "p13": 0.1499146596669653, "p13mais": 0.18737255766648486}, {"ts": 1782154800, "t": "22/06 16:00", "jogo": "ARGENTINA x AUSTRIA", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.06070972123098799, "p13": 0.20528822761020568, "p13mais": 0.26599794884119365}, {"ts": 1782169200, "t": "22/06 20:00", "jogo": "FRANCA x IRAQUE", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.06931916103104359, "p13": 0.22457043595586898, "p13mais": 0.2938895969869126}, {"ts": 1782180000, "t": "22/06 23:00", "jogo": "NORUEGA x SENEGAL", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.06931222980806279, "p13": 0.22455491168768102, "p13mais": 0.2938671414957438}, {"ts": 1782241200, "t": "23/06 16:00", "jogo": "PORTUGAL x UZBEQUISTAO/UZB", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.08803788874388771, "p13": 0.2614368763519067, "p13mais": 0.34947476509579445}, {"ts": 1782252000, "t": "23/06 19:00", "jogo": "INGLATERRA x GANA", "resultado": "X", "coberto": false, "sorteio": false, "p14": 0.0, "p13": 0.11299947213950415, "p13mais": 0.11299947213950415}, {"ts": 1782262800, "t": "23/06 22:00", "jogo": "PANAMA x CROACIA", "resultado": "2", "coberto": true, "sorteio": false, "p14": 0.0, "p13": 0.18463966035866697, "p13mais": 0.18463966035866697}, {"ts": 1782273600, "t": "24/06 01:00", "jogo": "COLOMBIA x CONGO", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.0, "p13": 0.29699157207442006, "p13mais": 0.29699157207442006}, {"ts": 1782334800, "t": "24/06 18:00", "jogo": "SUICA x CANADA", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.0, "p13": 0.29699157207442006, "p13mais": 0.29699157207442006}, {"ts": 1782334800, "t": "24/06 18:00", "jogo": "BOSNIA HERZEGOVIN x CATAR", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.0, "p13": 0.4512863882, "p13mais": 0.4512863882}, {"ts": 1782345600, "t": "24/06 21:00", "jogo": "ESCOCIA/SCT x BRASIL", "resultado": "2", "coberto": true, "sorteio": false, "p14": 0.0, "p13": 0.6572770000000001, "p13mais": 0.6572770000000001}, {"ts": 1782345600, "t": "24/06 21:00", "jogo": "MARROCOS x HAITI", "resultado": "1", "coberto": true, "sorteio": false, "p14": 0.0, "p13": 0.8300000000000001, "p13mais": 0.8300000000000001}]}</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById('dados').textContent);
+const KEY = {'1':'casa','X':'empate','2':'fora'};
+const intBR = v => Number(v).toLocaleString('pt-BR');
+const fmtBRL = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+function pct(p,dec){ if(p==null) return '—'; return (p*100).toFixed(dec==null?1:dec)+'%'; }
+function umEm(p){ if(!p||p<=0) return '—'; return '1 em '+intBR(Math.round(1/p)); }
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function grad(p){
+  if(p==null) return 'transparent';
+  const t=Math.max(0,Math.min(1,p));
+  const r=Math.round(255+(22-255)*t), g=Math.round(255+(150-255)*t), b=Math.round(255+(60-255)*t);
+  return 'rgb('+r+','+g+','+b+')';
+}
+function tipoAposta(m){ const n=(m||[]).length; return n>=3?'triplo':n===2?'duplo':'simples'; }
+/* variação em pontos percentuais (▲/▼ Xpp) — usado p/ comparar ao vivo vs pré-jogo */
+function ppBadge(now,was,suf){
+  if(now==null||was==null) return '';
+  const d=now-was; const u=(suf==null?'pp':suf);
+  if(Math.abs(d)<5e-4) return ' <span style="color:var(--muted)">=</span>';
+  const cls=d>0?'delta-up':'delta-dn', sig=d>0?'▲':'▼';
+  return ' <span class="'+cls+'">'+sig+(Math.abs(d)*100).toFixed(1)+u+'</span>';
+}
+// rótulo do ponto "ao vivo": jogos com odds in-play e/ou decididos (1X2 fechado)
+function lpDesc(lp){
+  const a=lp.n_live?(lp.n_live+' in-play'):'';
+  const b=lp.n_dec?(lp.n_dec+' decidido'+(lp.n_dec>1?'s':'')):'';
+  return (a&&b)?(a+' + '+b):(a||b||'0 in-play');
+}
+
+/* cabeçalho */
+document.getElementById('titulo').textContent = 'Loteca '+D.concurso+' — acompanhamento';
+document.getElementById('subtitulo').innerHTML =
+  'gerado em '+esc(D.gerado_em)+'<br>fonte '+esc(D.fonte)+
+  '<br>análise de apostas: '+esc(D.pasta);
+
+/* card info + bilhete */
+(function(){
+  const r=D.resumo, b=D.bilhete;
+  let bil='';
+  if(b){
+    bil='<tr><td class="k">Bilhete jogado</td><td class="v">'+fmtBRL(b.custo)+
+      ' &nbsp;<span style="color:var(--muted);font-weight:400">('+intBR(b.combos)+
+      ' apostas · '+b.d+' duplo(s) · '+b.t+' triplo(s)'+
+      (b.valido?'':' · ⚠ fora da tabela')+')</span></td></tr>';
+    if(Math.abs((b.valor_input||b.custo)-b.custo)>0.005)
+      bil+='<tr><td class="k">Valor informado</td><td class="v">'+fmtBRL(b.valor_input)+
+        ' <span style="color:var(--muted);font-weight:400">→ usei a aposta vendável de '+
+        fmtBRL(b.custo)+'</span></td></tr>';
+  }
+  const box='<div class="placar-box">'+
+    '<div class="pl-item ok"><div class="pl-num">'+r.cobertos+'</div><div class="pl-lab">acertos</div></div>'+
+    '<div class="pl-item no"><div class="pl-num">'+r.furos+'</div><div class="pl-lab">erros</div></div>'+
+    (r.sorteios?'<div class="pl-item sort"><div class="pl-num">'+r.sorteios+'</div><div class="pl-lab">sorteio</div></div>':'')+
+    '</div>';
+  document.getElementById('info').innerHTML =
+    '<h2>Situação</h2>'+box+
+    '<table class="info-tab"><tbody>'+
+    bil+
+    '<tr><td class="k">Jogos finalizados</td><td class="v">'+r.finalizados+' de '+r.total+'</td></tr>'+
+    (r.sorteios?'<tr><td class="k">Definidos por sorteio</td><td class="v">'+r.sorteios+'</td></tr>':'')+
+    '<tr><td class="k">Ao vivo agora</td><td class="v">'+r.ao_vivo+
+      (r.com_odds_live?' <span style="color:var(--warn);font-weight:700">('+r.com_odds_live+' com odds ao vivo)</span>':'')+
+      (r.decididos_live?' <span style="color:var(--warn);font-weight:700">(⚑ '+r.decididos_live+' decidido'+(r.decididos_live>1?'s':'')+')</span>':'')+'</td></tr>'+
+    '<tr><td class="k">Ainda por jogar</td><td class="v">'+r.pendentes+'</td></tr>'+
+    (D.fim_apostas?'<tr><td class="k">Apostas até</td><td class="v">'+esc(D.fim_apostas)+'</td></tr>':'')+
+    '</tbody></table>';
+})();
+
+/* tabela dos jogos (com ordenação) */
+(function(){
+  let ordem='loteca';
+
+  function badgeFor(j){
+    if(j.estado==='finalizado'){ const ok=j.coberto; return '<span class="badge '+(ok?'ok':'no')+'">'+(ok?'✓ coberto':'✗ furou')+'</span>'; }
+    if(j.estado==='sorteio'){ return '<span class="badge sort">⚄ sorteio</span>'; }
+    if(j.estado==='ao_vivo'){ return '<span class="badge live">● ao vivo</span>'+
+      (j.live_decidido?' <span class="badge fin" title="mercado 1X2 ao vivo fechado: jogo decidido">⚑ decidido</span>':''); }
+    if(j.estado==='indefinido'){ return '<span class="badge fin">encerrado</span>'; }
+    return '<span class="badge ag">agendado</span>';
+  }
+
+  function cellsFor(j){
+    const marcas=j.marcas||[];
+    if(j.estado==='sorteio'){
+      // jogo vira sorteio: resultado equiprovável (1/3 em cada coluna)
+      return ['1','X','2'].map(k=>{
+        const fav=marcas.includes(k)?' fav':'';
+        return '<td><span class="prob'+fav+'" style="background:'+grad(1/3)+'">'+pct(1/3)+'</span></td>';
+      }).join('');
+    }
+    if(j.resultado!=null){
+      // jogo decidido: ● na coluna do resultado (verde se coberta, vermelho se não)
+      return ['1','X','2'].map(k=>{
+        const isRes=(k===j.resultado), marked=marcas.includes(k);
+        if(isRes){ const col=j.coberto?'var(--accent)':'var(--red)';
+          return '<td><span class="prob'+(marked?' fav':'')+'" style="background:'+grad(1)+';color:'+col+'">●</span></td>'; }
+        return '<td>'+(marked?'<span class="prob fav" style="color:var(--muted)">·</span>':'·')+'</td>';
+      }).join('');
+    }
+    const p=j.prob||j.prob_orig||{};
+    const pl=j.prob_live;
+    return ['1','X','2'].map(k=>{
+      const v=p[KEY[k]]; const fav=marcas.includes(k)?' fav':'';
+      let sub='';
+      if(pl){
+        const lv=pl[KEY[k]];
+        sub = j.live_decidido
+          ? '<div class="liveval" title="jogo decidido: 1X2 ao vivo fechado — resultado atual tido como certo">⚑&nbsp;'+pct(lv)+'</div>'
+          : '<div class="liveval" title="odds ao vivo (in-play)">●&nbsp;'+pct(lv)+ppBadge(lv,v)+'</div>';
+      }
+      return '<td><span class="prob'+fav+'" style="background:'+grad(v)+'">'+pct(v)+'</span>'+sub+'</td>';
+    }).join('');
+  }
+
+  function liveLine(j){
+    // selinho de odds AO VIVO (os valores vão sob cada coluna 1/X/2, em cellsFor)
+    if(j.live_decidido) return '<div style="margin-top:3px;font-size:.72rem;color:var(--warn);font-weight:700">'+
+      '⚑ jogo decidido — mercado 1X2 ao vivo fechado (resultado atual considerado certo)</div>';
+    if(!j.prob_live) return '';
+    const n=(j.live&&j.live.n_casas)||0;
+    return '<div style="margin-top:3px;font-size:.72rem;color:var(--warn);font-weight:700">'+
+      '● odds ao vivo ('+n+' casa'+(n>1?'s':'')+')</div>';
+  }
+
+  function cobDe(p,marcas){
+    // cobertura = soma das probs das colunas marcadas (mesma conta de _cob_marcas)
+    if(!p||!marcas) return null;
+    let s=0,ok=false;
+    marcas.forEach(k=>{const v=p[KEY[k]]; if(v!=null){s+=v; ok=true;}});
+    return ok?s:null;
+  }
+
+  function casasCell(j){
+    // nº de casas (bookmakers) cujas odds 1X2 entraram no consenso deste jogo.
+    // pendente: coleta ATUAL (j.prob); decidido: a coleta original da análise
+    // (j.prob_orig), já que não re-coletamos odds de jogo encerrado.
+    const p=j.prob||j.prob_orig||{};
+    const n=p.n_casas_validas;
+    let sub='';
+    if(j.live&&j.live.n_casas) sub='<div class="liveval" title="casas com odds ao vivo (in-play)">●&nbsp;'+j.live.n_casas+'</div>';
+    return '<td>'+(n!=null?n:'—')+sub+'</td>';
+  }
+
+  function cobCell(j){
+    let sub='';
+    if(j.prob_live && j.estado==='ao_vivo'){
+      const lc=cobDe(j.prob_live, j.marcas);
+      if(lc!=null){
+        const mk=j.live_decidido?'⚑':'●';
+        const ti=j.live_decidido?'cobertura com o resultado atual (jogo decidido)':'cobertura ao vivo';
+        sub='<div class="liveval" title="'+ti+'">'+mk+'&nbsp;'+pct(lc)+ppBadge(lc,j.cob)+'</div>';
+      }
+    }
+    return '<td>'+pct(j.cob)+sub+'</td>';
+  }
+
+  function rowFor(j){
+    const marcas=j.marcas||[];
+    const placar=(j.placar!=null && (j.resultado!=null || j.estado==='ao_vivo'))
+      ? '<span class="placar">'+esc(j.placar)+'</span>' : '—';
+    return '<tr>'+
+      '<td class="conf">'+esc(j.home)+' <span style="color:var(--muted)">x</span> '+esc(j.away)+
+        (j.erro?' <span title="'+esc(j.erro)+'" style="color:var(--warn)">⚠</span>':'')+
+        liveLine(j)+'</td>'+
+      '<td>'+(j.inicio?esc(j.inicio):'—')+'</td>'+
+      '<td>'+badgeFor(j)+'</td>'+
+      '<td><span class="mk">'+esc(marcas.join(' '))+'</span><br><span style="color:var(--muted);font-size:.74rem">'+tipoAposta(marcas)+'</span></td>'+
+      '<td>'+placar+'</td>'+
+      cobCell(j)+
+      cellsFor(j)+
+      casasCell(j)+
+    '</tr>';
+  }
+
+  function ordenar(arr){
+    const a=arr.slice();
+    if(ordem==='horario'){
+      a.sort((x,y)=>{ const tx=x.ts_ini==null?Infinity:x.ts_ini, ty=y.ts_ini==null?Infinity:y.ts_ini; return (tx-ty)||(x.seq-y.seq); });
+    } else if(ordem==='cobertura'){
+      a.sort((x,y)=>{ const cx=x.cob==null?-1:x.cob, cy=y.cob==null?-1:y.cob; return (cy-cx)||(x.seq-y.seq); });
+    } else {
+      a.sort((x,y)=>x.seq-y.seq);
+    }
+    return a;
+  }
+
+  function render(){
+    document.getElementById('jogos-body').innerHTML = ordenar(D.jogos).map(rowFor).join('');
+    [...document.querySelectorAll('#ord-btns button')].forEach(b=>b.className=(b.dataset.o===ordem?'on':''));
+  }
+
+  document.getElementById('jogos-sec').innerHTML =
+    '<h2>Jogos</h2><p class="sub">Coluna(s) <b>marcada(s) no bilhete</b> destacada(s). '+
+    'Pendentes: prob. 1X2 <b>atualizada</b> e cobertura corrente. Decididos: placar e '+
+    '● na coluna do resultado (verde = coberto, vermelho = furou). '+
+    '<b>Sorteio</b>: jogo não realizado/interrompido — resultado equiprovável 1X2. '+
+    'Em jogos <b>ao vivo</b> com mercado in-play, sob cada coluna 1/X/2 aparece em '+
+    '<span style="color:var(--warn)">amarelo</span> a <b>prob. ao vivo</b> e a variação em '+
+    'pp vs. a prob. pré-jogo (consenso das casas que precificam durante a partida). '+
+    'A coluna <b>Casas</b> mostra quantas casas (bookmakers) tiveram odds 1X2 coletadas '+
+    'e usadas no consenso de cada jogo (selo ● = casas com odds ao vivo).</p>'+
+    '<div class="ordena" id="ord-btns">'+
+      '<button data-o="loteca">Ordem da Loteca</button>'+
+      '<button data-o="horario">Data e hora</button>'+
+      '<button data-o="cobertura">Cobertura</button>'+
+    '</div>'+
+    '<div class="tabela-wrap"><table><thead><tr>'+
+    '<th class="conf">Confronto</th><th>Data/Hora</th><th>Situação</th><th>Aposta</th><th>Placar</th>'+
+    '<th>Cob.</th><th>1</th><th>X</th><th>2</th>'+
+    '<th title="nº de casas (bookmakers) cujas odds 1X2 entraram no consenso">Casas</th>'+
+    '</tr></thead><tbody id="jogos-body"></tbody></table></div>';
+  [...document.querySelectorAll('#ord-btns button')].forEach(b=>b.onclick=()=>{ ordem=b.dataset.o; render(); });
+  render();
+})();
+
+/* card KPIs atuais (com o delta vs. início) */
+(function(){
+  const a=D.atual, ini=D.inicial||{}, al=D.atual_live||{};
+  const hasLive = (D.resumo&&(D.resumo.com_odds_live>0||D.resumo.decididos_live>0));
+  function delta(now,was){
+    if(now==null||was==null) return '';
+    const d=now-was; if(Math.abs(d)<1e-9) return ' <span style="color:var(--muted)">=</span>';
+    const cls=d>0?'delta-up':'delta-dn'; const sig=d>0?'▲':'▼';
+    return ' <span class="'+cls+'">'+sig+' '+(Math.abs(d)*100).toFixed(1)+'pp</span>';
+  }
+  // linha complementar "● ao vivo": recalcula o KPI usando as odds in-play onde
+  // existem; delta = quanto a leitura ao vivo muda vs. a prob atual (pré-jogo).
+  function liveRow(nowLive, base){
+    if(!hasLive || nowLive==null) return '';
+    return '<div class="kpi-live">● ao vivo: '+pct(nowLive)+ppBadge(nowLive,base)+'</div>';
+  }
+  function kpi(lab,val,sub,live,dest){
+    return '<div class="kpi'+(dest?' destaque':'')+'"><div class="lab">'+lab+'</div>'+
+      '<div class="val">'+val+'</div><div class="sub2">'+sub+'</div>'+live+'</div>';
+  }
+  document.getElementById('kpi-sec').innerHTML =
+    '<h2>Probabilidade atual do bilhete</h2>'+
+    '<p class="sub">Do bilhete jogado'+(D.bilhete?' ('+fmtBRL(D.bilhete.custo)+')':'')+
+    ', com os jogos já decididos fixados. <b>pp</b> = variação vs. o início.'+
+    (hasLive?' <b style="color:var(--warn)">● ao vivo</b> = mesma conta usando as odds '+
+      'in-play onde existem (complementar; a variação é vs. a prob atual).':'')+'</p>'+
+    '<div class="resumo">'+
+      kpi('P(14 ou 13)', pct(a.p13mais), umEm(a.p13mais)+delta(a.p13mais,ini.p13mais), liveRow(al.p13mais,a.p13mais), true)+
+      kpi('P(14)', pct(a.p14), umEm(a.p14)+delta(a.p14,ini.p14), liveRow(al.p14,a.p14))+
+      kpi('P(13 exato)', pct(a.p13), umEm(a.p13)+delta(a.p13,ini.p13), liveRow(al.p13,a.p13))+
+    '</div>';
+})();
+
+/* gráfico temporal + tabela de evolução */
+(function(){
+  const METR=[{k:'p13mais',rot:'P(14 ou 13)'},{k:'p14',rot:'P(14)'},{k:'p13',rot:'P(13 exato)'}];
+  let metr='p13mais';
+  const tl=D.timeline;
+
+  const g=document.getElementById('grafico-sec');
+  if(!tl || tl.length<2){
+    g.innerHTML='<h2>Evolução temporal</h2><p class="sub">Ainda não há jogos '+
+      'finalizados — a evolução aparece conforme os resultados saem.</p>'+
+      '<div id="evol-sec"></div>';
+  } else {
+    g.innerHTML='<h2>Evolução temporal</h2>'+
+      '<p class="sub">Como a probabilidade foi mudando conforme os jogos terminaram '+
+      '(término estimado em início + 120 min).</p>'+
+      '<div class="metricas" id="metr"></div><div id="chart"></div>'+
+      '<p class="dica" id="dica">Toque num ponto para ver o valor.</p>'+
+      '<div id="evol-sec"></div>';
+    const mc=document.getElementById('metr');
+    METR.forEach(m=>{ const b=document.createElement('button'); b.textContent=m.rot;
+      b.dataset.k=m.k; if(m.k===metr)b.className='on';
+      b.onclick=()=>{metr=m.k; [...mc.children].forEach(x=>x.className=x.dataset.k===metr?'on':''); draw();};
+      mc.appendChild(b); });
+    draw();
+  }
+
+  function draw(){
+    const W=920,H=320,P={l:54,r:18,t:16,b:46};
+    // o "agora (ao vivo)" entra como ponto EXTRA à direita: a escala X passa a ter
+    // tl.length + 1 posições e o ponto live ocupa a última; linha tracejada (warn)
+    // liga o último ponto histórico (pré-jogo) ao live, deixando claro o salto.
+    const lp=D.live_point;
+    const n=tl.length + (lp?1:0);
+    const ys=tl.map(p=>p[metr]); if(lp) ys.push(lp[metr]);
+    const ymax=Math.max(...ys, 1e-9)*1.12, ymin=0;
+    const px=i=> P.l + (W-P.l-P.r) * (n<2?0.5:i/(n-1));
+    const py=v=> H-P.b - (H-P.t-P.b) * ((v-ymin)/(ymax-ymin||1));
+    const iLive=tl.length;   // índice X do ponto live
+    let grid='', ax='';
+    for(let gi=0;gi<=4;gi++){ const v=ymin+(ymax-ymin)*gi/4, y=py(v);
+      grid+='<line class="grid" x1="'+P.l+'" y1="'+y+'" x2="'+(W-P.r)+'" y2="'+y+'"/>';
+      ax+='<text x="'+(P.l-8)+'" y="'+(y+4)+'" text-anchor="end">'+(v*100).toFixed(1)+'%</text>'; }
+    let xlab='';
+    tl.forEach((p,i)=>{ if(tl.length>8 && i%2 && i!==tl.length-1) return;
+      xlab+='<text x="'+px(i)+'" y="'+(H-P.b+18)+'" text-anchor="middle">'+esc(p.t)+'</text>'; });
+    if(lp) xlab+='<text x="'+px(iLive)+'" y="'+(H-P.b+18)+'" text-anchor="middle" '+
+      'style="fill:var(--warn);font-weight:700">● '+esc(lp.t)+'</text>';
+    const dpts=tl.map((p,i)=>(i?'L':'M')+px(i)+' '+py(p[metr])).join(' ');
+    const area=(tl.length>1)?('M'+px(0)+' '+py(0)+' '+tl.map((p,i)=>'L'+px(i)+' '+py(p[metr])).join(' ')+' L'+px(tl.length-1)+' '+py(0)+' Z'):'';
+    // segmento tracejado do último ponto histórico ao live
+    const liveSeg=(lp && tl.length)?('<path class="line-live" d="M'+px(tl.length-1)+' '+
+      py(tl[tl.length-1][metr])+' L'+px(iLive)+' '+py(lp[metr])+'"/>'):'';
+    let pts='';
+    tl.forEach((p,i)=>{ pts+='<circle class="pt" data-i="'+i+'" cx="'+px(i)+'" cy="'+py(p[metr])+'" r="5"/>'; });
+    const livePt=lp?('<circle class="pt-live" data-live="1" cx="'+px(iLive)+'" cy="'+py(lp[metr])+'" r="6"/>'):'';
+    document.getElementById('chart').innerHTML=
+      '<svg class="chart" viewBox="0 0 '+W+' '+H+'">'+grid+
+      '<line class="axis" x1="'+P.l+'" y1="'+P.t+'" x2="'+P.l+'" y2="'+(H-P.b)+'"/>'+
+      '<line class="axis" x1="'+P.l+'" y1="'+(H-P.b)+'" x2="'+(W-P.r)+'" y2="'+(H-P.b)+'"/>'+
+      (area?'<path class="area" d="'+area+'"/>':'')+
+      '<path class="line" d="'+dpts+'"/>'+liveSeg+ax+xlab+pts+livePt+'</svg>';
+    document.querySelectorAll('#chart .pt').forEach(c=>c.onclick=()=>{
+      const i=+c.dataset.i, p=tl[i];
+      document.querySelectorAll('#chart .pt,#chart .pt-live').forEach(x=>x.classList.remove('sel'));
+      c.classList.add('sel');
+      const ctx = p.jogo ? (p.sorteio ? (esc(p.jogo)+' → sorteio (equiprovável 1X2)')
+        : (esc(p.jogo)+' → '+p.resultado+' ('+(p.coberto?'coberto':'furou')+')')) : 'situação inicial';
+      document.getElementById('dica').innerHTML='<b>'+esc(p.t)+'</b> · '+ctx+' · '+
+        METR.find(m=>m.k===metr).rot+' = <b>'+pct(p[metr])+'</b> ('+umEm(p[metr])+')';
+    });
+    const lpc=document.querySelector('#chart .pt-live');
+    if(lpc) lpc.onclick=()=>{
+      document.querySelectorAll('#chart .pt,#chart .pt-live').forEach(x=>x.classList.remove('sel'));
+      lpc.classList.add('sel');
+      document.getElementById('dica').innerHTML='<b>'+esc(lp.t)+'</b> · '+
+        '<span style="color:var(--warn);font-weight:700">considerando odds ao vivo</span> ('+
+        lpDesc(lp)+') · '+
+        METR.find(m=>m.k===metr).rot+' = <b>'+pct(lp[metr])+'</b> ('+umEm(lp[metr])+')';
+    };
+  }
+
+  // tabela de evolução
+  let rows='';
+  tl.forEach((p)=>{
+    let ev='—';
+    if(p.jogo){
+      ev = p.sorteio
+        ? (esc(p.jogo)+' <span class="badge sort">⚄ sorteio</span>')
+        : (esc(p.jogo)+' <span class="mk">'+p.resultado+'</span> '+
+           (p.coberto?'<span class="res-ok">✓</span>':'<span class="res-no">✗</span>'));
+    }
+    rows+='<tr><td>'+esc(p.t)+'</td><td class="conf">'+ev+'</td>'+
+      '<td>'+pct(p.p13mais)+'</td><td>'+pct(p.p14)+'</td><td>'+pct(p.p13)+'</td></tr>';
+  });
+  // linha extra "agora (ao vivo)": só quando há jogos com odds in-play. Mostra a
+  // hora em que o script rodou e as métricas recalculadas com as odds ao vivo,
+  // com a variação (pp) vs. a situação atual (pré-jogo) — leitura complementar.
+  if(D.live_point){
+    const lp=D.live_point, a=D.atual||{};
+    rows+='<tr style="background:#fffaf0">'+
+      '<td>'+esc(lp.t)+'</td>'+
+      '<td class="conf"><span style="color:var(--warn);font-weight:700">● considerando odds ao vivo</span> '+
+        '<span style="color:var(--muted);font-size:.8rem">('+lpDesc(lp)+')</span></td>'+
+      '<td>'+pct(lp.p13mais)+ppBadge(lp.p13mais,a.p13mais)+'</td>'+
+      '<td>'+pct(lp.p14)+ppBadge(lp.p14,a.p14)+'</td>'+
+      '<td>'+pct(lp.p13)+ppBadge(lp.p13,a.p13)+'</td></tr>';
+  }
+  document.getElementById('evol-sec').innerHTML=
+    '<h3 class="sub-h">Evolução (tabela)</h3><div class="tabela-wrap"><table><thead><tr>'+
+    '<th>Quando</th><th class="conf">Jogo decidido</th><th>P(14 ou 13)</th><th>P(14)</th>'+
+    '<th>P(13)</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+})();
+</script>
+</body>
+</html>

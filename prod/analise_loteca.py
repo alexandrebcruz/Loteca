@@ -12,8 +12,8 @@ Pipeline (reusa os módulos de prod, sem duplicar lógica):
      `_resolver_jogo` (agenda/feed + apelidos + auditoria opcional) e `coletar_odds`
      do buscar_odds_flashscore. Reusar o browser evita 14 boots de Chrome.
   3. Estima a probabilidade 1X2 (`estimar_prob`): de cada casa tira o overround
-     (normaliza 1/odd p/ somar 1) e faz a MÉDIA entre as casas -> probabilidade de
-     consenso, robusta ao vig de cada casa.
+     (de-viga 1/odd p/ somar 1, por Shin por padrão -> ver METODO_DEVIG) e faz a
+     MÉDIA entre as casas -> probabilidade de consenso, robusta ao vig de cada casa.
 
 Checkpoint / retomada: tudo é gravado incrementalmente em data/analise/<concurso>/
   - programacao.json   -> o concurso (gravado ANTES de coletar)
@@ -38,6 +38,7 @@ Logs/progresso vão p/ stderr. Pré-requisitos: nodriver + Chrome/Xvfb; Hub p/ -
 """
 import os
 import sys
+import math
 import json
 import asyncio
 import argparse
@@ -159,14 +160,62 @@ def _mediana(xs):
     return xs[m] if n % 2 else (xs[m - 1] + xs[m]) / 2
 
 
-def estimar_prob(odds_res, invertido=False):
+# --------------------------------------------------------------------------- #
+# De-vig: como remover o overround (Σ 1/odd > 1) de UMA casa -> prob que soma 1.
+# --------------------------------------------------------------------------- #
+# METODO_DEVIG escolhe o método usado por estimar_prob (e por todo o pipeline,
+# já que todos importam estimar_prob daqui):
+#   "shin" (default) -> modelo de Shin (1991-93): a casa carrega margem EXTRA no
+#       azarão (proteção contra apostador informado); o de-vig devolve essa margem
+#       de volta ao favorito. Encolhe o azarão, engorda o favorito — corrige o viés
+#       favorite-longshot que o multiplicativo deixa passar (ver README + memória
+#       de calibração: cauda ~3,6% real vs ~8% previsto no multiplicativo).
+#   "multiplicativo" -> proporcional (1/odd ÷ Σ): remove a margem IGUAL para todos,
+#       preservando a distorção relativa. Mais simples; mantido p/ comparação.
+# Em jogo equilibrado (sem azarão extremo) os dois praticamente coincidem.
+METODO_DEVIG = "shin"
+
+
+def _devig_mult(inv):
+    """De-vig multiplicativo (proporcional): cada prob implícita ÷ a soma."""
+    s = sum(inv)
+    return [x / s for x in inv]
+
+
+def _devig_shin(inv):
+    """De-vig de Shin: resolve z em [0,1) por bissecção de modo que
+        p_i = (sqrt(z² + 4(1-z)·π_i²/B) - z) / (2(1-z))  some 1,  B = Σ π_i.
+    z = fração estimada de dinheiro informado naquele mercado (endógena por jogo);
+    z maior encolhe mais o azarão. Em z->0 recai no multiplicativo."""
+    B = sum(inv)
+
+    def soma(z):
+        return sum((math.sqrt(z * z + 4 * (1 - z) * q * q / B) - z) / (2 * (1 - z))
+                   for q in inv)
+
+    lo, hi = 0.0, 0.999          # soma(0)=sqrt(B)>1 (decrescente em z) -> raiz em (0,1)
+    for _ in range(80):
+        m = (lo + hi) / 2
+        lo, hi = (m, hi) if soma(m) > 1 else (lo, m)
+    z = (lo + hi) / 2
+    return [(math.sqrt(z * z + 4 * (1 - z) * q * q / B) - z) / (2 * (1 - z))
+            for q in inv]
+
+
+def _devig(inv, metodo=None):
+    """Aplica o de-vig escolhido a um vetor de probs implícitas (1/odd)."""
+    return (_devig_shin if (metodo or METODO_DEVIG) == "shin" else _devig_mult)(inv)
+
+
+def estimar_prob(odds_res, invertido=False, metodo=None):
     """Probabilidade de consenso (1X2) a partir das odds de todas as casas.
 
     Para CADA casa com as 3 cotações válidas (>1), converte em prob implícita e
-    NORMALIZA (1/odd dividido pela soma -> remove o overround/vig daquela casa);
-    depois faz a MÉDIA dessas probabilidades entre as casas. Como cada vetor já
-    soma 1, a média também soma 1. `invertido` troca casa<->fora p/ as colunas da
-    Loteca. -> dict {casa, empate, fora, n_casas_validas, odds_medianas} ou None.
+    DE-VIGA (remove o overround/vig daquela casa, normalizando p/ somar 1) pelo
+    método `metodo` (default: o módulo `METODO_DEVIG` = "shin"); depois faz a
+    MÉDIA dessas probabilidades entre as casas. Como cada vetor já soma 1, a média
+    também soma 1. `invertido` troca casa<->fora p/ as colunas da Loteca.
+    -> dict {casa, empate, fora, n_casas_validas, odds_medianas} ou None.
     """
     vetores, brutas = [], {"casa": [], "empate": [], "fora": []}
     for c in (odds_res.get("odds_por_casa") or []):
@@ -174,9 +223,7 @@ def estimar_prob(odds_res, invertido=False):
         a, e, f = o.get("casa"), o.get("empate"), o.get("fora")
         if None in (a, e, f) or min(a, e, f) <= 1:
             continue
-        inv = [1.0 / a, 1.0 / e, 1.0 / f]
-        s = sum(inv)
-        vetores.append([x / s for x in inv])
+        vetores.append(_devig([1.0 / a, 1.0 / e, 1.0 / f], metodo))
         brutas["casa"].append(a)
         brutas["empate"].append(e)
         brutas["fora"].append(f)
@@ -195,6 +242,28 @@ def estimar_prob(odds_res, invertido=False):
         "n_casas_validas": n,
         "odds_medianas": od,
     }
+
+
+def odds_por_casa(odds_res, invertido=False):
+    """Lista as odds 1X2 de CADA casa, já nas COLUNAS DA LOTECA (1=mandante,
+    X=empate, 2=visitante), preservando o NOME da casa. Só inclui casas com as 3
+    cotações válidas (>1) — o mesmo filtro do `estimar_prob`. `invertido` troca
+    1<->2 (orientação da página da fonte vs. a da Loteca, idem `estimar_prob`).
+    -> [{casa, id, "1", "X", "2"}] (lista; pode ser []).
+
+    Persistido por jogo (analise e backtest) p/ permitir line-shopping/EV depois:
+    o consenso de-vig descarta a DISPERSÃO entre casas, que é a única fonte de EV+
+    realizável (pegar a casa que paga acima de 1/p)."""
+    out = []
+    for c in (odds_res.get("odds_por_casa") or []):
+        o = c.get("odds_1x2") or {}
+        a, e, f = o.get("casa"), o.get("empate"), o.get("fora")
+        if None in (a, e, f) or min(a, e, f) <= 1:
+            continue
+        um, dois = (f, a) if invertido else (a, f)
+        out.append({"casa": c.get("casa"), "id": c.get("bookmaker_id"),
+                    "1": um, "X": e, "2": dois})
+    return out
 
 
 def _palpite(prob):
@@ -287,6 +356,7 @@ async def _analisar_jogo(tab, jg, modo, janela_dias, auditar, llm_model, verbose
             reg["resolvido"]["auditoria"] = ev.get("auditoria")
         reg["n_casas"] = odds.get("n_casas", 0)
         reg["prob_1x2"] = prob
+        reg["odds_casas"] = odds_por_casa(odds, invertido=bool(ev.get("invertido")))
         reg["palpite"] = _palpite(prob)
         if prob is None:
             reg["erro"] = "jogo resolvido, mas sem odds 1X2 válidas"

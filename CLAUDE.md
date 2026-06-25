@@ -51,6 +51,15 @@ ambiente; sem elas, use `--sem-auditar`/`--pular-auditoria` e sem `--proxy`.
   ruído cosmético. Para proxy `user:pass`, responda o auth via CDP
   (`fetch.continue_with_auth`) e continue TODA request (`fetch.continue_request`),
   senão a página trava.
+- **De-vig = Shin (padrão), configurável**: a remoção do overround (`Σ 1/odd > 1`)
+  de cada casa em `estimar_prob` usa o **método de Shin** (insider-trading: a casa
+  carrega margem extra no azarão; o de-vig devolve ao favorito → corrige o viés
+  favorite-longshot que o multiplicativo deixa passar). Trocar via a constante
+  **`METODO_DEVIG`** em `analise_loteca.py` (`"shin"` | `"multiplicativo"`) ou via
+  `estimar_prob(..., metodo=...)`. **Único ponto de de-vig do projeto**: todos
+  (otimizador, backtest, acompanhamento, BX, Flashscore) importam `estimar_prob`
+  daqui, então mudar a constante muda o pipeline inteiro. Em jogo equilibrado
+  Shin≈multiplicativo. Detalhe matemático e calibração no README.
 - **Dois de-para SEPARADOS**: Sofascore em INGLÊS (Alemanha→Germany), Flashscore
   em PT raw-first (Alemanha→Alemanha). Não unifique — a tabela em inglês quebra o
   match no Flashscore.

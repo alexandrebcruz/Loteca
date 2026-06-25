@@ -93,10 +93,27 @@ Saída do pipeline em `data/analise/<concurso>_<AAAAMMDDHHMM>/`:
   **probabilidade 1X2** de cada jogo. Reusa **uma só sessão de Chrome** para os 14
   jogos (consent uma vez), em vez de subir 14 navegadores.
   - **Probabilidade de consenso** (`estimar_prob`): de cada casa tira o overround
-    (normaliza `1/odd` p/ somar 1, removendo o vig) e faz a média entre as casas.
+    (de-viga `1/odd` p/ somar 1, removendo o vig) e faz a média entre as casas.
     É probabilidade **de mercado**, não um modelo próprio. Respeita as colunas da
     Loteca (1 = `nomeEquipeUm`, 2 = `nomeEquipeDois`); se o casamento vier
     `invertido`, troca casa↔fora.
+  - **De-vig: método de Shin (padrão)**. O overround (`Σ 1/odd > 1`) pode ser
+    removido de dois jeitos. O **multiplicativo** (`p_i = (1/odd_i) / Σ`) tira a
+    margem proporcionalmente — igual para favorito e azarão — e por isso **preserva
+    o viés favorite-longshot**: o azarão fica superestimado. O método de **Shin**
+    (Hyun Song Shin, 1991-93) modela a casa enfrentando uma fração `z` de
+    apostadores **informados** (insiders) e, por isso, carregando margem **extra no
+    azarão** (onde o insider mais machuca); o de-vig devolve essa margem ao
+    favorito. Resolve-se `z ∈ [0,1)` por bissecção de modo que
+    `p_i = (√(z² + 4(1−z)·π_i²/B) − z) / (2(1−z))` some 1 (`π_i = 1/odd_i`,
+    `B = Σ π_i`). Efeito: **encolhe o azarão, engorda o favorito**, proporcional à
+    distorção de cauda de cada jogo (em jogo equilibrado, `z≈0` e Shin ≈
+    multiplicativo). Na calibração dos 100 concursos isso reduz o viés de cauda
+    pela metade nas duas pontas **sem perda de acurácia** (Brier idêntico). O método
+    é configurável pela constante `METODO_DEVIG` em `analise_loteca.py` (`"shin"` |
+    `"multiplicativo"`) ou pelo argumento `metodo=` de `estimar_prob`; todo o
+    pipeline (análise, otimizador, backtest, acompanhamento) herda a escolha porque
+    todos importam `estimar_prob` daqui.
   - **Checkpoint / retomada** em `data/analise/<concurso>/`: grava
     `programacao.json` antes de coletar, um `jogo-NN.json` (NN = `nuSequencial`)
     por jogo coletado, e o `analise.json` agregado no fim (escrita atômica).

@@ -75,7 +75,7 @@ from buscar_odds_flashscore import (                             # noqa: E402
     buscar_odds_live_flashscore, _canonical_from_mid, _esperar, ORIGIN,
 )
 import buscar_odds_betexplorer as BX                             # noqa: E402
-from analise_loteca import estimar_prob                          # noqa: E402
+from analise_loteca import estimar_prob, odds_por_casa           # noqa: E402
 
 
 def _fonte_da_analise(analise, override=None):
@@ -563,6 +563,9 @@ async def _coletar(analise, marcas_por_seq, proxy, country, verbose,
                         reg["live"] = {
                             "n_casas": live["n_casas_live"],
                             "casas": live.get("casas_disponiveis") or [],
+                            # odds AO VIVO por casa (já nas colunas da Loteca; mesmo
+                            # helper do pré-jogo), embutidas no blob `dados` do HTML.
+                            "odds_casas": odds_por_casa(live, invertido=inv),
                         }
                     elif live.get("live_ativo"):
                         # WS empurra mercados live (ex.: próximo gol) mas NENHUMA casa
