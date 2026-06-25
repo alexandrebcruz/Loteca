@@ -1,0 +1,161 @@
+{
+  "seq": 10,
+  "loteca": {
+    "home": "PANAMA",
+    "away": "INGLATERRA",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "panama",
+    "away": "england",
+    "data_exibida": "2026-06-27",
+    "match_href": "/br/football/world/world-championship-2026/panama-england/YZajsXcn/",
+    "mid": "YZajsXcn",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.0511,
+    "empate": 0.1178,
+    "fora": 0.8311,
+    "n_casas_validas": 18,
+    "odds_medianas": {
+      "casa": 14.0,
+      "empate": 7.55,
+      "fora": 1.16
+    }
+  },
+  "palpite": "2",
+  "n_casas": 18,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 14.0,
+      "X": 8.3,
+      "2": 1.16
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 13.0,
+      "X": 8.0,
+      "2": 1.17
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 19.0,
+      "X": 7.8,
+      "2": 1.19
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 15.5,
+      "X": 8.15,
+      "2": 1.16
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 16.0,
+      "X": 7.4,
+      "2": 1.19
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 17.0,
+      "X": 8.0,
+      "2": 1.15
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 14.0,
+      "X": 8.0,
+      "2": 1.16
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 14.0,
+      "X": 6.5,
+      "2": 1.14
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 14.0,
+      "X": 6.66,
+      "2": 1.17
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 15.0,
+      "X": 7.0,
+      "2": 1.18
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 14.0,
+      "X": 6.5,
+      "2": 1.14
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 14.0,
+      "X": 6.5,
+      "2": 1.14
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 14.0,
+      "X": 7.0,
+      "2": 1.15
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 19.0,
+      "X": 8.0,
+      "2": 1.16
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 14.0,
+      "X": 6.5,
+      "2": 1.14
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 14.0,
+      "X": 6.66,
+      "2": 1.17
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 14.0,
+      "X": 7.7,
+      "2": 1.16
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 14.0,
+      "X": 7.9,
+      "2": 1.18
+    }
+  ]
+}

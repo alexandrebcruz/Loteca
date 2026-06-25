@@ -1,0 +1,161 @@
+{
+  "seq": 13,
+  "loteca": {
+    "home": "CONGO",
+    "away": "UZBEQUISTAO/UZB",
+    "data": "2026-06-27"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "d",
+    "away": "uzbekistan",
+    "data_exibida": "2026-06-28",
+    "match_href": "/br/football/world/world-championship-2026/d-r-congo-uzbekistan/hEWfCwid/",
+    "mid": "hEWfCwid",
+    "metodo": "dia",
+    "score": 0.762,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.5528,
+    "empate": 0.2255,
+    "fora": 0.2217,
+    "n_casas_validas": 18,
+    "odds_medianas": {
+      "casa": 1.73,
+      "empate": 4.05,
+      "fora": 4.15
+    }
+  },
+  "palpite": "1",
+  "n_casas": 18,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 1.74,
+      "X": 4.2,
+      "2": 4.2
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 1.73,
+      "X": 4.1,
+      "2": 4.33
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 1.78,
+      "X": 4.1,
+      "2": 4.6
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 1.76,
+      "X": 4.25,
+      "2": 4.2
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 1.79,
+      "X": 3.9,
+      "2": 4.5
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 1.75,
+      "X": 4.0,
+      "2": 4.5
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 1.75,
+      "X": 4.0,
+      "2": 4.3
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 1.69,
+      "X": 4.0,
+      "2": 3.8
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 1.71,
+      "X": 4.2,
+      "2": 4.0
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 1.76,
+      "X": 4.2,
+      "2": 4.0
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 1.69,
+      "X": 4.0,
+      "2": 3.8
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 1.69,
+      "X": 4.0,
+      "2": 3.8
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 1.71,
+      "X": 4.0,
+      "2": 4.0
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 1.7,
+      "X": 4.2,
+      "2": 4.6
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 1.69,
+      "X": 4.0,
+      "2": 3.8
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 1.71,
+      "X": 4.2,
+      "2": 4.0
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 1.74,
+      "X": 4.1,
+      "2": 4.1
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 1.78,
+      "X": 4.0,
+      "2": 4.35
+    }
+  ]
+}

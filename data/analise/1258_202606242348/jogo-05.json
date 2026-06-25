@@ -1,0 +1,175 @@
+{
+  "seq": 5,
+  "loteca": {
+    "home": "TURQUIA",
+    "away": "ESTADOS UNIDOS",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "turkey",
+    "away": "usa",
+    "data_exibida": "2026-06-26",
+    "match_href": "/br/football/world/world-championship-2026/turkey-usa/SCvmMa2U/",
+    "mid": "SCvmMa2U",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2703,
+    "empate": 0.23,
+    "fora": 0.4997,
+    "n_casas_validas": 20,
+    "odds_medianas": {
+      "casa": 3.46,
+      "empate": 4.0,
+      "fora": 1.92
+    }
+  },
+  "palpite": "2",
+  "n_casas": 20,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 3.46,
+      "X": 4.08,
+      "2": 1.92
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 3.5,
+      "X": 4.1,
+      "2": 1.91
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 3.55,
+      "X": 4.05,
+      "2": 2.02
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 3.5,
+      "X": 4.15,
+      "2": 1.94
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 3.65,
+      "X": 3.85,
+      "2": 1.97
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 3.6,
+      "X": 4.0,
+      "2": 1.91
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 3.6,
+      "X": 4.0,
+      "2": 1.95
+    },
+    {
+      "casa": "Betnacional",
+      "id": "1096",
+      "1": 3.54,
+      "X": 3.89,
+      "2": 1.92
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 3.2,
+      "X": 4.0,
+      "2": 1.85
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 3.4,
+      "X": 4.0,
+      "2": 1.9
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 3.33,
+      "X": 4.2,
+      "2": 1.93
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 3.38,
+      "X": 4.2,
+      "2": 1.9
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 3.2,
+      "X": 4.0,
+      "2": 1.85
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 3.33,
+      "X": 4.0,
+      "2": 1.88
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 3.85,
+      "X": 4.0,
+      "2": 1.87
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 3.2,
+      "X": 4.0,
+      "2": 1.85
+    },
+    {
+      "casa": "LuvaBet",
+      "id": "1094",
+      "1": 3.47,
+      "X": 3.98,
+      "2": 1.96
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 3.4,
+      "X": 4.0,
+      "2": 1.9
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 3.45,
+      "X": 4.0,
+      "2": 1.92
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 3.6,
+      "X": 4.0,
+      "2": 1.95
+    }
+  ]
+}

@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loteca — bilhetes otimizados</title>
+<style>
+  :root{
+    --bg:#0f1419; --card:#ffffff; --ink:#1a2330; --muted:#5d6b7a;
+    --line:#e3e8ee; --accent:#0a7d3b; --accent2:#0b66c3; --warn:#b8860b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#eef2f6;color:var(--ink);
+    font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-text-size-adjust:100%;}
+  main{max-width:980px;margin:0 auto;padding:16px 14px 60px}
+  header h1{font-size:1.35rem;margin:.2em 0 .1em}
+  header p{color:var(--muted);margin:.1em 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 16px 18px;margin:16px 0;box-shadow:0 1px 3px rgba(20,30,50,.06)}
+  .card h2{font-size:1.08rem;margin:.1em 0 .7em}
+  .sub{color:var(--muted);font-size:.86rem;margin:-.3em 0 .8em}
+  .tabela-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;font-size:.92rem}
+  th,td{padding:7px 9px;text-align:center;white-space:nowrap}
+  th{background:#f4f7fa;color:var(--muted);font-weight:600;font-size:.8rem;
+    text-transform:uppercase;letter-spacing:.02em;border-bottom:2px solid var(--line)}
+  td{border-bottom:1px solid var(--line)}
+  td.conf,th.conf{text-align:left;white-space:normal;min-width:150px}
+  tr:last-child td{border-bottom:none}
+  .info-tab{table-layout:fixed;width:100%}
+  .info-tab td{text-align:left;border:none;padding:6px 8px;white-space:normal;
+    word-break:break-word;overflow-wrap:anywhere;vertical-align:top}
+  .info-tab td.k{color:var(--muted);width:40%;font-size:.86rem}
+  .info-tab td.v{font-weight:600}
+  .badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;
+    font-weight:600}
+  .badge.ok{background:#e4f5ea;color:var(--accent)}
+  .badge.fb{background:#fbf1dc;color:var(--warn)}
+  .prob{font-variant-numeric:tabular-nums;font-weight:600;border-radius:5px}
+  .fav{font-weight:800}
+  /* gráfico */
+  .modos{display:flex;gap:6px;background:#eef2f6;border:1px solid var(--line);
+    border-radius:11px;padding:4px;margin:0 0 14px}
+  .modos button{flex:1 1 0;cursor:pointer;border:none;background:transparent;
+    color:var(--muted);border-radius:8px;padding:9px 10px;font-size:.9rem;
+    font-weight:700;transition:.12s}
+  .modos button.on{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(16,24,40,.12)}
+  #grafico-sec h3{margin:18px 0 2px;font-size:1rem}
+  .metricas{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+  .metricas button{flex:1 1 auto;min-width:110px;cursor:pointer;border:1px solid var(--line);
+    background:#f4f7fa;color:var(--muted);border-radius:9px;padding:9px 10px;font-size:.86rem;
+    font-weight:600;transition:.12s}
+  .metricas button.on{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+  svg.chart{width:100%;height:auto;display:block;touch-action:manipulation}
+  svg.chart text{fill:var(--muted);font-size:12px}
+  svg.chart .grid{stroke:#eef2f6}
+  svg.chart .axis{stroke:#c9d3dd}
+  svg.chart .line{fill:none;stroke:var(--accent2);stroke-width:2.5}
+  svg.chart .pt{fill:#fff;cursor:pointer}
+  svg.chart .pt.dom{stroke:#b3c0cc;stroke-width:1.5}
+  svg.chart .pt.eff{stroke:var(--accent2);stroke-width:2}
+  svg.chart .pt.sel{fill:var(--accent);stroke:var(--accent);stroke-width:2.5}
+  svg.chart .hit{cursor:pointer}
+  .dica{color:var(--muted);font-size:.82rem;margin:.5em 0 0;text-align:center}
+  /* tabela preço × prob */
+  .precos-tab tbody tr{cursor:pointer}
+  .precos-tab tbody tr:hover{background:#f0f6ff}
+  .precos-tab tbody tr.sel{background:#e4f5ea;outline:2px solid var(--accent);
+    outline-offset:-2px}
+  .precos-tab td{font-variant-numeric:tabular-nums}
+  .precos-tab td.preco{font-weight:700}
+  /* detalhe */
+  #detalhe .topo{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;
+    justify-content:space-between}
+  .resumo{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 14px}
+  .kpi{flex:1 1 130px;background:#f4f7fa;border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px}
+  .kpi .lab{color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.03em}
+  .kpi .val{font-size:1.18rem;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
+  .kpi .sub2{color:var(--muted);font-size:.72rem}
+  .kpi.destaque{background:#e4f5ea;border-color:#bfe6cd}
+  .kpi.destaque .val{color:var(--accent)}
+  .det-tab .cel{position:relative;display:block;border-radius:6px;padding:7px 4px;
+    font-variant-numeric:tabular-nums;font-weight:600}
+  .det-tab .cel.marcado{box-shadow:inset 0 0 0 3px var(--accent);font-weight:800}
+  .det-tab .cel.marcado::after{content:"✓";position:absolute;top:-7px;right:-3px;
+    background:var(--accent);color:#fff;font-size:10px;line-height:1;padding:2px 3px;
+    border-radius:6px}
+  .det-tab td.mk{padding:5px 6px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .btn{cursor:pointer;border:none;border-radius:9px;padding:11px 16px;font-size:.92rem;
+    font-weight:700;color:#fff;background:var(--accent)}
+  .btn.sec{background:#f4f7fa;color:var(--ink);border:1px solid var(--line)}
+  .selo{font-size:.84rem;font-weight:600}
+  .selo.ok{color:var(--accent)} .selo.no{color:#c0392b}
+  .rodape{color:var(--muted);font-size:.8rem;margin-top:22px}
+  .leg{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:.8rem;margin-top:8px}
+  .leg .bar{height:12px;width:120px;border-radius:3px;
+    background:linear-gradient(90deg,#fff,rgb(22,150,60))}
+  @media (max-width:560px){
+    header h1{font-size:1.15rem}
+    .kpi{flex:1 1 45%}
+    th,td{padding:6px 6px;font-size:.86rem}
+  }
+  @media print{
+    body{background:#fff}
+    main{max-width:none;padding:0}
+    .nao-imprimir{display:none!important}
+    .card{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+    .btns{display:none!important}
+    .det-tab .cel.marcado{box-shadow:inset 0 0 0 2px #0a7d3b;
+      -webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .prob,.cel,.kpi.destaque{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1 id="titulo">Loteca</h1>
+    <p id="subtitulo"></p>
+  </header>
+  <section id="info" class="card nao-imprimir"></section>
+  <section id="jogos-sec" class="card nao-imprimir"></section>
+  <section id="grafico-sec" class="card nao-imprimir"></section>
+  <section id="detalhe" class="card"></section>
+  <p class="rodape nao-imprimir">Probabilidades de <b>consenso de mercado</b>
+  (de-vig + média entre casas). Não há aposta de valor esperado positivo na
+  Loteca — &ldquo;ótimo&rdquo; = maior chance de prêmio por real gasto. O mercado
+  tende a subestimar zebras, então o P(14) real é provavelmente um pouco menor.
+  Confira o volante na lotérica.</p>
+</main>
+
+<script id="dados" type="application/json">{"meta": {"concurso": 1258, "fim_apostas": "25/06/2026 16h", "fonte_odds": "betexplorer.com", "jogos_total": 14, "jogos_resolvidos": 14}, "regras": {"preco": 2.0, "min_combos": 2, "max_combos": 864, "min_valor": 4.0, "max_valor": 1728.0, "origem": "fonte oficial Caixa · 2026-06-24T21:04:21", "oficial": true, "tabela_validada": true, "linhas_tabela": 38, "max_duplos": 9, "max_triplos": 6}, "jogos": [{"seq": 1, "home": "CURAÇAO", "away": "COSTA DO MARFIM", "data": "2026-06-25", "n_casas": 20, "p": {"1": 0.0428, "X": 0.1155, "2": 0.8417}}, {"seq": 2, "home": "EQUADOR", "away": "ALEMANHA", "data": "2026-06-25", "n_casas": 20, "p": {"1": 0.2171, "X": 0.2146, "2": 0.5682}}, {"seq": 3, "home": "TUNISIA", "away": "HOLANDA", "data": "2026-06-25", "n_casas": 20, "p": {"1": 0.0269, "X": 0.0927, "2": 0.8804}}, {"seq": 4, "home": "JAPAO", "away": "SUECIA", "data": "2026-06-25", "n_casas": 20, "p": {"1": 0.515, "X": 0.2732, "2": 0.2118}}, {"seq": 5, "home": "TURQUIA", "away": "ESTADOS UNIDOS", "data": "2026-06-25", "n_casas": 20, "p": {"1": 0.2703, "X": 0.23, "2": 0.4997}}, {"seq": 6, "home": "PARAGUAI", "away": "AUSTRALIA", "data": "2026-06-25", "n_casas": 20, "p": {"1": 0.3376, "X": 0.4262, "2": 0.2362}}, {"seq": 7, "home": "NORUEGA", "away": "FRANCA", "data": "2026-06-26", "n_casas": 19, "p": {"1": 0.2028, "X": 0.2179, "2": 0.5793}}, {"seq": 8, "home": "SENEGAL", "away": "IRAQUE", "data": "2026-06-26", "n_casas": 19, "p": {"1": 0.7941, "X": 0.1413, "2": 0.0646}}, {"seq": 9, "home": "URUGUAI", "away": "ESPANHA", "data": "2026-06-26", "n_casas": 20, "p": {"1": 0.1303, "X": 0.2278, "2": 0.6419}}, {"seq": 10, "home": "PANAMA", "away": "INGLATERRA", "data": "2026-06-27", "n_casas": 18, "p": {"1": 0.0511, "X": 0.1178, "2": 0.8311}}, {"seq": 11, "home": "CROACIA", "away": "GANA", "data": "2026-06-27", "n_casas": 18, "p": {"1": 0.5442, "X": 0.2868, "2": 0.169}}, {"seq": 12, "home": "COLOMBIA", "away": "PORTUGAL", "data": "2026-06-27", "n_casas": 18, "p": {"1": 0.2291, "X": 0.2527, "2": 0.5182}}, {"seq": 13, "home": "CONGO", "away": "UZBEQUISTAO/UZB", "data": "2026-06-27", "n_casas": 18, "p": {"1": 0.5528, "X": 0.2255, "2": 0.2217}}, {"seq": 14, "home": "JORDANIA", "away": "ARGENTINA", "data": "2026-06-27", "n_casas": 18, "p": {"1": 0.0542, "X": 0.1344, "2": 0.8114}}], "bilhetes": [{"combos": 2, "custo": 4.0, "d": 1, "t": 0, "valido": true, "motivo": "", "p14": 0.0025691720537030747, "p13": 0.020274337153476065, "p13mais": 0.02284350920717914, "marcas": [["2"], ["2"], ["2"], ["1"], ["2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 3, "custo": 6.0, "d": 0, "t": 1, "valido": true, "motivo": "", "p14": 0.0033636711884041308, "p13": 0.02550384658127128, "p13mais": 0.028867517769675412, "marcas": [["2"], ["2"], ["2"], ["1"], ["2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 4, "custo": 8.0, "d": 2, "t": 0, "valido": true, "motivo": "", "p14": 0.003958900302884466, "p13": 0.028460098777256707, "p13mais": 0.032418999080141175, "marcas": [["2"], ["2"], ["2"], ["1"], ["1", "2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 6, "custo": 12.0, "d": 1, "t": 1, "valido": true, "motivo": "", "p14": 0.005183163528259317, "p13": 0.03565833405588093, "p13mais": 0.04084149758414025, "marcas": [["2"], ["2"], ["2"], ["1"], ["1", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 8, "custo": 16.0, "d": 3, "t": 0, "valido": true, "motivo": "", "p14": 0.006059039259676768, "p13": 0.03947982698920666, "p13mais": 0.045538866248883425, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 9, "custo": 18.0, "d": 0, "t": 2, "valido": true, "motivo": "", "p14": 0.006731381205531581, "p13": 0.04429885243975151, "p13mais": 0.05103023364528309, "marcas": [["2"], ["2"], ["2"], ["1"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 12, "custo": 24.0, "d": 2, "t": 1, "valido": true, "motivo": "", "p14": 0.007932756297036882, "p13": 0.04923554589139375, "p13mais": 0.05716830218843063, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 16, "custo": 32.0, "d": 4, "t": 0, "valido": true, "motivo": "", "p14": 0.009252226432913258, "p13": 0.05441850248951534, "p13mais": 0.0636707289224286, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["2"], ["1"], ["2"]]}, {"combos": 18, "custo": 36.0, "d": 1, "t": 2, "valido": true, "motivo": "", "p14": 0.010302280905242699, "p13": 0.060864962705438876, "p13mais": 0.07116724361068158, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 24, "custo": 48.0, "d": 3, "t": 1, "valido": true, "motivo": "", "p14": 0.012113415073204058, "p13": 0.06750106552660975, "p13mais": 0.07961448059981381, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["2"], ["1"], ["2"]]}, {"combos": 27, "custo": 54.0, "d": 0, "t": 3, "valido": true, "motivo": "", "p14": 0.013070643117537048, "p13": 0.07370794277232241, "p13mais": 0.08677858588985946, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["2"], ["1"], ["2"]]}, {"combos": 32, "custo": 64.0, "d": 5, "t": 0, "valido": true, "motivo": "", "p14": 0.013764070546377518, "p13": 0.07224889898823447, "p13mais": 0.08601296953461199, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1"], ["2"]]}, {"combos": 36, "custo": 72.0, "d": 2, "t": 2, "valido": true, "motivo": "", "p14": 0.01573170788727799, "p13": 0.08296463988641017, "p13mais": 0.09869634777368816, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["2"], ["1"], ["2"]]}, {"combos": 48, "custo": 96.0, "d": 4, "t": 1, "valido": true, "motivo": "", "p14": 0.0180205165571845, "p13": 0.08901866061459479, "p13mais": 0.1070391771717793, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1"], ["2"]]}, {"combos": 54, "custo": 108.0, "d": 1, "t": 3, "valido": true, "motivo": "", "p14": 0.019959030559855356, "p13": 0.09989509923094747, "p13mais": 0.11985412979080283, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["2"], ["1"], ["2"]]}, {"combos": 64, "custo": 128.0, "d": 6, "t": 0, "valido": true, "motivo": "", "p14": 0.01937875561911292, "p13": 0.09156409734046218, "p13mais": 0.11094285295957511, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 72, "custo": 144.0, "d": 3, "t": 2, "valido": true, "motivo": "", "p14": 0.023403268256083756, "p13": 0.1086180635268773, "p13mais": 0.13202133178296105, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1"], ["2"]]}, {"combos": 81, "custo": 162.0, "d": 0, "t": 4, "valido": true, "motivo": "", "p14": 0.025223163098296118, "p13": 0.1187869988258652, "p13mais": 0.14401016192416133, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1"], ["1", "X", "2"], ["1"], ["2"]]}, {"combos": 96, "custo": 192.0, "d": 5, "t": 1, "valido": true, "motivo": "", "p14": 0.02537150513107217, "p13": 0.11203371017086008, "p13mais": 0.13740521530193225, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 108, "custo": 216.0, "d": 2, "t": 3, "valido": true, "motivo": "", "p14": 0.030358371067691993, "p13": 0.1318756787070555, "p13mais": 0.16223404977474748, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1"], ["2"]]}, {"combos": 128, "custo": 256.0, "d": 7, "t": 0, "valido": true, "motivo": "", "p14": 0.026783063688295274, "p13": 0.11351808794840301, "p13mais": 0.1403011516366983, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 144, "custo": 288.0, "d": 4, "t": 2, "valido": true, "motivo": "", "p14": 0.032950006663730075, "p13": 0.13565611511454828, "p13mais": 0.16860612177827836, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 162, "custo": 324.0, "d": 1, "t": 4, "valido": true, "motivo": "", "p14": 0.03851607595495052, "p13": 0.15696266660720246, "p13mais": 0.19547874256215297, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1"], ["2"]]}, {"combos": 192, "custo": 384.0, "d": 6, "t": 1, "valido": true, "motivo": "", "p14": 0.03506554554634103, "p13": 0.13777900771191057, "p13mais": 0.1728445532582516, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 216, "custo": 432.0, "d": 3, "t": 3, "valido": true, "motivo": "", "p14": 0.04274225796306925, "p13": 0.163268729816071, "p13mais": 0.20601098777914023, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X"], ["2"]]}, {"combos": 243, "custo": 486.0, "d": 0, "t": 5, "valido": true, "motivo": "", "p14": 0.046349068537846594, "p13": 0.17945809148532657, "p13mais": 0.22580716002317316, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1"], ["2"]]}, {"combos": 256, "custo": 512.0, "d": 8, "t": 0, "valido": true, "motivo": "", "p14": 0.0368573422618833, "p13": 0.13882675839613132, "p13mais": 0.17568410065801462, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["X", "2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 288, "custo": 576.0, "d": 5, "t": 2, "valido": true, "motivo": "", "p14": 0.04553966954070263, "p13": 0.16533101781499865, "p13mais": 0.21087068735570128, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 324, "custo": 648.0, "d": 2, "t": 4, "valido": true, "motivo": "", "p14": 0.05491745851608538, "p13": 0.19413276276892566, "p13mais": 0.24905022128501103, "marcas": [["2"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"]]}, {"combos": 384, "custo": 768.0, "d": 7, "t": 1, "valido": true, "motivo": "", "p14": 0.04825522684195248, "p13": 0.16683539384140106, "p13mais": 0.21509062068335355, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["X", "2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 432, "custo": 864.0, "d": 4, "t": 3, "valido": true, "motivo": "", "p14": 0.05907338116578368, "p13": 0.19690920507188686, "p13mais": 0.25598258623767056, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X"], ["2"]]}, {"combos": 486, "custo": 972.0, "d": 1, "t": 5, "valido": true, "motivo": "", "p14": 0.06967452234976577, "p13": 0.22757637520330534, "p13mais": 0.2972508975530711, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"]]}, {"combos": 512, "custo": 1024.0, "d": 9, "t": 0, "valido": true, "motivo": "", "p14": 0.049937421039351775, "p13": 0.16771701666871308, "p13mais": 0.21765443770806486, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X"], ["X", "2"], ["1"], ["X", "2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 576, "custo": 1152.0, "d": 6, "t": 2, "valido": true, "motivo": "", "p14": 0.06266912576876944, "p13": 0.19794999339556374, "p13mais": 0.26061911916433317, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["X", "2"], ["1"], ["2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 648, "custo": 1296.0, "d": 3, "t": 4, "valido": true, "motivo": "", "p14": 0.07590052828701488, "p13": 0.23137872022440661, "p13mais": 0.3072792485114215, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["2"]]}, {"combos": 729, "custo": 1458.0, "d": 0, "t": 6, "valido": true, "motivo": "", "p14": 0.08384419055326808, "p13": 0.2568071083030121, "p13mais": 0.3406512988562802, "marcas": [["2"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"], ["1"], ["2"], ["2"], ["1", "X", "2"], ["1", "X", "2"], ["1", "X", "2"], ["2"]]}, {"combos": 768, "custo": 1536.0, "d": 8, "t": 1, "valido": true, "motivo": "", "p14": 0.06538023178757761, "p13": 0.19936397737691441, "p13mais": 0.26474420916449204, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "2"], ["1", "X", "2"], ["X", "2"], ["1"], ["X", "2"], ["2"], ["1", "X"], ["X", "2"], ["1", "X"], ["2"]]}, {"combos": 864, "custo": 1728.0, "d": 5, "t": 3, "valido": true, "motivo": "", "p14": 0.08129345669836482, "p13": 0.2326185788895685, "p13mais": 0.31391203558793335, "marcas": [["2"], ["1", "2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X", "2"], ["X", "2"], ["1"], ["2"], ["2"], ["1", "X"], ["1", "X", "2"], ["1", "X"], ["2"]]}], "destaque_idx": 9}</script>
+<script>
+"use strict";
+const D = JSON.parse(document.getElementById('dados').textContent);
+const RES = ['1','X','2'];
+
+const fmtBRL  = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtBRL0 = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
+const intBR   = v => Number(v).toLocaleString('pt-BR');
+function pct(p,dec){ if(p==null) return '—'; return (p*100).toFixed(dec==null?2:dec)+'%'; }
+function umEm(p){ if(!p||p<=0) return '—'; return '1 em '+intBR(Math.round(1/p)); }
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function grad(p){
+  if(p==null) return {bg:'transparent',fg:'#9aa6b2'};
+  const r=Math.round(255+(22-255)*p), g=Math.round(255+(150-255)*p), b=Math.round(255+(60-255)*p);
+  const lum=0.299*r+0.587*g+0.114*b;
+  return {bg:'rgb('+r+','+g+','+b+')', fg: lum<150?'#fff':'#16451f'};
+}
+
+/* ---------- cabeçalho + info ---------- */
+function buildHeader(){
+  const m=D.meta;
+  document.getElementById('titulo').textContent = 'Loteca — concurso '+(m.concurso??'?');
+  const part=[];
+  if(m.fim_apostas) part.push('Apostas até '+esc(m.fim_apostas));
+  if(m.fonte_odds)  part.push('Odds: '+esc(m.fonte_odds));
+  document.getElementById('subtitulo').textContent = part.join('  ·  ');
+}
+function buildInfo(){
+  const m=D.meta, r=D.regras;
+  let teto='';
+  if(r.tabela_validada){
+    teto = '<tr><td class="k">Teto verificado</td><td class="v">'+
+      (r.linhas_tabela??'?')+' pares (D,T) conferidos ponto a ponto contra 2^D·3^T '+
+      '(máx. '+(r.max_duplos??'?')+' duplos ou '+(r.max_triplos??'?')+' triplos)</td></tr>';
+  }
+  document.getElementById('info').innerHTML =
+    '<h2>Concurso</h2><table class="info-tab"><tbody>'+
+    '<tr><td class="k">Concurso</td><td class="v">'+(m.concurso??'—')+'</td></tr>'+
+    '<tr><td class="k">Apostas até</td><td class="v">'+esc(m.fim_apostas||'—')+'</td></tr>'+
+    '<tr><td class="k">Jogos</td><td class="v">'+
+      (m.jogos_resolvidos!=null?(m.jogos_resolvidos+' de '+(m.jogos_total??14)+' com odds')
+        :(m.jogos_total??14)+' jogos')+'</td></tr>'+
+    '<tr><td class="k">Fonte das odds</td><td class="v">'+esc(m.fonte_odds||'—')+'</td></tr>'+
+    '<tr><td class="k">Preço por combinação</td><td class="v">'+fmtBRL(r.preco)+'</td></tr>'+
+    '<tr><td class="k">Aposta mínima</td><td class="v">'+fmtBRL(r.min_valor)+
+      ' ('+r.min_combos+' combinações — ao menos 1 duplo)</td></tr>'+
+    '<tr><td class="k">Maior bilhete oficial</td><td class="v">'+fmtBRL(r.max_valor)+
+      ' ('+intBR(r.max_combos)+' apostas)</td></tr>'+
+    teto+
+    '</tbody></table>';
+}
+
+/* ---------- tabela de jogos ---------- */
+function buildJogos(){
+  let body='';
+  D.jogos.forEach(j=>{
+    const p=j.p;
+    let cels;
+    if(!p){
+      cels = '<td>—</td><td>—</td><td>—</td>';
+    }else{
+      const fav = RES.reduce((a,k)=> p[k]>p[a]?k:a, '1');
+      cels = RES.map(k=>{
+        const g=grad(p[k]);
+        return '<td class="prob'+(k===fav?' fav':'')+'" style="background:'+g.bg+';color:'+g.fg+'">'+
+          pct(p[k],1)+'</td>';
+      }).join('');
+    }
+    body += '<tr>'+
+      '<td class="conf">'+esc(j.home)+' <span style="color:var(--muted)">×</span> '+esc(j.away)+'</td>'+
+      cels+
+      '<td>'+esc(j.data||'—')+'</td>'+
+      '<td>'+(j.n_casas!=null?j.n_casas:'—')+'</td>'+
+      '</tr>';
+  });
+  document.getElementById('jogos-sec').innerHTML =
+    '<h2>Jogos do concurso</h2>'+
+    '<p class="sub">Probabilidades 1X2 médias do mercado, na ordem da Loteca. '+
+    '<b>Bets</b> = nº de casas de aposta coletadas por jogo.</p>'+
+    '<div class="tabela-wrap"><table>'+
+    '<thead><tr><th class="conf">Confronto</th>'+
+    '<th>P(1)</th><th>P(X)</th><th>P(2)</th><th>Data</th><th>Bets</th></tr></thead>'+
+    '<tbody>'+body+'</tbody></table></div>'+
+    '<div class="leg"><span class="bar"></span> menor → maior probabilidade</div>';
+}
+
+/* ---------- gráfico custo × probabilidade ---------- */
+const METRICAS = [
+  {k:'p13mais', rot:'P(14 ou 13)'},
+  {k:'p14',     rot:'P(14)'},
+  {k:'p13',     rot:'P(13)'},
+];
+let metric = 'p13mais';
+let modo = 'prob';            // 'prob' | 'alav'
+let selIdx = D.destaque_idx||0;
+
+/* ---------- alavancagem ----------
+   Razão entre a probabilidade real (consenso de mercado) e a probabilidade do
+   MESMO evento (14 acertos, 13 exatos, ou 13+) se todos os 3^14 resultados fossem
+   equiprováveis. Base equiprovável de um bilhete:
+     • 14 acertos: combos/3^14   (combos = nº de combinações cobertas = Π marcas)
+     • 13 exatos : [Σ_j (3-m_j)·Π_{i≠j} m_i]/3^14 = combos·Σ_j(3/m_j - 1)/3^14
+                   = combos·(2·simples + 0.5·duplos)/3^14
+     • 13 ou 14  : soma das duas. */
+const N3 = 4782969; // 3^14
+function baseEqui(b, mk){
+  const simples = 14 - b.d - b.t;
+  const c13 = b.combos*(2*simples + 0.5*b.d); // nº de resultados com 13 exatos
+  if(mk==='p14') return b.combos/N3;
+  if(mk==='p13') return c13/N3;
+  return (b.combos + c13)/N3;                  // p13mais
+}
+function alav(b, mk){ const base=baseEqui(b,mk); return base>0 ? b[mk]/base : null; }
+function fmtAlav(a){ if(a==null) return '—';
+  return '×'+(a>=100 ? intBR(Math.round(a)) : a.toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})); }
+// valor plotado/exibido conforme o modo atual, para uma métrica mk
+function valY(b, mk){ return modo==='alav' ? (alav(b,mk)||0) : b[mk]; }
+// texto da célula (tabela) para a métrica mk
+function showVal(b, mk){ return modo==='alav' ? fmtAlav(alav(b,mk)) : pct(b[mk],1); }
+
+const MODOS = [
+  {k:'prob', rot:'Probabilidade'},
+  {k:'alav', rot:'Alavancagem'},
+];
+function buildChartSec(){
+  const btns = METRICAS.map(m=>
+    '<button data-metric="'+m.k+'"'+(m.k===metric?' class="on"':'')+'>'+m.rot+'</button>').join('');
+  const mbtns = MODOS.map(m=>
+    '<button data-modo="'+m.k+'"'+(m.k===modo?' class="on"':'')+'>'+m.rot+'</button>').join('');
+  document.getElementById('grafico-sec').innerHTML =
+    '<div class="modos">'+mbtns+'</div>'+
+    '<h2>Custo × probabilidade</h2>'+
+    '<p class="sub">Um ponto por par <b>(duplos, triplos)</b> vendável — a aposta que '+
+    '<b>maximiza P(14)</b> naquele preço. Pontos <b>cheios</b> = eficientes em '+
+    'probabilidade (melhor prob. por aquele custo), <b>vazados</b> = dominados — os '+
+    'mesmos pontos são realçados nos dois modos. <b>Alavancagem</b> = prob. real ÷ prob. '+
+    'se todos os resultados fossem equiprováveis (quão melhor que o acaso). '+
+    'Toque num ponto para ver o bilhete.</p>'+
+    '<div class="metricas">'+btns+'</div>'+
+    '<div id="chart-box"></div>'+
+    '<p class="dica" id="dica-eixos"></p>'+
+    '<div id="tabela-precos"></div>';
+  document.querySelectorAll('.metricas button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      metric=b.dataset.metric;
+      document.querySelectorAll('.metricas button').forEach(x=>x.classList.toggle('on',x===b));
+      drawChart();
+    });
+  });
+  document.querySelectorAll('.modos button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      modo=b.dataset.modo;
+      document.querySelectorAll('.modos button').forEach(x=>x.classList.toggle('on',x===b));
+      drawChart(); buildTabelaPrecos();
+    });
+  });
+  drawChart(); buildTabelaPrecos();
+}
+
+function drawChart(){
+  const B=D.bilhetes;
+  const W=820,H=420,mL=72,mR=22,mT=20,mB=54;
+  const xs=B.map(b=>b.custo), ys=B.map(b=>valY(b,metric));
+  const xmin=Math.min(...xs), xmax=Math.max(...xs);
+  let ymax=Math.max(...ys); if(!isFinite(ymax)||ymax<=0) ymax=1; ymax*=1.1;
+  const X=v=> mL + (xmax===xmin?0.5:(v-xmin)/(xmax-xmin))*(W-mL-mR);
+  const Y=v=> H-mB - (v/ymax)*(H-mT-mB);
+  const dec = ymax<0.005?4 : ymax<0.05?3 : 2;
+  const fmtYlab = yv => modo==='alav' ? ('×'+intBR(Math.round(yv))) : ((yv*100).toFixed(dec)+'%');
+
+  let grid='',xlab='',ylab='';
+  for(let i=0;i<=5;i++){
+    const yv=ymax*i/5, y=Y(yv);
+    grid += '<line class="grid" x1="'+mL+'" y1="'+y+'" x2="'+(W-mR)+'" y2="'+y+'"/>';
+    ylab += '<text x="'+(mL-8)+'" y="'+(y+4)+'" text-anchor="end">'+fmtYlab(yv)+'</text>';
+  }
+  for(let i=0;i<=5;i++){
+    const xv=xmin+(xmax-xmin)*i/5, x=X(xv);
+    xlab += '<text x="'+x+'" y="'+(H-mB+20)+'" text-anchor="middle">'+fmtBRL0(xv)+'</text>';
+  }
+  const axis='<line class="axis" x1="'+mL+'" y1="'+mT+'" x2="'+mL+'" y2="'+(H-mB)+'"/>'+
+             '<line class="axis" x1="'+mL+'" y1="'+(H-mB)+'" x2="'+(W-mR)+'" y2="'+(H-mB)+'"/>';
+  // Eficiência é SEMPRE definida pela PROBABILIDADE (mesma fronteira nos dois modos):
+  // um ponto é eficiente se nenhum bilhete igual/mais barato tem prob igual/maior
+  // (B já vem ordenado por combos = custo asc). No modo alavancagem reaproveitamos
+  // exatamente esses mesmos pontos, plotados no eixo de leverage.
+  let melhor=-Infinity; const eficiente=new Set();
+  B.forEach((b,i)=>{ if(b[metric]>melhor+1e-15){ melhor=b[metric]; eficiente.add(i); } });
+  const poly = B.map((b,i)=>eficiente.has(i)?(X(b.custo)+','+Y(valY(b,metric))):null)
+                .filter(Boolean).join(' ');
+  let pts='',hit='';
+  B.forEach((b,i)=>{
+    const cx=X(b.custo), cy=Y(valY(b,metric));
+    const cls = i===selIdx ? 'pt sel' : (eficiente.has(i) ? 'pt eff' : 'pt dom');
+    const r   = i===selIdx ? 7 : (eficiente.has(i) ? 5 : 3.5);
+    pts += '<circle class="'+cls+'" data-i="'+i+'" cx="'+cx+'" cy="'+cy+'" r="'+r+'"></circle>';
+    hit += '<circle class="hit" data-i="'+i+'" cx="'+cx+'" cy="'+cy+'" r="14" fill="transparent"></circle>';
+  });
+  document.getElementById('chart-box').innerHTML =
+    '<svg class="chart" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+
+    grid+axis+ylab+xlab+
+    '<polyline class="line" points="'+poly+'"/>'+pts+hit+'</svg>';
+  document.querySelectorAll('#chart-box circle[data-i]').forEach(c=>{
+    c.addEventListener('click',()=>selecionar(+c.dataset.i));
+  });
+  document.getElementById('dica-eixos').textContent =
+    'Eixo X: custo do bilhete · Eixo Y: '+(modo==='alav'?'alavancagem (× sobre o acaso)':'probabilidade selecionada');
+}
+
+/* ---------- tabela preço × probabilidade ---------- */
+function buildTabelaPrecos(){
+  let rows='';
+  D.bilhetes.forEach((b,i)=>{
+    rows += '<tr data-i="'+i+'"'+(i===selIdx?' class="sel"':'')+'>'+
+      '<td class="preco">'+fmtBRL(b.custo)+'</td>'+
+      '<td>'+showVal(b,'p13mais')+'</td>'+
+      '<td>'+showVal(b,'p14')+'</td>'+
+      '<td>'+showVal(b,'p13')+'</td></tr>';
+  });
+  const L = modo==='alav' ? 'A' : 'P';
+  document.getElementById('tabela-precos').innerHTML =
+    '<h3>Tabela — '+(modo==='alav'?'alavancagem':'probabilidade')+' por preço</h3>'+
+    '<p class="sub">As '+D.bilhetes.length+' apostas vendáveis (uma por par '+
+    'duplos/triplos), ordenadas por preço.'+(modo==='alav'?' <b>A</b> = alavancagem.':'')+
+    ' <b>Clique numa linha</b> para ver o bilhete abaixo — equivale a clicar no ponto do gráfico.</p>'+
+    '<div class="tabela-wrap"><table class="precos-tab">'+
+    '<thead><tr><th>Preço</th><th>'+L+'(14 ou 13)</th><th>'+L+'(14)</th>'+
+    '<th>'+L+'(13)</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table></div>';
+  document.querySelectorAll('.precos-tab tbody tr').forEach(tr=>{
+    tr.addEventListener('click',()=>selecionar(+tr.dataset.i));
+  });
+}
+function marcarLinha(i){
+  document.querySelectorAll('.precos-tab tbody tr').forEach(tr=>
+    tr.classList.toggle('sel', +tr.dataset.i===i));
+}
+
+/* ---------- detalhe do bilhete ---------- */
+function selecionar(i){
+  selIdx=i; drawChart(); marcarLinha(i); buildDetalhe(i);
+}
+function buildDetalhe(i){
+  const b=D.bilhetes[i];
+  const selo = b.valido
+    ? '<span class="selo ok">✅ aposta válida na tabela oficial</span>'
+    : '<span class="selo no">⚠️ '+esc(b.motivo)+'</span>';
+
+  let rows='';
+  D.jogos.forEach((j,k)=>{
+    const marks=(b.marcas[k]||[]);
+    const p=j.p;
+    const cels = RES.map(res=>{
+      const val = p? p[res] : null;
+      const g=grad(val);
+      const mk=marks.includes(res)?' marcado':'';
+      return '<td class="mk"><span class="cel'+mk+'" style="background:'+g.bg+';color:'+g.fg+'">'+
+        (p?pct(val,1):'—')+'</span></td>';
+    }).join('');
+    rows += '<tr>'+
+      '<td class="conf">'+esc(j.home)+' <span style="color:var(--muted)">×</span> '+esc(j.away)+'</td>'+
+      cels+'</tr>';
+  });
+
+  document.getElementById('detalhe').innerHTML =
+    '<div class="topo"><h2 style="margin:0">Bilhete — '+intBR(b.combos)+' apostas · '+fmtBRL0(b.custo)+'</h2>'+
+      selo+'</div>'+
+    '<div class="resumo">'+
+      kpi('P(14 ou 13)', pct(b.p13mais,1), umEm(b.p13mais)+' · alav. '+fmtAlav(alav(b,'p13mais')), true)+
+      kpi('P(14)', pct(b.p14,1), umEm(b.p14)+' · alav. '+fmtAlav(alav(b,'p14')))+
+      kpi('P(13 exato)', pct(b.p13,1), umEm(b.p13)+' · alav. '+fmtAlav(alav(b,'p13')))+
+      kpi('Valor do bilhete', fmtBRL(b.custo), b.d+' duplo(s) · '+b.t+' triplo(s)')+
+    '</div>'+
+    '<p class="sub">Marque na Loteca os resultados destacados (✓) de cada jogo. '+
+    'Células coloridas pela probabilidade do mercado.</p>'+
+    '<div class="tabela-wrap"><table class="det-tab">'+
+    '<thead><tr><th class="conf">Confronto</th><th>1</th><th>X</th><th>2</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table></div>'+
+    '<div class="btns">'+
+      '<button class="btn" onclick="window.print()">⬇ Exportar bilhete (PDF)</button>'+
+    '</div>';
+}
+function kpi(lab,val,sub,destaque){
+  return '<div class="kpi'+(destaque?' destaque':'')+'"><div class="lab">'+lab+'</div>'+
+    '<div class="val">'+val+'</div><div class="sub2">'+sub+'</div></div>';
+}
+
+/* ---------- init ---------- */
+buildHeader(); buildInfo(); buildJogos(); buildChartSec(); buildDetalhe(selIdx);
+</script>
+</body>
+</html>

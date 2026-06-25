@@ -1,0 +1,14 @@
+{
+  "apelidos": "/mnt/d/Projetos/Loteca/prod/apelidos_loteca_betexplorer.json",
+  "concursos": 1256,
+  "nomes_distintos": 933,
+  "total_times": 0,
+  "etapa1": {
+    "usados": 0,
+    "orfaos": [],
+    "duplicatas": [],
+    "typos": [],
+    "conflitos": []
+  },
+  "etapa2": []
+}

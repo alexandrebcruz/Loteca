@@ -1,0 +1,175 @@
+{
+  "seq": 2,
+  "loteca": {
+    "home": "EQUADOR",
+    "away": "ALEMANHA",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "ecuador",
+    "away": "germany",
+    "data_exibida": "2026-06-25",
+    "match_href": "/br/football/world/world-championship-2026/ecuador-germany/zmvgtcCa/",
+    "mid": "zmvgtcCa",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2171,
+    "empate": 0.2146,
+    "fora": 0.5682,
+    "n_casas_validas": 20,
+    "odds_medianas": {
+      "casa": 4.26,
+      "empate": 4.33,
+      "fora": 1.69
+    }
+  },
+  "palpite": "2",
+  "n_casas": 20,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 4.36,
+      "X": 4.32,
+      "2": 1.69
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 4.33,
+      "X": 4.5,
+      "2": 1.67
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 4.55,
+      "X": 4.3,
+      "2": 1.75
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 4.2,
+      "X": 4.5,
+      "2": 1.73
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 4.5,
+      "X": 4.09,
+      "2": 1.75
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 4.4,
+      "X": 4.6,
+      "2": 1.67
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 4.3,
+      "X": 4.3,
+      "2": 1.7
+    },
+    {
+      "casa": "Betnacional",
+      "id": "1096",
+      "1": 4.27,
+      "X": 4.17,
+      "2": 1.71
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 4.0,
+      "X": 4.25,
+      "2": 1.64
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 4.2,
+      "X": 4.33,
+      "2": 1.66
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 4.25,
+      "X": 4.33,
+      "2": 1.7
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 4.25,
+      "X": 4.35,
+      "2": 1.68
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 4.0,
+      "X": 4.25,
+      "2": 1.64
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 4.0,
+      "X": 4.5,
+      "2": 1.64
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 4.6,
+      "X": 4.0,
+      "2": 1.75
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 4.0,
+      "X": 4.25,
+      "2": 1.64
+    },
+    {
+      "casa": "LuvaBet",
+      "id": "1094",
+      "1": 4.54,
+      "X": 4.43,
+      "2": 1.77
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 4.2,
+      "X": 4.33,
+      "2": 1.66
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 4.2,
+      "X": 4.4,
+      "2": 1.71
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 4.35,
+      "X": 4.2,
+      "2": 1.74
+    }
+  ]
+}

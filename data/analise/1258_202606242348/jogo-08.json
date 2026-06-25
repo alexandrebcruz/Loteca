@@ -1,0 +1,168 @@
+{
+  "seq": 8,
+  "loteca": {
+    "home": "SENEGAL",
+    "away": "IRAQUE",
+    "data": "2026-06-26"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "senegal",
+    "away": "iraq",
+    "data_exibida": "2026-06-26",
+    "match_href": "/br/football/world/world-championship-2026/senegal-iraq/j5IhOwop/",
+    "mid": "j5IhOwop",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.7941,
+    "empate": 0.1413,
+    "fora": 0.0646,
+    "n_casas_validas": 19,
+    "odds_medianas": {
+      "casa": 1.22,
+      "empate": 6.4,
+      "fora": 12.5
+    }
+  },
+  "palpite": "1",
+  "n_casas": 19,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 1.2,
+      "X": 6.75,
+      "2": 14.0
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 1.22,
+      "X": 6.5,
+      "2": 12.0
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 1.26,
+      "X": 6.4,
+      "2": 13.0
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 1.19,
+      "X": 6.75,
+      "2": 15.5
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 1.25,
+      "X": 6.4,
+      "2": 13.0
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 1.22,
+      "X": 6.5,
+      "2": 13.0
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 1.24,
+      "X": 6.7,
+      "2": 12.5
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 1.2,
+      "X": 5.75,
+      "2": 11.0
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 1.22,
+      "X": 6.0,
+      "2": 12.0
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 1.23,
+      "X": 6.0,
+      "2": 13.0
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 1.21,
+      "X": 6.4,
+      "2": 13.0
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 1.2,
+      "X": 5.75,
+      "2": 11.0
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 1.2,
+      "X": 6.0,
+      "2": 13.0
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 1.2,
+      "X": 7.0,
+      "2": 14.0
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 1.2,
+      "X": 5.75,
+      "2": 11.0
+    },
+    {
+      "casa": "LuvaBet",
+      "id": "1094",
+      "1": 1.22,
+      "X": 6.08,
+      "2": 12.0
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 1.22,
+      "X": 6.0,
+      "2": 12.0
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 1.22,
+      "X": 6.5,
+      "2": 12.0
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 1.24,
+      "X": 6.6,
+      "2": 11.0
+    }
+  ]
+}

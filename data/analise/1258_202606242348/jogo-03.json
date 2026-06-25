@@ -1,0 +1,175 @@
+{
+  "seq": 3,
+  "loteca": {
+    "home": "TUNISIA",
+    "away": "HOLANDA",
+    "data": "2026-06-25"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "tunisia",
+    "away": "netherlands",
+    "data_exibida": "2026-06-26",
+    "match_href": "/br/football/world/world-championship-2026/tunisia-netherlands/0lERfdRh/",
+    "mid": "0lERfdRh",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.0269,
+    "empate": 0.0927,
+    "fora": 0.8804,
+    "n_casas_validas": 20,
+    "odds_medianas": {
+      "casa": 25.5,
+      "empate": 9.38,
+      "fora": 1.1
+    }
+  },
+  "palpite": "2",
+  "n_casas": 20,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 28.0,
+      "X": 10.0,
+      "2": 1.09
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 26.0,
+      "X": 9.5,
+      "2": 1.09
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 32.0,
+      "X": 9.5,
+      "2": 1.12
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 21.0,
+      "X": 10.0,
+      "2": 1.1
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 28.0,
+      "X": 9.4,
+      "2": 1.11
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 26.0,
+      "X": 10.0,
+      "2": 1.1
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 25.0,
+      "X": 10.5,
+      "2": 1.1
+    },
+    {
+      "casa": "Betnacional",
+      "id": "1096",
+      "1": 24.12,
+      "X": 9.36,
+      "2": 1.1
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 21.0,
+      "X": 7.5,
+      "2": 1.09
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 21.0,
+      "X": 9.0,
+      "2": 1.1
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 26.0,
+      "X": 8.5,
+      "2": 1.11
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 26.0,
+      "X": 8.9,
+      "2": 1.1
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 21.0,
+      "X": 7.5,
+      "2": 1.09
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 26.0,
+      "X": 8.0,
+      "2": 1.09
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 26.0,
+      "X": 9.5,
+      "2": 1.11
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 21.0,
+      "X": 7.5,
+      "2": 1.09
+    },
+    {
+      "casa": "LuvaBet",
+      "id": "1094",
+      "1": 26.0,
+      "X": 8.98,
+      "2": 1.11
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 21.0,
+      "X": 9.0,
+      "2": 1.1
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 21.0,
+      "X": 10.0,
+      "2": 1.09
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 23.0,
+      "X": 10.0,
+      "2": 1.11
+    }
+  ]
+}
