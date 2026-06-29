@@ -1,0 +1,168 @@
+{
+  "seq": 14,
+  "loteca": {
+    "home": "ARGENTINA",
+    "away": "CABO VERDE",
+    "data": "2026-07-03"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "argentina",
+    "away": "verde",
+    "data_exibida": "2026-07-04",
+    "match_href": "/br/football/world/world-championship-2026/argentina-cape-verde/O4oeJu9d/",
+    "mid": "O4oeJu9d",
+    "metodo": "dia",
+    "score": 0.9,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.8368,
+    "empate": 0.1215,
+    "fora": 0.0416,
+    "n_casas_validas": 19,
+    "odds_medianas": {
+      "casa": 1.15,
+      "empate": 7.24,
+      "fora": 17.0
+    }
+  },
+  "palpite": "1",
+  "n_casas": 19,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 1.14,
+      "X": 7.9,
+      "2": 22.0
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 1.17,
+      "X": 8.0,
+      "2": 15.0
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 1.19,
+      "X": 7.5,
+      "2": 19.5
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 1.15,
+      "X": 7.8,
+      "2": 17.0
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 1.15,
+      "X": 7.2,
+      "2": 17.0
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 1.11,
+      "X": 8.5,
+      "2": 19.0
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 1.16,
+      "X": 7.5,
+      "2": 18.0
+    },
+    {
+      "casa": "Betnacional",
+      "id": "1096",
+      "1": 1.16,
+      "X": 7.24,
+      "2": 17.18
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 1.15,
+      "X": 6.0,
+      "2": 15.0
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 1.15,
+      "X": 6.5,
+      "2": 17.0
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 1.18,
+      "X": 6.66,
+      "2": 17.0
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 1.15,
+      "X": 6.0,
+      "2": 15.0
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 1.15,
+      "X": 6.0,
+      "2": 15.0
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 1.15,
+      "X": 6.5,
+      "2": 17.0
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 1.13,
+      "X": 9.0,
+      "2": 25.0
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 1.15,
+      "X": 6.0,
+      "2": 15.0
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 1.15,
+      "X": 6.5,
+      "2": 17.0
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 1.14,
+      "X": 7.9,
+      "2": 17.0
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 1.17,
+      "X": 7.6,
+      "2": 16.0
+    }
+  ]
+}

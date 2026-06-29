@@ -1,0 +1,168 @@
+{
+  "seq": 13,
+  "loteca": {
+    "home": "AUSTRALIA",
+    "away": "EGITO",
+    "data": "2026-07-03"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "australia",
+    "away": "egypt",
+    "data_exibida": "2026-07-03",
+    "match_href": "/br/football/world/world-championship-2026/australia-egypt/Whg00tL7/",
+    "mid": "Whg00tL7",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.2888,
+    "empate": 0.3274,
+    "fora": 0.3838,
+    "n_casas_validas": 19,
+    "odds_medianas": {
+      "casa": 3.2,
+      "empate": 2.85,
+      "fora": 2.47
+    }
+  },
+  "palpite": "2",
+  "n_casas": 19,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 3.26,
+      "X": 2.95,
+      "2": 2.46
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 3.25,
+      "X": 2.88,
+      "2": 2.5
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 3.4,
+      "X": 2.95,
+      "2": 2.55
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 3.3,
+      "X": 2.84,
+      "2": 2.48
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 3.2,
+      "X": 2.9,
+      "2": 2.5
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 3.3,
+      "X": 2.8,
+      "2": 2.45
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 3.2,
+      "X": 2.95,
+      "2": 2.5
+    },
+    {
+      "casa": "Betnacional",
+      "id": "1096",
+      "1": 3.19,
+      "X": 2.9,
+      "2": 2.49
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 3.1,
+      "X": 2.8,
+      "2": 2.37
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 3.2,
+      "X": 2.8,
+      "2": 2.42
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 3.2,
+      "X": 2.85,
+      "2": 2.54
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 3.1,
+      "X": 2.8,
+      "2": 2.37
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 3.1,
+      "X": 2.8,
+      "2": 2.37
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 3.2,
+      "X": 2.8,
+      "2": 2.42
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 3.4,
+      "X": 2.88,
+      "2": 2.48
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 3.1,
+      "X": 2.8,
+      "2": 2.37
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 3.2,
+      "X": 2.8,
+      "2": 2.42
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 3.27,
+      "X": 2.87,
+      "2": 2.47
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 3.25,
+      "X": 2.95,
+      "2": 2.52
+    }
+  ]
+}

@@ -1,0 +1,2383 @@
+{
+  "concurso": 1259,
+  "aberto": true,
+  "fim_apostas": "29/06/2026 13h",
+  "fonte_odds": "betexplorer.com",
+  "jogos_resolvidos": 14,
+  "jogos_total": 14,
+  "jogos": [
+    {
+      "seq": 1,
+      "loteca": {
+        "home": "BRASIL",
+        "away": "JAPAO",
+        "data": "2026-06-29"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "brazil",
+        "away": "japan",
+        "data_exibida": "2026-06-29",
+        "match_href": "/br/football/world/world-championship-2026/brazil-japan/f7ENGzPc/",
+        "mid": "f7ENGzPc",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.5733,
+        "empate": 0.2499,
+        "fora": 0.1767,
+        "n_casas_validas": 20,
+        "odds_medianas": {
+          "casa": 1.69,
+          "empate": 3.76,
+          "fora": 5.12
+        }
+      },
+      "palpite": "1",
+      "n_casas": 20,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.68,
+          "X": 3.8,
+          "2": 5.1
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.67,
+          "X": 3.75,
+          "2": 5.25
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.75,
+          "X": 3.9,
+          "2": 5.0
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.74,
+          "X": 3.95,
+          "2": 5.2
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.72,
+          "X": 3.7,
+          "2": 5.4
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.7,
+          "X": 3.9,
+          "2": 5.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.7,
+          "X": 3.9,
+          "2": 5.2
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.69,
+          "X": 3.79,
+          "2": 5.15
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.62,
+          "X": 3.5,
+          "2": 5.0
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.64,
+          "X": 3.66,
+          "2": 5.33
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.68,
+          "X": 3.66,
+          "2": 5.33
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.7,
+          "X": 3.87,
+          "2": 5.45
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.62,
+          "X": 3.5,
+          "2": 5.0
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.64,
+          "X": 3.66,
+          "2": 5.0
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.7,
+          "X": 3.65,
+          "2": 5.6
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.62,
+          "X": 3.5,
+          "2": 5.0
+        },
+        {
+          "casa": "LuvaBet",
+          "id": "1094",
+          "1": 1.71,
+          "X": 3.79,
+          "2": 4.97
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.64,
+          "X": 3.66,
+          "2": 5.33
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.67,
+          "X": 3.78,
+          "2": 5.1
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.7,
+          "X": 3.85,
+          "2": 5.1
+        }
+      ]
+    },
+    {
+      "seq": 2,
+      "loteca": {
+        "home": "ALEMANHA",
+        "away": "PARAGUAI",
+        "data": "2026-06-29"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "germany",
+        "away": "paraguay",
+        "data_exibida": "2026-06-29",
+        "match_href": "/br/football/world/world-championship-2026/germany-paraguay/2y2UKhp1/",
+        "mid": "2y2UKhp1",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7344,
+        "empate": 0.1729,
+        "fora": 0.0927,
+        "n_casas_validas": 20,
+        "odds_medianas": {
+          "casa": 1.31,
+          "empate": 5.28,
+          "fora": 9.5
+        }
+      },
+      "palpite": "1",
+      "n_casas": 20,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.31,
+          "X": 5.4,
+          "2": 9.6
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.3,
+          "X": 5.25,
+          "2": 10.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.36,
+          "X": 5.3,
+          "2": 10.0
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.33,
+          "X": 5.2,
+          "2": 9.8
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.34,
+          "X": 5.2,
+          "2": 9.8
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.3,
+          "X": 5.0,
+          "2": 11.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.33,
+          "X": 5.5,
+          "2": 9.5
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.32,
+          "X": 5.39,
+          "2": 9.32
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.28,
+          "X": 5.0,
+          "2": 8.0
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.3,
+          "X": 5.33,
+          "2": 8.5
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.33,
+          "X": 5.33,
+          "2": 8.5
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.34,
+          "X": 5.55,
+          "2": 9.6
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.28,
+          "X": 5.0,
+          "2": 8.0
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.3,
+          "X": 5.0,
+          "2": 8.5
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.34,
+          "X": 5.2,
+          "2": 10.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.28,
+          "X": 5.0,
+          "2": 8.0
+        },
+        {
+          "casa": "LuvaBet",
+          "id": "1094",
+          "1": 1.33,
+          "X": 5.12,
+          "2": 9.49
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.3,
+          "X": 5.33,
+          "2": 8.5
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.3,
+          "X": 5.3,
+          "2": 9.6
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.33,
+          "X": 5.45,
+          "2": 9.0
+        }
+      ]
+    },
+    {
+      "seq": 3,
+      "loteca": {
+        "home": "HOLANDA",
+        "away": "MARROCOS",
+        "data": "2026-06-29"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "netherlands",
+        "away": "morocco",
+        "data_exibida": "2026-06-30",
+        "match_href": "/br/football/world/world-championship-2026/netherlands-morocco/S0MygXWj/",
+        "mid": "S0MygXWj",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.4394,
+        "empate": 0.3011,
+        "fora": 0.2596,
+        "n_casas_validas": 20,
+        "odds_medianas": {
+          "casa": 2.18,
+          "empate": 3.1,
+          "fora": 3.63
+        }
+      },
+      "palpite": "1",
+      "n_casas": 20,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 2.15,
+          "X": 3.19,
+          "2": 3.62
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 2.15,
+          "X": 3.2,
+          "2": 3.7
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 2.25,
+          "X": 3.1,
+          "2": 3.85
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 2.2,
+          "X": 3.15,
+          "2": 3.65
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 2.21,
+          "X": 3.15,
+          "2": 3.7
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 2.2,
+          "X": 3.1,
+          "2": 3.75
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 2.2,
+          "X": 3.2,
+          "2": 3.7
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 2.17,
+          "X": 3.21,
+          "2": 3.61
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 2.12,
+          "X": 3.0,
+          "2": 3.4
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 2.16,
+          "X": 3.1,
+          "2": 3.5
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 2.2,
+          "X": 3.1,
+          "2": 3.6
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 2.22,
+          "X": 3.25,
+          "2": 3.68
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 2.12,
+          "X": 3.0,
+          "2": 3.4
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 2.12,
+          "X": 3.1,
+          "2": 3.5
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 2.2,
+          "X": 3.2,
+          "2": 3.65
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 2.12,
+          "X": 3.0,
+          "2": 3.4
+        },
+        {
+          "casa": "LuvaBet",
+          "id": "1094",
+          "1": 2.19,
+          "X": 3.11,
+          "2": 3.69
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 2.16,
+          "X": 3.1,
+          "2": 3.5
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 2.19,
+          "X": 3.09,
+          "2": 3.59
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 2.17,
+          "X": 3.25,
+          "2": 3.65
+        }
+      ]
+    },
+    {
+      "seq": 4,
+      "loteca": {
+        "home": "COSTA DO MARFIM",
+        "away": "NORUEGA",
+        "data": "2026-06-30"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "ivory",
+        "away": "norway",
+        "data_exibida": "2026-06-30",
+        "match_href": "/br/football/world/world-championship-2026/ivory-coast-norway/tx2IC6G7/",
+        "mid": "tx2IC6G7",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.258,
+        "empate": 0.2726,
+        "fora": 0.4694,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 3.6,
+          "empate": 3.4,
+          "fora": 2.0
+        }
+      },
+      "palpite": "2",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 3.62,
+          "X": 3.54,
+          "2": 2.02
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 3.7,
+          "X": 3.5,
+          "2": 2.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 3.7,
+          "X": 3.55,
+          "2": 2.12
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 3.65,
+          "X": 3.5,
+          "2": 2.02
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 3.75,
+          "X": 3.4,
+          "2": 2.08
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 3.8,
+          "X": 3.4,
+          "2": 2.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 3.6,
+          "X": 3.5,
+          "2": 2.05
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 3.6,
+          "X": 3.45,
+          "2": 2.03
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 3.4,
+          "X": 3.25,
+          "2": 2.0
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 3.6,
+          "X": 3.4,
+          "2": 2.0
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 3.5,
+          "X": 3.4,
+          "2": 2.1
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 3.4,
+          "X": 3.25,
+          "2": 2.0
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 3.4,
+          "X": 3.25,
+          "2": 2.0
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 3.5,
+          "X": 3.4,
+          "2": 2.0
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 3.95,
+          "X": 3.45,
+          "2": 2.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 3.4,
+          "X": 3.25,
+          "2": 2.0
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 3.6,
+          "X": 3.4,
+          "2": 2.0
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 3.53,
+          "X": 3.45,
+          "2": 2.05
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 3.65,
+          "X": 3.5,
+          "2": 2.07
+        }
+      ]
+    },
+    {
+      "seq": 5,
+      "loteca": {
+        "home": "FRANCA",
+        "away": "SUECIA",
+        "data": "2026-06-30"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "france",
+        "away": "sweden",
+        "data_exibida": "2026-06-30",
+        "match_href": "/br/football/world/world-championship-2026/france-sweden/UN3MMEFl/",
+        "mid": "UN3MMEFl",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7657,
+        "empate": 0.1528,
+        "fora": 0.0815,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.26,
+          "empate": 5.96,
+          "fora": 10.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.25,
+          "X": 6.2,
+          "2": 11.0
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.25,
+          "X": 6.0,
+          "2": 11.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.31,
+          "X": 6.0,
+          "2": 10.5
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.27,
+          "X": 5.8,
+          "2": 10.0
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.29,
+          "X": 6.0,
+          "2": 11.0
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.25,
+          "X": 6.0,
+          "2": 12.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.28,
+          "X": 6.0,
+          "2": 10.0
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.26,
+          "X": 5.96,
+          "2": 9.89
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.23,
+          "X": 5.5,
+          "2": 9.5
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.26,
+          "X": 5.66,
+          "2": 9.5
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.28,
+          "X": 5.66,
+          "2": 10.0
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.23,
+          "X": 5.5,
+          "2": 9.5
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.23,
+          "X": 5.5,
+          "2": 9.5
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.25,
+          "X": 5.66,
+          "2": 9.5
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.27,
+          "X": 6.0,
+          "2": 12.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.23,
+          "X": 5.5,
+          "2": 9.5
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.26,
+          "X": 5.66,
+          "2": 9.5
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.25,
+          "X": 6.2,
+          "2": 10.0
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.29,
+          "X": 6.1,
+          "2": 9.8
+        }
+      ]
+    },
+    {
+      "seq": 6,
+      "loteca": {
+        "home": "MEXICO",
+        "away": "EQUADOR",
+        "data": "2026-06-30"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "mexico",
+        "away": "ecuador",
+        "data_exibida": "2026-07-01",
+        "match_href": "/br/football/world/world-championship-2026/mexico-ecuador/fydIxpfR/",
+        "mid": "fydIxpfR",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.4364,
+        "empate": 0.3202,
+        "fora": 0.2434,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 2.22,
+          "empate": 2.9,
+          "fora": 3.75
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 2.22,
+          "X": 3.03,
+          "2": 3.66
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 2.2,
+          "X": 3.0,
+          "2": 3.8
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 2.32,
+          "X": 2.95,
+          "2": 3.9
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 2.24,
+          "X": 2.9,
+          "2": 3.75
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 2.27,
+          "X": 2.95,
+          "2": 3.8
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 2.3,
+          "X": 2.9,
+          "2": 3.8
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 2.25,
+          "X": 3.0,
+          "2": 3.7
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 2.22,
+          "X": 2.97,
+          "2": 3.67
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 2.05,
+          "X": 2.9,
+          "2": 3.75
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 2.1,
+          "X": 2.9,
+          "2": 4.0
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 2.16,
+          "X": 2.9,
+          "2": 4.0
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 2.05,
+          "X": 2.9,
+          "2": 3.75
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 2.05,
+          "X": 2.9,
+          "2": 3.75
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 2.12,
+          "X": 2.9,
+          "2": 3.8
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 2.25,
+          "X": 2.9,
+          "2": 3.95
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 2.05,
+          "X": 2.9,
+          "2": 3.75
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 2.1,
+          "X": 2.9,
+          "2": 4.0
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 2.24,
+          "X": 2.9,
+          "2": 3.72
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 2.25,
+          "X": 3.0,
+          "2": 3.7
+        }
+      ]
+    },
+    {
+      "seq": 7,
+      "loteca": {
+        "home": "INGLATERRA",
+        "away": "CONGO",
+        "data": "2026-07-01"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "england",
+        "away": "congo",
+        "data_exibida": "2026-07-01",
+        "match_href": "/br/football/world/world-championship-2026/england-d-r-congo/nkoQVAgB/",
+        "mid": "nkoQVAgB",
+        "metodo": "dia",
+        "score": 0.9,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7694,
+        "empate": 0.166,
+        "fora": 0.0646,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.25,
+          "empate": 5.5,
+          "fora": 12.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.25,
+          "X": 5.65,
+          "2": 13.0
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.27,
+          "X": 5.5,
+          "2": 12.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.29,
+          "X": 5.8,
+          "2": 13.0
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.26,
+          "X": 5.4,
+          "2": 12.0
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.28,
+          "X": 5.6,
+          "2": 13.0
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.25,
+          "X": 5.5,
+          "2": 14.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.26,
+          "X": 5.5,
+          "2": 12.0
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.26,
+          "X": 5.55,
+          "2": 11.94
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.22,
+          "X": 5.0,
+          "2": 12.0
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.25,
+          "X": 5.33,
+          "2": 12.0
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.26,
+          "X": 5.5,
+          "2": 12.0
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.22,
+          "X": 5.0,
+          "2": 12.0
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.22,
+          "X": 5.0,
+          "2": 12.0
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.25,
+          "X": 5.0,
+          "2": 13.0
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.27,
+          "X": 5.75,
+          "2": 13.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.22,
+          "X": 5.0,
+          "2": 12.0
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.25,
+          "X": 5.33,
+          "2": 12.0
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.25,
+          "X": 5.5,
+          "2": 12.0
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.28,
+          "X": 5.75,
+          "2": 11.0
+        }
+      ]
+    },
+    {
+      "seq": 8,
+      "loteca": {
+        "home": "BELGICA",
+        "away": "SENEGAL",
+        "data": "2026-07-01"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "belgium",
+        "away": "senegal",
+        "data_exibida": "2026-07-01",
+        "match_href": "/br/football/world/world-championship-2026/belgium-senegal/vPsIXWOb/",
+        "mid": "vPsIXWOb",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.4518,
+        "empate": 0.2944,
+        "fora": 0.2538,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 2.12,
+          "empate": 3.2,
+          "fora": 3.64
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 2.13,
+          "X": 3.24,
+          "2": 3.64
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 2.15,
+          "X": 3.2,
+          "2": 3.75
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 2.15,
+          "X": 3.3,
+          "2": 3.85
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 2.14,
+          "X": 3.15,
+          "2": 3.65
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 2.17,
+          "X": 3.15,
+          "2": 3.8
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 2.15,
+          "X": 3.0,
+          "2": 3.6
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 2.12,
+          "X": 3.2,
+          "2": 3.7
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 2.11,
+          "X": 3.2,
+          "2": 3.65
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 2.0,
+          "X": 3.1,
+          "2": 3.6
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 2.08,
+          "X": 3.2,
+          "2": 3.5
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 2.12,
+          "X": 3.2,
+          "2": 3.66
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 2.0,
+          "X": 3.1,
+          "2": 3.6
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 2.0,
+          "X": 3.1,
+          "2": 3.6
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 2.08,
+          "X": 3.2,
+          "2": 3.5
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 2.2,
+          "X": 3.1,
+          "2": 3.7
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 2.0,
+          "X": 3.1,
+          "2": 3.6
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 2.08,
+          "X": 3.2,
+          "2": 3.5
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 2.13,
+          "X": 3.18,
+          "2": 3.62
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 2.15,
+          "X": 3.25,
+          "2": 3.7
+        }
+      ]
+    },
+    {
+      "seq": 9,
+      "loteca": {
+        "home": "ESTADOS UNIDOS",
+        "away": "BOSNIA HERZEGOVIN",
+        "data": "2026-07-01"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "usa",
+        "away": "herzegovina",
+        "data_exibida": "2026-07-02",
+        "match_href": "/br/football/world/world-championship-2026/usa-bosnia-herzegovina/A1Jughll/",
+        "mid": "A1Jughll",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7138,
+        "empate": 0.1872,
+        "fora": 0.0989,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.35,
+          "empate": 4.75,
+          "fora": 8.6
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.35,
+          "X": 4.94,
+          "2": 9.2
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.36,
+          "X": 5.0,
+          "2": 8.5
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.4,
+          "X": 4.85,
+          "2": 10.0
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.36,
+          "X": 4.9,
+          "2": 8.8
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.38,
+          "X": 4.9,
+          "2": 9.19
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.33,
+          "X": 4.75,
+          "2": 9.5
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.36,
+          "X": 5.0,
+          "2": 9.0
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.35,
+          "X": 4.92,
+          "2": 8.7
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.32,
+          "X": 4.75,
+          "2": 7.5
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.33,
+          "X": 4.75,
+          "2": 8.5
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.37,
+          "X": 4.75,
+          "2": 8.5
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.32,
+          "X": 4.75,
+          "2": 7.5
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.32,
+          "X": 4.75,
+          "2": 7.5
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.33,
+          "X": 4.75,
+          "2": 8.5
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.36,
+          "X": 5.0,
+          "2": 10.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.32,
+          "X": 4.75,
+          "2": 7.5
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.33,
+          "X": 4.75,
+          "2": 8.5
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.37,
+          "X": 4.7,
+          "2": 8.6
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.37,
+          "X": 5.0,
+          "2": 8.7
+        }
+      ]
+    },
+    {
+      "seq": 10,
+      "loteca": {
+        "home": "PORTUGAL",
+        "away": "CROACIA",
+        "data": "2026-07-02"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "portugal",
+        "away": "croatia",
+        "data_exibida": "2026-07-03",
+        "match_href": "/br/football/world/world-championship-2026/portugal-croatia/6BqAZhfn/",
+        "mid": "6BqAZhfn",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.5379,
+        "empate": 0.2692,
+        "fora": 0.1929,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.78,
+          "empate": 3.45,
+          "fora": 4.75
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.76,
+          "X": 3.48,
+          "2": 5.05
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.8,
+          "X": 3.4,
+          "2": 5.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.85,
+          "X": 3.55,
+          "2": 4.85
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.8,
+          "X": 3.45,
+          "2": 4.7
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.79,
+          "X": 3.4,
+          "2": 4.8
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.75,
+          "X": 3.4,
+          "2": 4.75
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.8,
+          "X": 3.5,
+          "2": 4.8
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.79,
+          "X": 3.45,
+          "2": 4.75
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.73,
+          "X": 3.33,
+          "2": 4.5
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.75,
+          "X": 3.5,
+          "2": 4.5
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.78,
+          "X": 3.5,
+          "2": 4.75
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.73,
+          "X": 3.33,
+          "2": 4.5
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.73,
+          "X": 3.33,
+          "2": 4.5
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.75,
+          "X": 3.5,
+          "2": 4.5
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.83,
+          "X": 3.45,
+          "2": 4.9
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.73,
+          "X": 3.33,
+          "2": 4.5
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.75,
+          "X": 3.5,
+          "2": 4.5
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.78,
+          "X": 3.47,
+          "2": 4.75
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.82,
+          "X": 3.55,
+          "2": 4.8
+        }
+      ]
+    },
+    {
+      "seq": 11,
+      "loteca": {
+        "home": "ESPANHA",
+        "away": "AUSTRIA",
+        "data": "2026-07-02"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "spain",
+        "away": "austria",
+        "data_exibida": "2026-07-02",
+        "match_href": "/br/football/world/world-championship-2026/spain-austria/jJucpA84/",
+        "mid": "jJucpA84",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.7548,
+        "empate": 0.1736,
+        "fora": 0.0716,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.27,
+          "empate": 5.0,
+          "fora": 11.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.26,
+          "X": 5.5,
+          "2": 12.0
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.3,
+          "X": 4.75,
+          "2": 13.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.31,
+          "X": 5.4,
+          "2": 13.0
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.29,
+          "X": 5.0,
+          "2": 12.0
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.29,
+          "X": 5.2,
+          "2": 11.0
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.25,
+          "X": 5.0,
+          "2": 12.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.3,
+          "X": 5.5,
+          "2": 11.0
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.29,
+          "X": 5.19,
+          "2": 10.76
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.25,
+          "X": 5.0,
+          "2": 10.0
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.26,
+          "X": 5.0,
+          "2": 11.0
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.28,
+          "X": 5.33,
+          "2": 11.0
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.25,
+          "X": 5.0,
+          "2": 10.0
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.25,
+          "X": 5.0,
+          "2": 10.0
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.26,
+          "X": 5.0,
+          "2": 11.0
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.28,
+          "X": 5.3,
+          "2": 14.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.25,
+          "X": 5.0,
+          "2": 10.0
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.26,
+          "X": 5.0,
+          "2": 11.0
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.27,
+          "X": 5.4,
+          "2": 11.0
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.31,
+          "X": 5.35,
+          "2": 10.0
+        }
+      ]
+    },
+    {
+      "seq": 12,
+      "loteca": {
+        "home": "SUICA",
+        "away": "ARGELIA",
+        "data": "2026-07-03"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "switzerland",
+        "away": "algeria",
+        "data_exibida": "2026-07-03",
+        "match_href": "/br/football/world/world-championship-2026/switzerland-algeria/rgxknWwh/",
+        "mid": "rgxknWwh",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.5079,
+        "empate": 0.2778,
+        "fora": 0.2143,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.88,
+          "empate": 3.38,
+          "fora": 4.25
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.9,
+          "X": 3.4,
+          "2": 4.24
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.9,
+          "X": 3.4,
+          "2": 4.33
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.95,
+          "X": 3.45,
+          "2": 4.5
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.89,
+          "X": 3.4,
+          "2": 4.3
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.9,
+          "X": 3.45,
+          "2": 4.09
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.87,
+          "X": 3.3,
+          "2": 4.33
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.9,
+          "X": 3.5,
+          "2": 4.3
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.89,
+          "X": 3.47,
+          "2": 4.12
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.83,
+          "X": 3.14,
+          "2": 4.2
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.86,
+          "X": 3.25,
+          "2": 4.25
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.92,
+          "X": 3.33,
+          "2": 4.25
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.83,
+          "X": 3.14,
+          "2": 4.2
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.83,
+          "X": 3.14,
+          "2": 4.2
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.86,
+          "X": 3.25,
+          "2": 4.25
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.83,
+          "X": 3.65,
+          "2": 4.5
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.83,
+          "X": 3.14,
+          "2": 4.2
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.86,
+          "X": 3.25,
+          "2": 4.25
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.88,
+          "X": 3.38,
+          "2": 4.33
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.92,
+          "X": 3.55,
+          "2": 4.2
+        }
+      ]
+    },
+    {
+      "seq": 13,
+      "loteca": {
+        "home": "AUSTRALIA",
+        "away": "EGITO",
+        "data": "2026-07-03"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "australia",
+        "away": "egypt",
+        "data_exibida": "2026-07-03",
+        "match_href": "/br/football/world/world-championship-2026/australia-egypt/Whg00tL7/",
+        "mid": "Whg00tL7",
+        "metodo": "dia",
+        "score": 1.0,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.2888,
+        "empate": 0.3274,
+        "fora": 0.3838,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 3.2,
+          "empate": 2.85,
+          "fora": 2.47
+        }
+      },
+      "palpite": "2",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 3.26,
+          "X": 2.95,
+          "2": 2.46
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 3.25,
+          "X": 2.88,
+          "2": 2.5
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 3.4,
+          "X": 2.95,
+          "2": 2.55
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 3.3,
+          "X": 2.84,
+          "2": 2.48
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 3.2,
+          "X": 2.9,
+          "2": 2.5
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 3.3,
+          "X": 2.8,
+          "2": 2.45
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 3.2,
+          "X": 2.95,
+          "2": 2.5
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 3.19,
+          "X": 2.9,
+          "2": 2.49
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 3.1,
+          "X": 2.8,
+          "2": 2.37
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 3.2,
+          "X": 2.8,
+          "2": 2.42
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 3.2,
+          "X": 2.85,
+          "2": 2.54
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 3.1,
+          "X": 2.8,
+          "2": 2.37
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 3.1,
+          "X": 2.8,
+          "2": 2.37
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 3.2,
+          "X": 2.8,
+          "2": 2.42
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 3.4,
+          "X": 2.88,
+          "2": 2.48
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 3.1,
+          "X": 2.8,
+          "2": 2.37
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 3.2,
+          "X": 2.8,
+          "2": 2.42
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 3.27,
+          "X": 2.87,
+          "2": 2.47
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 3.25,
+          "X": 2.95,
+          "2": 2.52
+        }
+      ]
+    },
+    {
+      "seq": 14,
+      "loteca": {
+        "home": "ARGENTINA",
+        "away": "CABO VERDE",
+        "data": "2026-07-03"
+      },
+      "campeonato": null,
+      "resolvido": {
+        "home": "argentina",
+        "away": "verde",
+        "data_exibida": "2026-07-04",
+        "match_href": "/br/football/world/world-championship-2026/argentina-cape-verde/O4oeJu9d/",
+        "mid": "O4oeJu9d",
+        "metodo": "dia",
+        "score": 0.9,
+        "invertido": false
+      },
+      "prob_1x2": {
+        "casa": 0.8368,
+        "empate": 0.1215,
+        "fora": 0.0416,
+        "n_casas_validas": 19,
+        "odds_medianas": {
+          "casa": 1.15,
+          "empate": 7.24,
+          "fora": 17.0
+        }
+      },
+      "palpite": "1",
+      "n_casas": 19,
+      "erro": null,
+      "odds_casas": [
+        {
+          "casa": "1xBet.br",
+          "id": "1106",
+          "1": 1.14,
+          "X": 7.9,
+          "2": 22.0
+        },
+        {
+          "casa": "bet365",
+          "id": "11",
+          "1": 1.17,
+          "X": 8.0,
+          "2": 15.0
+        },
+        {
+          "casa": "Betano.br",
+          "id": "1043",
+          "1": 1.19,
+          "X": 7.5,
+          "2": 19.5
+        },
+        {
+          "casa": "Betboom.br",
+          "id": "1097",
+          "1": 1.15,
+          "X": 7.8,
+          "2": 17.0
+        },
+        {
+          "casa": "BetEsporte",
+          "id": "1084",
+          "1": 1.15,
+          "X": 7.2,
+          "2": 17.0
+        },
+        {
+          "casa": "Betfair",
+          "id": "1038",
+          "1": 1.11,
+          "X": 8.5,
+          "2": 19.0
+        },
+        {
+          "casa": "BetMGM.br",
+          "id": "1091",
+          "1": 1.16,
+          "X": 7.5,
+          "2": 18.0
+        },
+        {
+          "casa": "Betnacional",
+          "id": "1096",
+          "1": 1.16,
+          "X": 7.24,
+          "2": 17.18
+        },
+        {
+          "casa": "BR4Bet",
+          "id": "1093",
+          "1": 1.15,
+          "X": 6.0,
+          "2": 15.0
+        },
+        {
+          "casa": "Esportivabet",
+          "id": "1083",
+          "1": 1.15,
+          "X": 6.5,
+          "2": 17.0
+        },
+        {
+          "casa": "Estrelabet",
+          "id": "1044",
+          "1": 1.18,
+          "X": 6.66,
+          "2": 17.0
+        },
+        {
+          "casa": "F12",
+          "id": "1092",
+          "1": 1.15,
+          "X": 6.0,
+          "2": 15.0
+        },
+        {
+          "casa": "Goldebet",
+          "id": "1109",
+          "1": 1.15,
+          "X": 6.0,
+          "2": 15.0
+        },
+        {
+          "casa": "Jogo de Ouro",
+          "id": "1098",
+          "1": 1.15,
+          "X": 6.5,
+          "2": 17.0
+        },
+        {
+          "casa": "KTO.br",
+          "id": "1086",
+          "1": 1.13,
+          "X": 9.0,
+          "2": 25.0
+        },
+        {
+          "casa": "Lotogreen",
+          "id": "1108",
+          "1": 1.15,
+          "X": 6.0,
+          "2": 15.0
+        },
+        {
+          "casa": "Multibet.br",
+          "id": "1099",
+          "1": 1.15,
+          "X": 6.5,
+          "2": 17.0
+        },
+        {
+          "casa": "SeguroBet",
+          "id": "1107",
+          "1": 1.14,
+          "X": 7.9,
+          "2": 17.0
+        },
+        {
+          "casa": "Superbet.br",
+          "id": "1085",
+          "1": 1.17,
+          "X": 7.6,
+          "2": 16.0
+        }
+      ]
+    }
+  ]
+}

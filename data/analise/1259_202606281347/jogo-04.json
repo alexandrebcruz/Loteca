@@ -1,0 +1,168 @@
+{
+  "seq": 4,
+  "loteca": {
+    "home": "COSTA DO MARFIM",
+    "away": "NORUEGA",
+    "data": "2026-06-30"
+  },
+  "campeonato": null,
+  "resolvido": {
+    "home": "ivory",
+    "away": "norway",
+    "data_exibida": "2026-06-30",
+    "match_href": "/br/football/world/world-championship-2026/ivory-coast-norway/tx2IC6G7/",
+    "mid": "tx2IC6G7",
+    "metodo": "dia",
+    "score": 1.0,
+    "invertido": false
+  },
+  "prob_1x2": {
+    "casa": 0.258,
+    "empate": 0.2726,
+    "fora": 0.4694,
+    "n_casas_validas": 19,
+    "odds_medianas": {
+      "casa": 3.6,
+      "empate": 3.4,
+      "fora": 2.0
+    }
+  },
+  "palpite": "2",
+  "n_casas": 19,
+  "erro": null,
+  "odds_casas": [
+    {
+      "casa": "1xBet.br",
+      "id": "1106",
+      "1": 3.62,
+      "X": 3.54,
+      "2": 2.02
+    },
+    {
+      "casa": "bet365",
+      "id": "11",
+      "1": 3.7,
+      "X": 3.5,
+      "2": 2.0
+    },
+    {
+      "casa": "Betano.br",
+      "id": "1043",
+      "1": 3.7,
+      "X": 3.55,
+      "2": 2.12
+    },
+    {
+      "casa": "Betboom.br",
+      "id": "1097",
+      "1": 3.65,
+      "X": 3.5,
+      "2": 2.02
+    },
+    {
+      "casa": "BetEsporte",
+      "id": "1084",
+      "1": 3.75,
+      "X": 3.4,
+      "2": 2.08
+    },
+    {
+      "casa": "Betfair",
+      "id": "1038",
+      "1": 3.8,
+      "X": 3.4,
+      "2": 2.0
+    },
+    {
+      "casa": "BetMGM.br",
+      "id": "1091",
+      "1": 3.6,
+      "X": 3.5,
+      "2": 2.05
+    },
+    {
+      "casa": "Betnacional",
+      "id": "1096",
+      "1": 3.6,
+      "X": 3.45,
+      "2": 2.03
+    },
+    {
+      "casa": "BR4Bet",
+      "id": "1093",
+      "1": 3.4,
+      "X": 3.25,
+      "2": 2.0
+    },
+    {
+      "casa": "Esportivabet",
+      "id": "1083",
+      "1": 3.6,
+      "X": 3.4,
+      "2": 2.0
+    },
+    {
+      "casa": "Estrelabet",
+      "id": "1044",
+      "1": 3.5,
+      "X": 3.4,
+      "2": 2.1
+    },
+    {
+      "casa": "F12",
+      "id": "1092",
+      "1": 3.4,
+      "X": 3.25,
+      "2": 2.0
+    },
+    {
+      "casa": "Goldebet",
+      "id": "1109",
+      "1": 3.4,
+      "X": 3.25,
+      "2": 2.0
+    },
+    {
+      "casa": "Jogo de Ouro",
+      "id": "1098",
+      "1": 3.5,
+      "X": 3.4,
+      "2": 2.0
+    },
+    {
+      "casa": "KTO.br",
+      "id": "1086",
+      "1": 3.95,
+      "X": 3.45,
+      "2": 2.0
+    },
+    {
+      "casa": "Lotogreen",
+      "id": "1108",
+      "1": 3.4,
+      "X": 3.25,
+      "2": 2.0
+    },
+    {
+      "casa": "Multibet.br",
+      "id": "1099",
+      "1": 3.6,
+      "X": 3.4,
+      "2": 2.0
+    },
+    {
+      "casa": "SeguroBet",
+      "id": "1107",
+      "1": 3.53,
+      "X": 3.45,
+      "2": 2.05
+    },
+    {
+      "casa": "Superbet.br",
+      "id": "1085",
+      "1": 3.65,
+      "X": 3.5,
+      "2": 2.07
+    }
+  ]
+}
